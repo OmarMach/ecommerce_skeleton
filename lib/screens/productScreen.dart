@@ -2,9 +2,14 @@ import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductScreen extends StatelessWidget {
+class ProductScreen extends StatefulWidget {
   static const routeName = '/product';
 
+  @override
+  _ProductScreenState createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     final id = ModalRoute.of(context).settings.arguments as String;
@@ -44,8 +49,14 @@ class ProductScreen extends StatelessWidget {
                 onPressed: () {},
               ),
               IconButton(
-                icon: Icon(Icons.favorite_outline),
-                onPressed: () {},
+                icon: Icon(product.isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_outline),
+                onPressed: () {
+                  setState(() {
+                    product.toggleFavorite();
+                  });
+                },
               ),
             ],
           )
