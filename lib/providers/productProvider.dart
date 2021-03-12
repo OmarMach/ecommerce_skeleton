@@ -7,12 +7,20 @@ class ProductProvider with ChangeNotifier {
     ...dummyList,
   ];
 
+  bool showFavoritesOnly = false;
+
   List<Product> get items {
+    if (showFavoritesOnly)
+      return _products.where((element) => element.isFavorite).toList();
     return [..._products];
   }
 
   // ignore: missing_return
   Product getProductById(String id) {
     return _products.firstWhere((element) => element.id == id);
+  }
+
+  void toggleFavoriteList() {
+    showFavoritesOnly = !showFavoritesOnly;
   }
 }
