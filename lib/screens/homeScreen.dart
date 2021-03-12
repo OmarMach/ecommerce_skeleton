@@ -17,8 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool showFavoritesOnly = false;
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductProvider>(
-      builder: (context, products, child) => Scaffold(
+    return Consumer<ProductProvider>(builder: (context, products, child) {
+      return Scaffold(
         appBar: AppBar(
           title: Text("Skeleton Application"),
           actions: [
@@ -28,8 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onPressed: () {
                 setState(() {
-                  Provider.of<ProductProvider>(context, listen: false)
-                      .toggleFavoriteList();
                   showFavoritesOnly = !showFavoritesOnly;
                 });
               },
@@ -38,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: SafeArea(
           child: GridView.builder(
-            itemCount: products.items.length,
+            itemCount: showFavoritesOnly
+                ? products.favorites.length
+                : products.items.length,
             physics: BouncingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
@@ -48,12 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             itemBuilder: (context, index) {
               return ProductWidget(
-                product: products.items[index],
+                product: showFavoritesOnly
+                    ? products.favorites[index]
+                    : products.items[index],
               );
             },
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

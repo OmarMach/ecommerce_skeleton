@@ -10,17 +10,15 @@ class ProductProvider with ChangeNotifier {
   bool showFavoritesOnly = false;
 
   List<Product> get items {
-    if (showFavoritesOnly)
-      return _products.where((element) => element.isFavorite).toList();
     return [..._products];
+  }
+
+  List<Product> get favorites {
+    return _products.where((element) => element.isFavorite).toList();
   }
 
   // ignore: missing_return
   Product getProductById(String id) {
     return _products.firstWhere((element) => element.id == id);
-  }
-
-  void toggleFavoriteList() {
-    showFavoritesOnly = !showFavoritesOnly;
   }
 }
