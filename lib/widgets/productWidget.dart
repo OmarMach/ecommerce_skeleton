@@ -1,6 +1,8 @@
 import 'package:ecommerce_app/models/product.dart';
+import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductWidget extends StatefulWidget {
   final Product product;
@@ -14,6 +16,7 @@ class ProductWidget extends StatefulWidget {
 class _ProductWidgetState extends State<ProductWidget> {
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context, listen: false);
     return GridTile(
       child: InkWell(
         onTap: () {
@@ -41,7 +44,13 @@ class _ProductWidgetState extends State<ProductWidget> {
           },
         ),
         trailing: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            cart.addCartItem(
+              widget.product.id,
+              widget.product.title,
+              widget.product.price,
+            );
+          },
           icon: Icon(Icons.shopping_cart),
         ),
         title: Text(

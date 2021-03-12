@@ -2,11 +2,15 @@ import 'package:ecommerce_app/models/product.dart';
 import 'package:flutter/foundation.dart';
 
 class CartItem {
-  final Product product;
+  final String id;
+  final String title;
+  final double price;
   final int quantity;
 
   CartItem({
-    @required this.product,
+    @required this.id,
+    @required this.title,
+    @required this.price,
     @required this.quantity,
   });
 }

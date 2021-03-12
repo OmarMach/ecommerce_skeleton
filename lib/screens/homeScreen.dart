@@ -1,4 +1,6 @@
+import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
+import 'package:ecommerce_app/widgets/badge.dart';
 import 'package:ecommerce_app/widgets/productWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
             ),
+            Consumer<CartProvider>(
+              builder: (context, cart, child) => Badge(
+                child: child,
+                value: cart.count.toString(),
+              ),
+              child: Icon(Icons.shop),
+            )
           ],
         ),
         body: SafeArea(
