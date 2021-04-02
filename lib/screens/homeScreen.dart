@@ -55,36 +55,32 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Flexible(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Search products..",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(SearchScreen.routeName);
-                      })
-                ],
-              ),
-              verticalSeparator,
-              CarouselWidget(),
-              verticalSeparator,
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "New Arrivals",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                  ),
-                ],
+              // Row(
+              //   children: [
+              //     Flexible(
+              //       child: TextFormField(
+              //         decoration: InputDecoration(
+              //           hintText: "Search products..",
+              //           border: OutlineInputBorder(),
+              //         ),
+              //       ),
+              //     ),
+              //     IconButton(
+              //         icon: Icon(Icons.search),
+              //         onPressed: () {
+              //           Navigator.of(context).pushNamed(SearchScreen.routeName);
+              //         })
+              //   ],
+              // ),
+              // verticalSeparator,
+              // CarouselWidget(),
+              // verticalSeparator,
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "New Arrivals",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
               ),
               ProductsGridList(),
               Padding(

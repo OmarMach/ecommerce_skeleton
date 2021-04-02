@@ -149,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 Divider(),
                 FutureBuilder(
-                  future: productProvider.getProductsFromDb(),
+                  future: productProvider.getProductsFromDb(context),
                   builder:
                       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     return snapshot.connectionState == ConnectionState.done

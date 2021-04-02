@@ -19,15 +19,16 @@ class ProductsGridList extends StatelessWidget {
         SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 1,
       childAspectRatio: 5 / 3,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
+      mainAxisSpacing: 20,
     );
 
     return SizedBox(
+      // Fixing the height of this gridview since it shrink wrap works only on the main axis.
       height: size.height / 2.5,
       child: productsList.isNotEmpty
           ? GridView.builder(
               shrinkWrap: true,
+              clipBehavior: Clip.antiAlias,
               scrollDirection: Axis.horizontal,
               physics: BouncingScrollPhysics(),
               itemCount: productsList.length,

@@ -22,7 +22,7 @@ class ProductProvider with ChangeNotifier {
     );
   }
 
-  Future<List<WooProduct>> getProductsFromDb() async {
+  Future<List<WooProduct>> getProductsFromDb(BuildContext context) async {
     // Clearing the entries
     _products.clear();
 
@@ -38,10 +38,12 @@ class ProductProvider with ChangeNotifier {
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
       // Sending the request
-      final response = await http.get(uri, headers: headers);
+      // final response = await http.get(uri, headers: headers);
+      final String response = await DefaultAssetBundle.of(context)
+          .loadString("assets/responseExample.json");
 
       // decoding the results into a list.
-      final List productList = json.decode(response.body) as List;
+      final List productList = json.decode(response) as List;
 
       // Converting each item to WooProduct.
       productList.forEach((element) {
@@ -56,7 +58,6 @@ class ProductProvider with ChangeNotifier {
           final WooProductItemAttribute productAttribute =
               WooProductItemAttribute.fromJson(element);
           product.attributes.add(productAttribute);
-          print(productAttribute);
         });
 
         // Adding the categories to the product.

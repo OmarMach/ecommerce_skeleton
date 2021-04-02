@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/screens/productScreen.dart';
+import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:woocommerce/woocommerce.dart';
 
@@ -16,103 +17,120 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-    print(widget.product);
 
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              ProductScreen.routeName,
-              arguments: widget.product,
-            );
-          },
-          child: Image.network(
-            widget.product.images[0].src,
-            fit: BoxFit.fill,
-            width: size.width,
-            height: size.height / 5.5,
-          ),
-        ),
-        Container(
-          color: Colors.black87,
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.product.name,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+    return SizedBox(
+      height: size.height / 2.5,
+      child: Stack(
+        fit: StackFit.loose,
+        children: [
+          Container(
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    child: Image.network(
+                      widget.product.images[0].src,
+                      fit: BoxFit.fill,
+                      width: size.width,
                     ),
                   ),
-                ],
-              ),
-              Container(
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      widget.product.price + " TND",
-                      textAlign: TextAlign.center,
-                      style: textTheme.subtitle1.copyWith(
-                        color: Colors.green,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade700,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
                       ),
                     ),
-                    if (widget.product.stockStatus != 'instock')
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.close,
-                            color: Colors.red,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.product.name
+                                .toLowerCase()
+                                .capitalizeFirstofEach,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            'Out of stock',
-                            style: textTheme.caption.copyWith(
-                              color: Colors.red,
+                        ),
+                        Expanded(
+                          child: Text(
+                            widget.product.price + " Tnd",
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: textTheme.subtitle1.copyWith(
+                              color: Colors.green,
                             ),
                           ),
-                        ],
-                      ),
-                  ],
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: widget.product.stockStatus != 'instock'
+                                ? null
+                                : () {},
+                            child: Text(
+                              widget.product.stockStatus != 'instock'
+                                  ? "Out of stock"
+                                  : "Add to cart",
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey.shade800,
+                            ),
+                          ),
+                        ),
+                        verticalSeparator,
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                ProductScreen.routeName,
+                                arguments: widget.product,
+                              );
+                            },
+                            child: Text("View"),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey.shade800,
+                            ),
+                          ),
+                        ),
+                        verticalSeparator,
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    ProductScreen.routeName,
-                    arguments: widget.product,
-                  );
-                },
-                child: Text("Add to cart"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.grey.shade800,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    ProductScreen.routeName,
-                    arguments: widget.product,
-                  );
-                },
-                child: Text("View"),
-                style: OutlinedButton.styleFrom(
-                  primary: Colors.grey,
-                  side: BorderSide(color: Colors.grey),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+          Positioned(
+              top: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: CircleAvatar(
+                  backgroundColor: Colors.blueGrey.shade800,
+                  child: Center(
+                    child: IconButton(
+                      splashRadius: 10,
+                      icon: Icon(
+                        Icons.favorite_outline,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+              ))
+        ],
+      ),
     );
   }
 }

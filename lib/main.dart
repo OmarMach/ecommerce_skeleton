@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         // displaying slpash screen while the data is loading.
         home: Consumer<ProductProvider>(
           builder: (context, value, child) => FutureBuilder(
-            future: value.getProductsFromDb(),
+            future: value.getProductsFromDb(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return SplashScreen();

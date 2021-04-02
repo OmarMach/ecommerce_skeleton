@@ -20,7 +20,6 @@ class TestScreenState extends State<TestScreen> {
     });
 
     try {
-      print("Checking database connection starts here..");
       String basicAuth =
           'Basic ' + base64Encode(utf8.encode('$consumerKey:$consumerSecret'));
 
@@ -38,7 +37,6 @@ class TestScreenState extends State<TestScreen> {
       };
 
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
-      print(uri.path);
       final response = await http.get(
         uri,
         headers: headers,
@@ -46,7 +44,6 @@ class TestScreenState extends State<TestScreen> {
       final List productList = json.decode(response.body) as List;
       productList.forEach((element) {
         final WooProduct product = WooProduct.fromJson(element);
-        print(product);
       });
     } catch (e) {
       print("Error : " + e.toString());
