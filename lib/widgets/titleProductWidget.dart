@@ -1,7 +1,5 @@
-import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:woocommerce/models/products.dart';
 
 class TitleProductWidget extends StatefulWidget {
@@ -16,7 +14,6 @@ class TitleProductWidget extends StatefulWidget {
 class _TitleProductWidgetState extends State<TitleProductWidget> {
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context, listen: false);
     final size = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),

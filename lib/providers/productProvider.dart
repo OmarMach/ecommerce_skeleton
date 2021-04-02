@@ -4,55 +4,33 @@ import 'package:ecommerce_app/config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:woocommerce/models/product_category.dart';
-import 'package:woocommerce/woocommerce.dart';
+import 'package:woocommerce/models/products.dart';
 import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
-  WooCommerce endpoint = WooCommerce(
-    baseUrl: baseUrl,
-    consumerKey: consumerKey,
-    consumerSecret: consumerSecret,
-    // isDebug: true,
-  );
-
   final List<WooProduct> _products = [];
-
-  DateTime lastRefresh = DateTime.now();
-
-  bool showFavoritesOnly = false;
 
   List<WooProduct> get items {
     return _products;
   }
 
-  // ignore: missing_return
   WooProduct getProductById(int id) {
-    print("Getting Product By Id");
+    print("Getting Product with Id : $id");
+
     return _products.firstWhere(
       (element) => element.id == id,
     );
   }
 
   Future<List<WooProduct>> getProductsFromDb() async {
+    // Clearing the entries
     _products.clear();
-
-    // Encoding the auth informations
-    String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$consumerKey:$consumerSecret'));
-
-    // Adding headers
-    Map<String, String> headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-      'authorization': basicAuth,
-    };
 
     // Adding params
     final Map<String, dynamic> params = {
-      'per_page': 100.toString(),
+      'per_page': '100',
       'page': '1',
       'status': 'publish',
-      'featured': 'true',
     };
 
     try {
@@ -60,27 +38,37 @@ class ProductProvider with ChangeNotifier {
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
       // Sending the request
-      final response = await http.get(
-        uri,
-        headers: headers,
-      );
+      final response = await http.get(uri, headers: headers);
 
       // decoding the results into a list.
       final List productList = json.decode(response.body) as List;
 
-      // Converting each item to product.
+      // Converting each item to WooProduct.
       productList.forEach((element) {
+        // Converting product from Json to WooProduct.
         final WooProduct product = WooProduct.fromJson(element);
+
         // Getting the categories
         final List categories = element['categories'];
+        final List attributes = element['attributes'];
+
+        attributes.forEach((element) {
+          final WooProductItemAttribute productAttribute =
+              WooProductItemAttribute.fromJson(element);
+          product.attributes.add(productAttribute);
+          print(productAttribute);
+        });
+
         // Adding the categories to the product.
         categories.forEach((element) {
-          print(element);
-          print(product.categories);
           final WooProductCategory category =
               WooProductCategory.fromJson(element);
-          product.categories.add(category);
+          // Avoiding duplicates
+          if (product.categories
+                  .indexWhere((product) => product.id == category.id) ==
+              -1) product.categories.add(element);
         });
+
         // Adding the product to the list
         _products.add(product);
       });

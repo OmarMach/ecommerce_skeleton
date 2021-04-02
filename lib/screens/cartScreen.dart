@@ -10,7 +10,6 @@ class CartScreen extends StatelessWidget {
   static const routeName = "/cart";
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);

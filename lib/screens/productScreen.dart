@@ -51,11 +51,11 @@ class _ProductScreenState extends State<ProductScreen> {
                   color: Colors.green,
                 ),
               ),
-              if (product != null && product.stockQuantity < 1)
+              if (product.stockStatus != 'instock')
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Icon(
                         Icons.close,
@@ -71,7 +71,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     ],
                   ),
                 ),
-              if (product != null && product.stockQuantity >= 1)
+              if (product.stockStatus == 'instock')
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -92,7 +92,7 @@ class _ProductScreenState extends State<ProductScreen> {
                   ),
                 ),
               Divider(),
-              if (product != null && product.categories != null)
+              if (product.categories != null)
                 ...product.categories
                     .map(
                       (e) => Padding(
@@ -113,17 +113,17 @@ class _ProductScreenState extends State<ProductScreen> {
               Divider(),
               ElevatedButton.icon(
                 icon: Icon(
-                  product != null && product.stockQuantity < 1
+                  product.stockStatus != 'instock'
                       ? Icons.shopping_bag_outlined
                       : Icons.shopping_bag,
                 ),
-                onPressed: product != null && product.stockQuantity < 1
+                onPressed: product.stockStatus != 'instock'
                     ? null
                     : () {
                         cartProvider.addCartItem(product);
                       },
                 label: Text(
-                  product != null && product.stockQuantity < 1
+                  product.stockStatus != 'instock'
                       ? "Out of stock"
                       : "Add To cart",
                 ),

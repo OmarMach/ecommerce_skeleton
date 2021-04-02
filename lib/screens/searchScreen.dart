@@ -42,7 +42,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     String categoryDropDownValue = 'Category 1';
     String subCategoryDropDownValue = 'Sub-category 1';
-    String searchBarValue;
 
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;

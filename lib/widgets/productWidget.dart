@@ -16,6 +16,7 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+    print(widget.product);
 
     return Column(
       children: [
@@ -65,8 +66,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         color: Colors.green,
                       ),
                     ),
-                    if (widget.product != null &&
-                        widget.product.stockQuantity < 0)
+                    if (widget.product.stockStatus != 'instock')
                       Row(
                         children: [
                           Icon(
