@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class User {
   final String id;
+  final String token;
   final String name;
   final String profileImageURL;
   final String email;
@@ -9,6 +10,7 @@ class User {
 
   User({
     @required this.id,
+    @required this.token,
     @required this.name,
     @required this.profileImageURL,
     @required this.email,

@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
-import 'package:ecommerce_app/screens/productScreen.dart';
+import 'package:ecommerce_app/routes.dart';
+import 'package:ecommerce_app/screens/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,14 +21,26 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Ecommerce',
+        title: 'Goods.tn',
         theme: ThemeData(
           brightness: Brightness.dark,
+          fontFamily: 'ProductSans',
         ),
-        routes: {
-          ProductScreen.routeName: (context) => ProductScreen(),
-        },
-        home: HomeScreen(),
+        routes: routes,
+
+        // Getting all the products from the database.
+        // displaying slpash screen while the data is loading.
+        home: Consumer<ProductProvider>(
+          builder: (context, value, child) => FutureBuilder(
+            future: value.getProductsFromDb(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return SplashScreen();
+              else
+                return HomeScreen();
+            },
+          ),
+        ),
       ),
     );
   }

@@ -1,17 +1,18 @@
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:woocommerce/woocommerce.dart';
+import 'package:woocommerce/models/products.dart';
 
-class ProductWidget extends StatefulWidget {
+class SingleProductWidget extends StatefulWidget {
   final WooProduct product;
 
-  const ProductWidget({Key key, @required this.product}) : super(key: key);
+  const SingleProductWidget({Key key, @required this.product})
+      : super(key: key);
 
   @override
-  _ProductWidgetState createState() => _ProductWidgetState();
+  _SingleProductWidgetState createState() => _SingleProductWidgetState();
 }
 
-class _ProductWidgetState extends State<ProductWidget> {
+class _SingleProductWidgetState extends State<SingleProductWidget> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -27,10 +28,11 @@ class _ProductWidgetState extends State<ProductWidget> {
             );
           },
           child: Image.network(
-            widget.product.images[0].src,
+            widget.product.images[0].src ??
+                'https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg',
             fit: BoxFit.fill,
-            width: size.width,
-            height: size.height / 5.5,
+            width: size.width / 2,
+            height: size.height / 5,
           ),
         ),
         Container(

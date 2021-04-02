@@ -1,16 +1,14 @@
-import 'package:ecommerce_app/models/product.dart';
 import 'package:flutter/foundation.dart';
+import 'package:woocommerce/models/products.dart';
 
 class CartItem {
-  final String id;
-  final String title;
-  final double price;
-  final int quantity;
+  final int id;
+  final WooProduct product;
+  int quantity;
 
   CartItem({
     @required this.id,
-    @required this.title,
-    @required this.price,
-    @required this.quantity,
+    @required this.product,
+    this.quantity = 1,
   });
 }
