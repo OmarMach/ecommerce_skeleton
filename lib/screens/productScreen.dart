@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
     final product = ModalRoute.of(context).settings.arguments as WooProduct;
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final categoryProvider = Provider.of<CategoriesProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(),
@@ -55,7 +57,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.close,
@@ -194,7 +196,7 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
               verticalSeparator,
               ProductsByCategoryGridList(
-                category: product.categories[0].id.toString(),
+                categoryId: product.categories[0].id,
               ),
             ],
           ),

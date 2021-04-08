@@ -1,7 +1,9 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/routes.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
+import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,8 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: ProductProvider()),
-        ChangeNotifierProvider.value(value: CartProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => CategoriesProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -28,19 +31,29 @@ class MyApp extends StatelessWidget {
         ),
         routes: routes,
 
-        // Getting all the products from the database.
+        // Getting all the products and categories from the database.
         // displaying slpash screen while the data is loading.
-        home: Consumer<ProductProvider>(
-          builder: (context, value, child) => FutureBuilder(
-            future: value.getProductsFromDb(context),
+        home: Consumer2<ProductProvider, CategoriesProvider>(
+          builder: (context, productProvider, categoriesProvider, child) =>
+              FutureBuilder(
+            future: productProvider.getProductsFromDb(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return SplashScreen();
               else
-                return HomeScreen();
+                return FutureBuilder(
+                  future: categoriesProvider.getAllCategories(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return SplashScreen();
+                    else
+                      return HomeScreen();
+                  },
+                );
             },
           ),
         ),
+        // home: TestScreen(),
       ),
     );
   }

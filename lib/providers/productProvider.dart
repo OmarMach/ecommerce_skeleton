@@ -14,12 +14,78 @@ class ProductProvider with ChangeNotifier {
     return _products;
   }
 
+  final List<WooProduct> filteredProducts = [];
+
   WooProduct getProductById(int id) {
     print("Getting Product with Id : $id");
 
     return _products.firstWhere(
       (element) => element.id == id,
     );
+  }
+
+  List<WooProduct> searchProductsByName(String name) {
+    // Returns a list of products that aren't duplicates in the filtered lists and have the given name.
+    return _products.where(
+      (element) =>
+          !filteredProducts.contains(element) && element.name.contains(name),
+    );
+  }
+
+  List<WooProduct> searchProductsByFilters({
+    String name = '',
+    List<int> categoryIds,
+  }) {
+    // initializing an empty list to return it back
+    final List<WooProduct> searchedProducts = [];
+
+    // clearing the filtered global list.
+    filteredProducts.clear();
+
+    // If the categoryids list isn't null and contians elements the function will be executed.
+    if (categoryIds != null && categoryIds.isNotEmpty)
+      searchedProducts.addAll(searchProductsByCategories(categoryIds));
+
+    // if the name isn't null and not empty send the request
+    if (name != null && name.isNotEmpty)
+      searchedProducts.addAll(searchProductsByName(name));
+
+    // notify the widget tree to rebuild.
+    // notifyListeners();
+
+    return searchedProducts;
+  }
+
+  List<WooProduct> searchProductsByCategories(List<int> categoryIds) {
+    final List<WooProduct> products = [];
+
+    categoryIds.forEach(
+      (categoryId) {
+        _products.forEach(
+          (element) {
+            if (element.categories.where((element) {
+              return element.parent == categoryId;
+            }).isNotEmpty) {
+              products.add(element);
+              if (!filteredProducts.contains(element))
+                filteredProducts.add(element);
+            }
+          },
+        );
+      },
+    );
+    notifyListeners();
+    return products;
+  }
+
+  List<WooProduct> getProductsByCategory(int categoryId) {
+    final List<WooProduct> products = [];
+    _products.forEach((element) {
+      if (element.categories
+          .where((element) => element.id == categoryId)
+          .isNotEmpty) products.add(element);
+    });
+    return products;
   }
 
   Future<List<WooProduct>> getProductsFromDb(BuildContext context) async {
@@ -38,12 +104,12 @@ class ProductProvider with ChangeNotifier {
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
       // Sending the request
-      // final response = await http.get(uri, headers: headers);
-      final String response = await DefaultAssetBundle.of(context)
-          .loadString("assets/responseExample.json");
+      final response = await http.get(uri, headers: headers);
+      // final String response = await DefaultAssetBundle.of(context)
+      //     .loadString("assets/responseExample.json");
 
       // decoding the results into a list.
-      final List productList = json.decode(response) as List;
+      final List productList = json.decode(response.body) as List;
 
       // Converting each item to WooProduct.
       productList.forEach((element) {

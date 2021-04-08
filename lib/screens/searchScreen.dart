@@ -1,9 +1,12 @@
+import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/utils.dart';
-import 'package:ecommerce_app/widgets/productsGridList.dart';
-import 'package:ecommerce_app/widgets/singleProductWidget.dart';
+import 'package:ecommerce_app/widgets/productWidget.dart';
+import 'package:ecommerce_app/widgets/searchAndFilterWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:woocommerce/models/product_category.dart';
+import 'package:woocommerce/models/products.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = "/search";
@@ -12,41 +15,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final categories =
-      <String>['Category 1', 'Category 2', 'Category 3', 'Category 4']
-          .map<DropdownMenuItem<String>>(
-            (String value) => DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            ),
-          )
-          .toList();
-
-  final subCategories = <String>[
-    'Sub-category 1',
-    'Sub-category 2',
-    'Sub-category 3',
-    'Sub-category 4'
-  ]
-      .map<DropdownMenuItem<String>>(
-        (String value) => DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
-
-  final List<String> selectedFilters = [];
+  final List<WooProductCategory> selectedFilters = [];
 
   @override
   Widget build(BuildContext context) {
-    String categoryDropDownValue = 'Category 1';
-    String subCategoryDropDownValue = 'Sub-category 1';
-
+    // Getting visual helpers.
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-    final productProvider =
-        Provider.of<ProductProvider>(context, listen: false);
 
     return Scaffold(
       body: SafeArea(
@@ -54,90 +29,15 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 verticalSeparator,
                 Text(
                   "Search Products..",
                   style: textTheme.headline4,
                 ),
-                verticalSeparator,
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Type product keywords..",
-                    suffixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                verticalSeparator,
-                Row(
-                  children: [
-                    Flexible(
-                      child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                        items: categories,
-                        value: categoryDropDownValue,
-                        onChanged: (value) {
-                          if (selectedFilters.length < 10)
-                            setState(() {
-                              categoryDropDownValue = value;
-                              if (!selectedFilters.contains(value))
-                                selectedFilters.add(value);
-                            });
-                        },
-                      ),
-                    ),
-                    if (selectedFilters.length > 0) horizontalSeparator,
-                    if (selectedFilters.length > 0)
-                      Flexible(
-                        child: DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          items: subCategories,
-                          value: subCategoryDropDownValue,
-                          onChanged: (value) {
-                            if (selectedFilters.length < 10)
-                              setState(() {
-                                subCategoryDropDownValue = value;
-                                selectedFilters.add(value);
-                              });
-                          },
-                        ),
-                      ),
-                  ],
-                ),
-                verticalSeparator,
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  label: Text("Search"),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey.shade800,
-                  ),
-                  icon: Icon(Icons.search_rounded),
-                ),
-                verticalSeparator,
-                Wrap(
-                  spacing: 10,
-                  children: [
-                    // Displaying all the selected filter from previous dropdown buttons as deletable chips.
-                    ...selectedFilters
-                        .map(
-                          (e) => Chip(
-                            label: Text(e),
-                            onDeleted: () {
-                              setState(() {
-                                selectedFilters.remove(e);
-                              });
-                            },
-                          ),
-                        )
-                        .toList()
-                  ],
-                ),
+                SearchAndFilterWidget(),
                 Divider(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -148,46 +48,33 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 Divider(),
-                FutureBuilder(
-                  future: productProvider.getProductsFromDb(context),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    return snapshot.connectionState == ConnectionState.done
-                        ? Container(
-                            width: size.width * .9,
-                            child: GridView.builder(
-                                shrinkWrap: true,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 0.55,
-                                  mainAxisSpacing: 10,
-                                ),
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: productProvider.items.length,
-                                itemBuilder: (context, index) => Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SingleProductWidget(
-                                        product: productProvider.items[index],
-                                      ),
-                                    )))
-                        : Container(
-                            width: size.width * .9,
-                            child: Center(child: CircularProgressIndicator()),
-                          );
+                Consumer<ProductProvider>(
+                  builder: (context, productProvider, child) {
+                    
+                    final List<WooProduct> searchedProducts =
+                        productProvider.filteredProducts;
+
+                    return Container(
+                      width: size.width * .9,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.55,
+                          mainAxisSpacing: 10,
+                        ),
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: searchedProducts.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ProductWidget(
+                            product: searchedProducts[index],
+                          ),
+                        ),
+                      ),
+                    );
                   },
-                ),
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Similar products",
-                    textAlign: TextAlign.start,
-                    style: textTheme.headline6,
-                  ),
-                ),
-                Divider(),
-                ProductsGridList(),
+                )
               ],
             ),
           ),

@@ -56,9 +56,8 @@ class _ProductWidgetState extends State<ProductWidget> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.product.name
-                                .toLowerCase()
-                                .capitalizeFirstofEach,
+                            widget.product.name,
+                            textAlign: TextAlign.center,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -117,12 +116,13 @@ class _ProductWidgetState extends State<ProductWidget> {
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: CircleAvatar(
-                  backgroundColor: Colors.blueGrey.shade800,
+                  backgroundColor: Colors.grey.shade800,
                   child: Center(
                     child: IconButton(
                       splashRadius: 10,
                       icon: Icon(
                         Icons.favorite_outline,
+                        color: Colors.white,
                       ),
                       onPressed: () {},
                     ),

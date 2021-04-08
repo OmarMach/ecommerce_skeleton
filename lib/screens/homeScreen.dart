@@ -8,7 +8,6 @@ import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:ecommerce_app/widgets/productsGridList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -75,6 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
               // verticalSeparator,
               // CarouselWidget(),
               // verticalSeparator,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(SearchScreen.routeName);
+                },
+                child: Text("Search"),
+              ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
@@ -93,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
-                  category: '71',
+                  categoryId: 71,
                 ),
               ),
               Padding(
@@ -106,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
-                  category: '79',
+                  categoryId: 79,
                 ),
               ),
               Padding(
@@ -119,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
-                  category: '83',
+                  categoryId: 83,
                 ),
               ),
               Padding(
@@ -132,63 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
-                  category: '77',
+                  categoryId: 77,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "We are thankful to our sponsors..",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              ),
-              SponsorWidget(sponsoringText: "Karim Repair Glass"),
-              SponsorWidget(sponsoringText: "Hedi Extreme GSM"),
-              SponsorWidget(sponsoringText: "Haithem Hamdi"),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class SponsorWidget extends StatelessWidget {
-  const SponsorWidget({
-    Key key,
-    this.sponsoringText,
-  }) : super(key: key);
-
-  final sponsoringText;
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final textTheme = Theme.of(context).textTheme;
-    return Container(
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey.shade800,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/images/sponsor.svg',
-              width: size.width / 7,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  sponsoringText,
-                  textAlign: TextAlign.center,
-                  style: textTheme.subtitle1,
-                ),
-              ),
-            )
-          ],
         ),
       ),
     );
