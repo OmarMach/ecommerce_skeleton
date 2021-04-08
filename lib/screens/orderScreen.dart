@@ -1,6 +1,10 @@
+import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/utils.dart';
+import 'package:ecommerce_app/widgets/cartItemWidget.dart';
+import 'package:ecommerce_app/widgets/orderCartItemsWidget.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum DeliveryType { pickup, delivery }
 
@@ -25,6 +29,11 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+
+    // Calling the cart provider
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final cart = cartProvider.items;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Billing and shipping"),
@@ -107,78 +116,11 @@ class _OrderScreenState extends State<OrderScreen> {
               Divider(),
               verticalSeparator,
               ListView.builder(
-                itemCount: 2,
+                itemCount: cart.length,
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      color: Colors.grey.shade900,
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            child: Icon(Icons.close),
-                            backgroundColor: Colors.grey.shade800,
-                          ),
-                          horizontalSeparator,
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              "https://goods.tn/wp-content/uploads/2021/02/%E8%AF%A6%E6%83%85%E9%A1%B5_01.jpg",
-                              height: size.width / 6,
-                              width: size.width / 6,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Product title",
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "A cart Item, this is a product titleA cart Item, this is a product title..",
-                                      style:
-                                          Theme.of(context).textTheme.caption,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("25.00 TND"),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CircleAvatar(
-                                            child: Text("X 5"),
-                                            backgroundColor:
-                                                Colors.grey.shade800,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                itemBuilder: (context, index) => OrderCartItemsWidget(
+                  cartItem: cart.values.elementAt(index),
                 ),
               ),
               verticalSeparator,
@@ -196,7 +138,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Subtotal"),
-                            Text("100.000 Tnd"),
+                            Text(cartProvider.total.toString() + " Tnd"),
                           ],
                         ),
                       ),
@@ -218,7 +160,16 @@ class _OrderScreenState extends State<OrderScreen> {
                               });
                             },
                           ),
-                          Text("Delivery")
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _delivery = DeliveryType.delivery;
+                                });
+                              },
+                              child: Text("Delivery"),
+                            ),
+                          )
                         ],
                       ),
                       Row(
@@ -232,7 +183,16 @@ class _OrderScreenState extends State<OrderScreen> {
                               });
                             },
                           ),
-                          Text("Personal Pickup")
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _delivery = DeliveryType.pickup;
+                                });
+                              },
+                              child: Text("Personal Pickup"),
+                            ),
+                          )
                         ],
                       ),
                       Divider(
@@ -244,7 +204,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Total"),
-                            Text("125.000 tnd"),
+                            Text(cartProvider.total.toString() + " Tnd"),
                           ],
                         ),
                       ),
@@ -297,10 +257,18 @@ class _OrderScreenState extends State<OrderScreen> {
                     },
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                          "I have read an gree the application's Terms and conditions *"),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _terms = !_terms;
+                        });
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          "I have read and agreed the application's Terms and conditions.",
+                        ),
+                      ),
                     ),
                   )
                 ],
