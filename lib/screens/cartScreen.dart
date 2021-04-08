@@ -157,141 +157,141 @@ class CartItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final CartProvider cartProvider = Provider.of<CartProvider>(context);
     final size = MediaQuery.of(context).size;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          color: Colors.grey.shade900,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  cartItem.product.name ?? " ",
-                  style: Theme.of(context).textTheme.subtitle1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: size.height / 40,
-                    child: Icon(Icons.close, size: size.height / 40),
-                    backgroundColor: Colors.grey.shade800,
-                  ),
-                  horizontalSeparator,
-                  horizontalSeparator,
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      cartItem.product.images[0].src,
-                      height: size.width / 6,
-                      width: size.width / 6,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      cartItem.product.price,
-                                    ),
-                                    Text(
-                                      cartItem.quantity.toString(),
-                                      style: TextStyle(color: Colors.green),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          final snackBar = SnackBar(
-                                            content:
-                                                Text('Quantity incremented.'),
-                                            action: SnackBarAction(
-                                              label: 'Undo',
-                                              onPressed: () {
-                                                cartProvider
-                                                    .decrementCartItemQuantity(
-                                                  cartItem,
-                                                );
-                                              },
-                                            ),
-                                          );
-                                          // Deleting the current snackBar to display the new one
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          cartProvider
-                                              .incrementCartItemQuantity(
-                                                  cartItem);
-                                        },
-                                        child: CircleAvatar(
-                                          child: Icon(Icons.add),
-                                          backgroundColor: Colors.grey.shade800,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          final snackBar = SnackBar(
-                                            content:
-                                                Text('Quantity decremented.'),
-                                            action: SnackBarAction(
-                                              label: 'Undo',
-                                              onPressed: () {
-                                                cartProvider
-                                                    .incrementCartItemQuantity(
-                                                  cartItem,
-                                                );
-                                              },
-                                            ),
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          cartProvider
-                                              .decrementCartItemQuantity(
-                                                  cartItem);
-                                        },
-                                        child: CircleAvatar(
-                                          child: Icon(Icons.remove),
-                                          backgroundColor: Colors.grey.shade800,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+        child: Row(
+          children: [
+            Image.network(
+              cartItem.product.images[0].src,
+              fit: BoxFit.cover,
+              height: size.width / 3,
+              width: size.width / 4,
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.grey.shade800,
+                height: size.width / 3,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              cartItem.product.name,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
-                          ),
-                        ],
+                            Text("Price : " + cartItem.product.price + " Tnd"),
+                            Text("Quantity : x" + cartItem.quantity.toString()),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Column(
+                      children: [
+                        Flexible(
+                          child: ClipRRect(
+                            child: Material(
+                              color: Colors.grey,
+                              child: InkWell(
+                                splashColor: Colors.red.shade100,
+                                child: SizedBox(
+                                  width: 56,
+                                  height: 56,
+                                  child: Icon(
+                                    Icons.close,
+                                  ),
+                                ),
+                                onTap: () {
+                                  // Clearing all the currently displayed snackbars.
+
+                                  scaffoldMessenger.removeCurrentSnackBar();
+                                  // Creating a snack bar showing delete message.
+                                  final deleteSnackbar = SnackBar(
+                                    content: Text('Item deleted from cart..'),
+                                  );
+                                  // Showing the snackbar.
+                                  scaffoldMessenger
+                                      .showSnackBar(deleteSnackbar);
+                                  cartProvider.deleteCartItem(cartItem);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: ClipRRect(
+                            child: Material(
+                              color: Colors.grey,
+                              child: InkWell(
+                                splashColor: Colors.teal,
+                                child: SizedBox(
+                                    width: 56,
+                                    height: 56,
+                                    child: Icon(
+                                      Icons.add,
+                                    )),
+                                onTap: () {
+                                  // Clearing all the currently displayed snackbars.
+
+                                  scaffoldMessenger.removeCurrentSnackBar();
+                                  // Creating a snack bar showing delete message.
+                                  final incrementSnackBar = SnackBar(
+                                    content: Text('Item added from cart..'),
+                                  );
+                                  // Showing the snackbar.
+                                  scaffoldMessenger
+                                      .showSnackBar(incrementSnackBar);
+                                  cartProvider
+                                      .incrementCartItemQuantity(cartItem);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: ClipRRect(
+                            child: Material(
+                              color: Colors.grey, // button color
+                              child: InkWell(
+                                splashColor: Colors.teal, // inkwell color
+                                child: SizedBox(
+                                    width: 56,
+                                    height: 56,
+                                    child: Icon(Icons.remove)),
+                                onTap: () {
+                                  // Clearing all the currently displayed snackbars.
+
+                                  scaffoldMessenger.removeCurrentSnackBar();
+                                  // Creating a snack bar showing delete message.
+                                  final decrementSnackBar = SnackBar(
+                                    content: Text('Item removed from cart..'),
+                                  );
+                                  // Showing the snackbar.
+                                  scaffoldMessenger
+                                      .showSnackBar(decrementSnackBar);
+                                  cartProvider
+                                      .decrementCartItemQuantity(cartItem);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
