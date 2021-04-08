@@ -1,6 +1,8 @@
+import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:woocommerce/woocommerce.dart';
 
 class ProductWidget extends StatefulWidget {
@@ -33,10 +35,18 @@ class _ProductWidgetState extends State<ProductWidget> {
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
                     ),
-                    child: Image.network(
-                      widget.product.images[0].src,
-                      fit: BoxFit.fill,
-                      width: size.width,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          ProductScreen.routeName,
+                          arguments: widget.product,
+                        );
+                      },
+                      child: Image.network(
+                        widget.product.images[0].src,
+                        fit: BoxFit.fill,
+                        width: size.width,
+                      ),
                     ),
                   ),
                 ),
@@ -55,11 +65,14 @@ class _ProductWidgetState extends State<ProductWidget> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Expanded(
-                          child: Text(
-                            widget.product.name,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              widget.product.name,
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -76,7 +89,20 @@ class _ProductWidgetState extends State<ProductWidget> {
                           child: ElevatedButton(
                             onPressed: widget.product.stockStatus != 'instock'
                                 ? null
-                                : () {},
+                                : () {
+                                    ScaffoldMessenger.of(context)
+                                        .removeCurrentSnackBar();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text("Item Added to the cart.."),
+                                      ),
+                                    );
+                                    Provider.of<CartProvider>(
+                                      context,
+                                      listen: false,
+                                    ).addCartItem(widget.product);
+                                  },
                             child: Text(
                               widget.product.stockStatus != 'instock'
                                   ? "Out of stock"
