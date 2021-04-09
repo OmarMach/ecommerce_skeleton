@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class CarouselListViewItem extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            color: Colors.black87,
+            color: Colors.grey.shade900,
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
@@ -81,7 +82,21 @@ class CarouselListViewItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: product.stockStatus != 'instock'
+                          ? null
+                          : () {
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Item Added to the cart.."),
+                                ),
+                              );
+                              Provider.of<CartProvider>(
+                                context,
+                                listen: false,
+                              ).addCartItem(product);
+                            },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.grey.shade800,
                       ),

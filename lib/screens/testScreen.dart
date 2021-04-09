@@ -13,20 +13,18 @@ class TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: checkDatabaseConnection,
-          style: ElevatedButton.styleFrom(
-            primary: error ? Colors.red : Colors.green,
-          ),
-          child: isLoading
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
-                )
-              : Text("Test DB Connection"),
+    return Center(
+      child: ElevatedButton(
+        onPressed: checkDatabaseConnection,
+        style: ElevatedButton.styleFrom(
+          primary: error ? Colors.red : Colors.green,
         ),
+        child: isLoading
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              )
+            : Text("Test DB Connection"),
       ),
     );
   }

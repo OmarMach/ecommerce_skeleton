@@ -23,64 +23,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Goods"),
-        actions: [
-          Consumer<CartProvider>(
-            builder: (context, cart, child) => Badge(
-              child: child,
-              value: cart.count.toString(),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pushNamed(CartScreen.routeName);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.shopping_basket_outlined,
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
+    return SafeArea(
+      child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Row(
-              //   children: [
-              //     Flexible(
-              //       child: TextFormField(
-              //         decoration: InputDecoration(
-              //           hintText: "Search products..",
-              //           border: OutlineInputBorder(),
-              //         ),
-              //       ),
-              //     ),
-              //     IconButton(
-              //         icon: Icon(Icons.search),
-              //         onPressed: () {
-              //           Navigator.of(context).pushNamed(SearchScreen.routeName);
-              //         })
-              //   ],
-              // ),
-              // verticalSeparator,
-              // CarouselWidget(),
-              // verticalSeparator,
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(SearchScreen.routeName);
-                },
-                child: Text("Search"),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Hot items",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
               ),
+              verticalSeparator,
+              CarouselWidget(),
+              verticalSeparator,
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
@@ -113,32 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
                   categoryId: 79,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Tool Organizer",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProductsByCategoryGridList(
-                  categoryId: 83,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Hand Tools",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProductsByCategoryGridList(
-                  categoryId: 77,
                 ),
               ),
             ],

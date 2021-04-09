@@ -2,14 +2,10 @@ import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/routes.dart';
-import 'package:ecommerce_app/screens/loginScreen.dart';
-import 'package:ecommerce_app/screens/registerScreen.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
-import 'package:ecommerce_app/screens/testScreen.dart';
+import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'screens/homeScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,6 +26,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'ProductSans',
+          primaryColor: Colors.grey,
+          accentColor: Colors.redAccent,
         ),
         routes: routes,
 
@@ -44,12 +42,12 @@ class MyApp extends StatelessWidget {
                 return SplashScreen();
               else
                 return FutureBuilder(
-                  future: categoriesProvider.getAllCategories(),
+                  // future: categoriesProvider.getAllCategories(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return SplashScreen();
                     else
-                      return LoginScreen();
+                      return WrapperScreen();
                   },
                 );
             },
