@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
@@ -144,13 +145,44 @@ class _ProductWidgetState extends State<ProductWidget> {
                 child: CircleAvatar(
                   backgroundColor: Colors.grey.shade800,
                   child: Center(
-                    child: IconButton(
-                      splashRadius: 10,
-                      icon: Icon(
-                        Icons.favorite_outline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
+                    child: Consumer<FavoritesProvider>(
+                      builder: (context, favoritesProvider, _) {
+                        // Getting the products state in the wishlist.
+                        bool alreadyExists = favoritesProvider
+                            .checkIfAlreadyExists(widget.product);
+
+                        return IconButton(
+                          splashRadius: 10,
+                          icon: Icon(
+                            Icons.favorite,
+                            color: !alreadyExists
+                                ? Colors.white
+                                : Colors.redAccent,
+                          ),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context)
+                                .removeCurrentSnackBar();
+                            if (alreadyExists) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Item removed to the favorites.."),
+                                ),
+                              );
+                              favoritesProvider
+                                  .deleteFromFavorites(widget.product);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Item Added to the favorites.."),
+                                ),
+                              );
+                              favoritesProvider.addToFavorites(widget.product);
+                            }
+                          },
+                        );
+                      },
                     ),
                   ),
                 ),

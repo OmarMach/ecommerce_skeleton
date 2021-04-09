@@ -1,6 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/utils.dart';
-import 'package:ecommerce_app/widgets/cartItemWidget.dart';
 import 'package:ecommerce_app/widgets/orderCartItemsWidget.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,6 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
 
     // Calling the cart provider

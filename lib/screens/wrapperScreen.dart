@@ -4,18 +4,20 @@ import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:flutter/material.dart';
 
+import 'favoritesScreen.dart';
+
 class WrapperScreen extends StatefulWidget {
   @override
   WrapperScreenState createState() => WrapperScreenState();
 }
 
 class WrapperScreenState extends State<WrapperScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
   List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     CartScreen(),
     SearchScreen(),
-    TestScreen(),
+    FavoritesScreen(),
     TestScreen(),
   ];
 
@@ -28,7 +30,9 @@ class WrapperScreenState extends State<WrapperScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: SafeArea(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -45,7 +49,7 @@ class WrapperScreenState extends State<WrapperScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            label: 'Wish list',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

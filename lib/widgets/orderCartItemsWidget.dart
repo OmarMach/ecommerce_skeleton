@@ -1,7 +1,5 @@
 import 'package:ecommerce_app/models/cartItem.dart';
-import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class OrderCartItemsWidget extends StatelessWidget {
   const OrderCartItemsWidget({
@@ -13,9 +11,7 @@ class OrderCartItemsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CartProvider cartProvider = Provider.of<CartProvider>(context);
     final size = MediaQuery.of(context).size;
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),

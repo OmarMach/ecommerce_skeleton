@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/productWidget.dart';

@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -322,7 +323,18 @@ class _ProductScreenState extends State<ProductScreen> {
                               Icons.favorite,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            ScaffoldMessenger.of(context)
+                                .removeCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Item Added to the favorites.."),
+                              ),
+                            );
+                            Provider.of<FavoritesProvider>(context,
+                                    listen: false)
+                                .addToFavorites(product);
+                          },
                         ),
                       ),
                     ),

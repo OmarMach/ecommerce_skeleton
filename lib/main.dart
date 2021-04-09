@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
+import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/routes.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (_) => FavoritesProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
