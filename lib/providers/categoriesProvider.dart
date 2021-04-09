@@ -22,7 +22,7 @@ class CategoriesProvider with ChangeNotifier {
     _categories['sub-categories'].forEach((element) {
       if (element.parent == id) subCategories.add(element);
     });
-    
+
     return subCategories;
   }
 
@@ -77,5 +77,13 @@ class CategoriesProvider with ChangeNotifier {
           .firstWhere((element) => element.id == id);
     });
     return category;
+  }
+
+  List<WooProductCategory> getAllOnlyCategories() {
+    return _categories['categories'];
+  }
+
+  List<WooProductCategory> getAllOnlySubCategories() {
+    return _categories['sub-categories'];
   }
 }

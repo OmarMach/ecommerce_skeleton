@@ -36,6 +36,7 @@ class ProductProvider with ChangeNotifier {
     String name = '',
     List<int> categoryIds,
   }) {
+    print(categoryIds.length);
     // initializing an empty list to return it back
     final List<WooProduct> searchedProducts = [];
 

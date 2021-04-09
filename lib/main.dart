@@ -2,6 +2,8 @@ import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/routes.dart';
+import 'package:ecommerce_app/screens/loginScreen.dart';
+import 'package:ecommerce_app/screens/registerScreen.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:flutter/material.dart';
@@ -47,13 +49,12 @@ class MyApp extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return SplashScreen();
                     else
-                      return HomeScreen();
+                      return LoginScreen();
                   },
                 );
             },
           ),
         ),
-        // home: TestScreen(),
       ),
     );
   }

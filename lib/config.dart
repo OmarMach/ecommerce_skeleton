@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:ui';
+
 const baseUrl = "https://goods.tn/";
 
 // Auth informations
@@ -15,6 +17,8 @@ final Map<String, String> headers = {
   'accept': 'application/json',
   'authorization': basicAuth,
 };
+const Color googleColor = Color(0xFFDB4437);
+const Color facebookColor = Color(0xFF4267B2);
 
 final item = """[
     {

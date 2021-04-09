@@ -13,28 +13,18 @@ class SearchAndFilterWidget extends StatefulWidget {
 
 class _SearchAndFilterWidgetState extends State<SearchAndFilterWidget> {
   final List<WooProductCategory> selectedFilters = [];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     // Getting visual helpers.
-    final textTheme = Theme.of(context).textTheme;
-
     final categoriesProvider =
         Provider.of<CategoriesProvider>(context, listen: false);
     final productsProvider =
         Provider.of<ProductProvider>(context, listen: false);
 
-    // Getting the list from the provider.
-    final Map<String, List<WooProductCategory>> categoriesFromProvider =
-        categoriesProvider.categories;
-
     // Mapping the lists from providers.
-    final categories = categoriesFromProvider['categories']
+    final categories = categoriesProvider
+        .getAllOnlyCategories()
         .map<DropdownMenuItem<WooProductCategory>>(
           (value) => DropdownMenuItem<WooProductCategory>(
             value: value,
@@ -44,7 +34,8 @@ class _SearchAndFilterWidgetState extends State<SearchAndFilterWidget> {
         .toList();
 
     final List<DropdownMenuItem<WooProductCategory>> subCategories =
-        categoriesFromProvider['sub-categories']
+        categoriesProvider
+            .getAllOnlySubCategories()
             .map<DropdownMenuItem<WooProductCategory>>(
               (value) => DropdownMenuItem<WooProductCategory>(
                 value: value,
@@ -55,10 +46,11 @@ class _SearchAndFilterWidgetState extends State<SearchAndFilterWidget> {
 
     // initialising the dropdown menus initial values..
     WooProductCategory categoryDropDownValue =
-        categoriesFromProvider['categories'][0];
+        categoriesProvider.getAllOnlyCategories()[0];
 
     WooProductCategory subCategoryDropDownValue =
-        categoriesFromProvider['sub-categories'][0];
+        categoriesProvider.getAllOnlySubCategories()[0];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -169,15 +161,18 @@ class _SearchAndFilterWidgetState extends State<SearchAndFilterWidget> {
           ),
         verticalSeparator,
         ElevatedButton.icon(
-          onPressed: () {
-            final List<int> categoryIds = [];
-            selectedFilters.forEach(
-              (element) {
-                categoryIds.add(element.id);
-              },
-            );
-            productsProvider.searchProductsByFilters(categoryIds: categoryIds);
-          },
+          onPressed: selectedFilters.isEmpty
+              ? null
+              : () {
+                  final List<int> categoryIds = [];
+                  selectedFilters.forEach(
+                    (element) {
+                      categoryIds.add(element.id);
+                    },
+                  );
+                  productsProvider.searchProductsByFilters(
+                      categoryIds: categoryIds);
+                },
           label: Text("Search"),
           style: ElevatedButton.styleFrom(
             primary: Colors.grey.shade800,
