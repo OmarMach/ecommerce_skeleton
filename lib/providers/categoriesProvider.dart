@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:woocommerce/models/product_category.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +12,11 @@ class CategoriesProvider with ChangeNotifier {
     'categories': [],
     'sub-categories': [],
   };
+  final List<WooProductCategory> _grouppedCategories = [];
+
+  List<WooProductCategory> get grouppedCategories {
+    return [..._grouppedCategories];
+  }
 
   Map<String, List<WooProductCategory>> get categories {
     return {..._categories};
@@ -26,10 +32,12 @@ class CategoriesProvider with ChangeNotifier {
     return subCategories;
   }
 
-  Future<Map<String, List<WooProductCategory>>> getAllCategories() async {
+  Future<Map<String, List<WooProductCategory>>> getAllCategories(
+      BuildContext context) async {
     // Clearing the categories to avoid duplicates.
     _categories['categories'].clear();
     _categories['sub-categories'].clear();
+    _grouppedCategories.clear();
 
     // Adding params
     final Map<String, dynamic> params = {
@@ -40,10 +48,12 @@ class CategoriesProvider with ChangeNotifier {
     // Creating the URL
     final Uri uri =
         Uri.https('goods.tn', '/wp-json/wc/v3/products/categories', params);
-
     // Sending the request
     final response = await http.get(uri, headers: headers);
 
+    // Local testing categoreis
+    // final String response = await DefaultAssetBundle.of(context)
+    //     .loadString("assets/responseCategoryExample.json");
     print("Adding Categories..");
 
     // decoding the results into a list.
@@ -52,7 +62,7 @@ class CategoriesProvider with ChangeNotifier {
     categoriesList.forEach((element) {
       // Creating the category item
       final WooProductCategory category = WooProductCategory.fromJson(element);
-
+      _grouppedCategories.add(category);
       // Dividing categories and subcategories.
       if (category.parent == 0)
         _categories['categories'].add(category);

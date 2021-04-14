@@ -171,7 +171,8 @@ class _SearchAndFilterWidgetState extends State<SearchAndFilterWidget> {
                     },
                   );
                   productsProvider.searchProductsByFilters(
-                      categoryIds: categoryIds);
+                    categoriesId: categoryIds,
+                  );
                 },
           label: Text("Search"),
           style: ElevatedButton.styleFrom(

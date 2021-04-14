@@ -1,5 +1,8 @@
+import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
+import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/utils.dart';
+import 'package:ecommerce_app/widgets/filterOnlyWidget.dart';
 import 'package:ecommerce_app/widgets/productWidget.dart';
 import 'package:ecommerce_app/widgets/searchAndFilterWidget.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,10 @@ class _SearchScreenState extends State<SearchScreen> {
     // Getting visual helpers.
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-
+    final categoriesProvider =
+        Provider.of<CategoriesProvider>(context, listen: false);
+    final productsProvider =
+        Provider.of<ProductProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -31,12 +37,105 @@ class _SearchScreenState extends State<SearchScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                buildAppBarSpacer(size),
                 verticalSeparator,
                 Text(
-                  "Search Products..",
-                  style: textTheme.headline4,
+                  "Select categories",
+                  style: textTheme.headline6,
                 ),
-                SearchAndFilterWidget(),
+                Consumer<SearchProvider>(
+                  builder: (context, searchProvider, _) {
+                    final selectedFilters = searchProvider.selectedFilters;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          height: size.height / 3,
+                          padding: EdgeInsets.all(10),
+                          color: Colors.grey.shade800,
+                          child: ListView.builder(
+                            itemCount:
+                                categoriesProvider.grouppedCategories.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final currentCatergory = categoriesProvider
+                                  .grouppedCategories
+                                  .elementAt(index);
+
+                              return CheckboxListTile(
+                                activeColor: Colors.green,
+                                value:
+                                    selectedFilters.contains(currentCatergory),
+                                onChanged: (value) {
+                                  if (!selectedFilters
+                                      .contains(currentCatergory))
+                                    searchProvider.addFilter(currentCatergory);
+                                  else
+                                    searchProvider
+                                        .removeFilter(currentCatergory);
+                                  setState(() {});
+                                },
+                                title: Text(
+                                  currentCatergory.name,
+                                ),
+                                subtitle: Text("items  : " +
+                                    currentCatergory.count.toString()),
+                              );
+                            },
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              searchProvider.addAll(
+                                  categoriesProvider.grouppedCategories);
+                            });
+                          },
+                          label: Text("select all"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey.shade800,
+                          ),
+                          icon: Icon(Icons.add_box_sharp),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: selectedFilters.isEmpty
+                              ? null
+                              : () {
+                                  setState(() {
+                                    searchProvider.clearFilters();
+                                  });
+                                },
+                          label: Text("Clear filters"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey.shade800,
+                          ),
+                          icon: Icon(Icons.delete),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: selectedFilters.isEmpty
+                              ? null
+                              : () {
+                                  final List<int> categoryIds = [];
+                                  selectedFilters.forEach(
+                                    (element) {
+                                      categoryIds.add(element.id);
+                                    },
+                                  );
+                                  productsProvider.searchProductsByFilters(
+                                    categoriesId: categoryIds,
+                                  );
+                                  setState(() {});
+                                },
+                          label: Text("Search"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey.shade800,
+                          ),
+                          icon: Icon(Icons.search_rounded),
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 Divider(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -49,7 +148,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 Divider(),
                 Consumer<ProductProvider>(
                   builder: (context, productProvider, child) {
-                    
                     final List<WooProduct> searchedProducts =
                         productProvider.filteredProducts;
 

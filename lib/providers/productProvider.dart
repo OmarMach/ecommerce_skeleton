@@ -32,51 +32,43 @@ class ProductProvider with ChangeNotifier {
     );
   }
 
-  List<WooProduct> searchProductsByFilters({
+  void searchProductsByFilters({
     String name = '',
-    List<int> categoryIds,
+    List<int> categoriesId,
   }) {
-    print(categoryIds.length);
-    // initializing an empty list to return it back
-    final List<WooProduct> searchedProducts = [];
-
     // clearing the filtered global list.
     filteredProducts.clear();
 
-    // If the categoryids list isn't null and contians elements the function will be executed.
-    if (categoryIds != null && categoryIds.isNotEmpty)
-      searchedProducts.addAll(searchProductsByCategories(categoryIds));
+    // If the categoriesId list isn't null and contians elements the function will be executed.
+    if (categoriesId != null && categoriesId.isNotEmpty)
+      filteredProducts.addAll(searchProductsByCategories(categoriesId));
 
     // if the name isn't null and not empty send the request
     if (name != null && name.isNotEmpty)
-      searchedProducts.addAll(searchProductsByName(name));
+      filteredProducts.addAll(
+        searchProductsByName(name),
+      );
 
-    // notify the widget tree to rebuild.
-    // notifyListeners();
-
-    return searchedProducts;
+    print("Filtered products count : " + filteredProducts.length.toString());
   }
 
-  List<WooProduct> searchProductsByCategories(List<int> categoryIds) {
-    final List<WooProduct> products = [];
-
-    categoryIds.forEach(
+  List<WooProduct> searchProductsByCategories(List<int> categoriesId) {
+    final List<WooProduct> searchedProducts = [];
+    categoriesId.forEach(
       (categoryId) {
         _products.forEach(
           (element) {
-            if (element.categories.where((element) {
-              return element.parent == categoryId;
-            }).isNotEmpty) {
-              products.add(element);
-              if (!filteredProducts.contains(element))
-                filteredProducts.add(element);
-            }
+            bool belongsToCategory = element.categories
+                .where((element) => categoryId == element.id)
+                .isNotEmpty;
+            if (belongsToCategory && !searchedProducts.contains(element))
+              searchedProducts.add(element);
           },
         );
       },
     );
-    notifyListeners();
-    return products;
+
+    return searchedProducts;
   }
 
   List<WooProduct> getProductsByCategory(int categoryId) {
@@ -90,56 +82,71 @@ class ProductProvider with ChangeNotifier {
   }
 
   Future<List<WooProduct>> getProductsFromDb(BuildContext context) async {
+    // Pagination variable
+    int pageNumber = 0;
+
     // Clearing the entries
     _products.clear();
 
     // Adding params
     final Map<String, dynamic> params = {
       'per_page': '100',
-      'page': '1',
+      'page': pageNumber.toString(),
       'status': 'publish',
     };
+    final List productList = [];
 
     try {
-      // Creating the URL
-      final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
+      do {
+        // emptying the product List to not get into a infinite loop.
+        productList.clear();
 
-      // Sending the request
-      // final response = await http.get(uri, headers: headers);
-      final String response = await DefaultAssetBundle.of(context)
-          .loadString("assets/responseExample.json");
+        // Incrementing the page
+        pageNumber++;
+        params['page'] = pageNumber.toString();
+        print(params);
 
-      // decoding the results into a list.
-      final List productList = json.decode(response) as List;
+        // Creating the URL
+        final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
-      // Converting each item to WooProduct.
-      productList.forEach((element) {
-        // Converting product from Json to WooProduct.
-        final WooProduct product = WooProduct.fromJson(element);
+        // Sending the request
+        final response = await http.get(uri, headers: headers);
+        // final String response = await DefaultAssetBundle.of(context)
+        //     .loadString("assets/responseExample.json");
 
-        // Getting the categories
-        final List categories = element['categories'];
-        final List attributes = element['attributes'];
+        // decoding the results into a list.
+        productList.addAll(json.decode(response.body) as List);
 
-        attributes.forEach((element) {
-          final WooProductItemAttribute productAttribute =
-              WooProductItemAttribute.fromJson(element);
-          product.attributes.add(productAttribute);
+        // Converting each item to WooProduct.
+        productList.forEach((element) {
+          // Converting product from Json to WooProduct.
+          final WooProduct product = WooProduct.fromJson(element);
+
+          // Getting the categories
+          final List categories = element['categories'];
+          final List attributes = element['attributes'];
+
+          attributes.forEach((element) {
+            final WooProductItemAttribute productAttribute =
+                WooProductItemAttribute.fromJson(element);
+            product.attributes.add(productAttribute);
+          });
+
+          // Adding the categories to the product.
+          categories.forEach((element) {
+            final WooProductCategory category =
+                WooProductCategory.fromJson(element);
+            // Avoiding duplicates
+            if (product.categories
+                    .indexWhere((product) => product.id == category.id) ==
+                -1) product.categories.add(element);
+          });
+
+          // Adding the product to the list
+          _products.add(product);
         });
-
-        // Adding the categories to the product.
-        categories.forEach((element) {
-          final WooProductCategory category =
-              WooProductCategory.fromJson(element);
-          // Avoiding duplicates
-          if (product.categories
-                  .indexWhere((product) => product.id == category.id) ==
-              -1) product.categories.add(element);
-        });
-
-        // Adding the product to the list
-        _products.add(product);
-      });
+        print("Total products retrieved : " + _products.length.toString());
+      } while (productList.isNotEmpty);
     } catch (e) {
       print("Error : " + e.toString());
     }

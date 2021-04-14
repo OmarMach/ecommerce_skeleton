@@ -15,7 +15,9 @@ class TestScreenState extends State<TestScreen> {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: checkDatabaseConnection,
+        onPressed: () {
+          checkDatabaseConnection(context);
+        },
         style: ElevatedButton.styleFrom(
           primary: error ? Colors.red : Colors.green,
         ),
@@ -29,12 +31,12 @@ class TestScreenState extends State<TestScreen> {
     );
   }
 
-  Future<void> checkDatabaseConnection() async {
+  Future<void> checkDatabaseConnection(BuildContext context) async {
     setState(() {
       isLoading = true;
     });
     try {
-      await CategoriesProvider().getAllCategories();
+      await CategoriesProvider().getAllCategories(context);
     } catch (e) {
       print("Error : " + e);
       setState(() {

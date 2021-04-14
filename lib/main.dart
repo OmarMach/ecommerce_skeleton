@@ -2,6 +2,7 @@ import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
+import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/routes.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
 import 'package:ecommerce_app/screens/wrapperScreen.dart';
@@ -21,6 +22,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProxyProvider<ProductProvider, SearchProvider>(
+          create: (context) => SearchProvider(searchResults: []),
+          update: (BuildContext context, ProductProvider value,
+              SearchProvider previous) {
+            return SearchProvider(searchResults: value.filteredProducts);
+          },
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -44,7 +52,7 @@ class MyApp extends StatelessWidget {
                 return SplashScreen();
               else
                 return FutureBuilder(
-                  // future: categoriesProvider.getAllCategories(),
+                  future: categoriesProvider.getAllCategories(context),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return SplashScreen();

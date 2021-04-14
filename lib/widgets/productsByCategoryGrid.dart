@@ -16,7 +16,8 @@ class ProductsByCategoryGridList extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     final categoryProductList =
-        Provider.of<ProductProvider>(context, listen: false).getProductsByCategory(categoryId);
+        Provider.of<ProductProvider>(context, listen: false)
+            .getProductsByCategory(categoryId);
 
     final sliverGridDelegateWithFixedCrossAxisCount =
         SliverGridDelegateWithFixedCrossAxisCount(
@@ -26,22 +27,18 @@ class ProductsByCategoryGridList extends StatelessWidget {
       crossAxisSpacing: 10,
     );
 
-    return SizedBox(
-      height: size.height / 2.5,
-      child: categoryProductList.isNotEmpty
-          ? GridView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              itemCount: categoryProductList.length,
-              gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
-              itemBuilder: (context, index) {
-                return ProductWidget(product: categoryProductList[index]);
-              },
-            )
-          : Center(
-              child: Text("No products Found.."),
-            ),
-    );
+    return categoryProductList.isNotEmpty
+        ? GridView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: 5,
+            gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
+            itemBuilder: (context, index) {
+              return ProductWidget(product: categoryProductList[index]);
+            },
+          )
+        : Center(
+            child: Text("No products Found.."),
+          );
   }
 }
