@@ -4,6 +4,7 @@ import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils.dart';
 import 'orderScreen.dart';
 
 class CartScreen extends StatelessWidget {
@@ -11,6 +12,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
     return Consumer<CartProvider>(
       builder: (context, cartProvider, _) {
         print('rebuildin cart');
@@ -22,6 +24,7 @@ class CartScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      buildAppBarSpacer(size),
                       Padding(
                         padding: EdgeInsets.all(10),
                         child: Text(

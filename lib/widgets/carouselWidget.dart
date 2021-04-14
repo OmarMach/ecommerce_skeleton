@@ -54,71 +54,102 @@ class CarouselListViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Flexible(
-          flex: 3,
-          child: Image.network(
-            product.images[0].src,
-            height: size.height / 2,
-            width: size.height / 2,
-            fit: BoxFit.fill,
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: Colors.grey.shade900,
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Text(
-                  product.name,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      onPressed: product.stockStatus != 'instock'
-                          ? null
-                          : () {
-                              ScaffoldMessenger.of(context)
-                                  .removeCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Item Added to the cart.."),
-                                ),
-                              );
-                              Provider.of<CartProvider>(
-                                context,
-                                listen: false,
-                              ).addCartItem(product);
-                            },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.grey.shade800,
-                      ),
-                      child: Text("Add to cart"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(ProductScreen.routeName,
-                            arguments: product);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.grey.shade800,
-                      ),
-                      child: Text("View"),
-                    ),
-                  ],
-                )
-              ],
+    return SizedBox(
+      width: size.width,
+      child: Column(
+        children: [
+          Flexible(
+            flex: 2,
+            child: Image.network(
+              product.images[0].src,
+              height: size.height / 2,
+              width: size.height / 2,
+              fit: BoxFit.fill,
             ),
           ),
-        )
-      ],
+          Expanded(
+            flex: 1,
+            child: Container(
+              color: Colors.grey.shade700,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      product.price + " TND",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.subtitle1.copyWith(
+                            color: Colors.green,
+                          ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      product.name,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        OutlinedButton(
+                          onPressed: product.stockStatus != 'instock'
+                              ? null
+                              : () {
+                                  ScaffoldMessenger.of(context)
+                                      .removeCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Item Added to the cart.."),
+                                    ),
+                                  );
+                                  Provider.of<CartProvider>(
+                                    context,
+                                    listen: false,
+                                  ).addCartItem(product);
+                                },
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.white,
+                            side: BorderSide(
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          child: Text("Add to cart"),
+                        ),
+                        OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              ProductScreen.routeName,
+                              arguments: product,
+                            );
+                          },
+                          style: OutlinedButton.styleFrom(
+                            primary: Colors.white,
+                            side: BorderSide(
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          child: Text("View"),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

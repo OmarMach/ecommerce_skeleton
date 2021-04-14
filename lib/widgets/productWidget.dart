@@ -27,53 +27,47 @@ class _ProductWidgetState extends State<ProductWidget> {
         fit: StackFit.loose,
         children: [
           Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade700,
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Column(
               children: [
                 Expanded(
                   flex: 5,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          ProductScreen.routeName,
-                          arguments: widget.product,
-                        );
-                      },
-                      child: Image.network(
-                        widget.product.images[0].src,
-                        fit: BoxFit.fill,
-                        width: size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            ProductScreen.routeName,
+                            arguments: widget.product,
+                          );
+                        },
+                        child: Image.network(
+                          widget.product.images[0].src,
+                          fit: BoxFit.fill,
+                          width: size.width,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Expanded(
                   flex: 4,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade700,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                    ),
+                  child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              widget.product.name,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.product.name,
+                            maxLines: 3,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         Expanded(
@@ -86,10 +80,15 @@ class _ProductWidgetState extends State<ProductWidget> {
                             ),
                           ),
                         ),
-                        Expanded(
+                        Flexible(
                           child: ElevatedButton(
                             onPressed: widget.product.stockStatus != 'instock'
-                                ? null
+                                ? () {
+                                    Navigator.of(context).pushNamed(
+                                      ProductScreen.routeName,
+                                      arguments: widget.product,
+                                    );
+                                  }
                                 : () {
                                     ScaffoldMessenger.of(context)
                                         .removeCurrentSnackBar();
@@ -106,24 +105,9 @@ class _ProductWidgetState extends State<ProductWidget> {
                                   },
                             child: Text(
                               widget.product.stockStatus != 'instock'
-                                  ? "Out of stock"
+                                  ? "Read More"
                                   : "Add to cart",
                             ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.grey.shade800,
-                            ),
-                          ),
-                        ),
-                        verticalSeparator,
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                ProductScreen.routeName,
-                                arguments: widget.product,
-                              );
-                            },
-                            child: Text("View"),
                             style: ElevatedButton.styleFrom(
                               primary: Colors.grey.shade800,
                             ),
@@ -154,10 +138,12 @@ class _ProductWidgetState extends State<ProductWidget> {
                         return IconButton(
                           splashRadius: 10,
                           icon: Icon(
-                            Icons.favorite,
-                            color: !alreadyExists
-                                ? Colors.white
-                                : Colors.redAccent,
+                            alreadyExists
+                                ? Icons.check
+                                : Icons.favorite_outline,
+                            color: alreadyExists
+                                ? Colors.red.shade800
+                                : Colors.green.shade700,
                           ),
                           onPressed: () {
                             ScaffoldMessenger.of(context)

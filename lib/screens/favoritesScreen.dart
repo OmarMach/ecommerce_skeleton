@@ -3,16 +3,20 @@ import 'package:ecommerce_app/widgets/favoritesGridList.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils.dart';
+
 class FavoritesScreen extends StatelessWidget {
   static const routeName = '/favs';
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        buildAppBarSpacer(size),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
           child: Column(

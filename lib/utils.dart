@@ -7,6 +7,9 @@ const verticalSeparator = SizedBox(
 const horizontalSeparator = SizedBox(
   width: 10,
 );
+final buildAppBarSpacer = (Size size) => SizedBox(
+      height: size.height / 12,
+    );
 
 String removeAllHtmlTags(String htmlText) {
   RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
