@@ -97,56 +97,56 @@ class ProductProvider with ChangeNotifier {
     final List productList = [];
 
     try {
-      do {
-        // emptying the product List to not get into a infinite loop.
-        productList.clear();
+      // do {
+      // emptying the product List to not get into a infinite loop.
+      productList.clear();
 
-        // Incrementing the page
-        pageNumber++;
-        params['page'] = pageNumber.toString();
-        print(params);
+      // Incrementing the page
+      pageNumber++;
+      params['page'] = pageNumber.toString();
+      print(params);
 
-        // Creating the URL
-        final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
+      // Creating the URL
+      final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
-        // Sending the request
-        final response = await http.get(uri, headers: headers);
-        // final String response = await DefaultAssetBundle.of(context)
-        //     .loadString("assets/responseExample.json");
+      // Sending the request
+      // final response = await http.get(uri, headers: headers);
+      final String response = await DefaultAssetBundle.of(context)
+          .loadString("assets/responseExample.json");
 
-        // decoding the results into a list.
-        productList.addAll(json.decode(response.body) as List);
+      // decoding the results into a list.
+      productList.addAll(json.decode(response) as List);
 
-        // Converting each item to WooProduct.
-        productList.forEach((element) {
-          // Converting product from Json to WooProduct.
-          final WooProduct product = WooProduct.fromJson(element);
+      // Converting each item to WooProduct.
+      productList.forEach((element) {
+        // Converting product from Json to WooProduct.
+        final WooProduct product = WooProduct.fromJson(element);
 
-          // Getting the categories
-          final List categories = element['categories'];
-          final List attributes = element['attributes'];
+        // Getting the categories
+        final List categories = element['categories'];
+        final List attributes = element['attributes'];
 
-          attributes.forEach((element) {
-            final WooProductItemAttribute productAttribute =
-                WooProductItemAttribute.fromJson(element);
-            product.attributes.add(productAttribute);
-          });
-
-          // Adding the categories to the product.
-          categories.forEach((element) {
-            final WooProductCategory category =
-                WooProductCategory.fromJson(element);
-            // Avoiding duplicates
-            if (product.categories
-                    .indexWhere((product) => product.id == category.id) ==
-                -1) product.categories.add(element);
-          });
-
-          // Adding the product to the list
-          _products.add(product);
+        attributes.forEach((element) {
+          final WooProductItemAttribute productAttribute =
+              WooProductItemAttribute.fromJson(element);
+          product.attributes.add(productAttribute);
         });
-        print("Total products retrieved : " + _products.length.toString());
-      } while (productList.isNotEmpty);
+
+        // Adding the categories to the product.
+        categories.forEach((element) {
+          final WooProductCategory category =
+              WooProductCategory.fromJson(element);
+          // Avoiding duplicates
+          if (product.categories
+                  .indexWhere((product) => product.id == category.id) ==
+              -1) product.categories.add(element);
+        });
+
+        // Adding the product to the list
+        _products.add(product);
+      });
+      print("Total products retrieved : " + _products.length.toString());
+      // } while (productList.isNotEmpty);
     } catch (e) {
       print("Error : " + e.toString());
     }

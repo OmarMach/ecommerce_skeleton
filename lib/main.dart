@@ -22,13 +22,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
-        ChangeNotifierProxyProvider<ProductProvider, SearchProvider>(
-          create: (context) => SearchProvider(searchResults: []),
-          update: (BuildContext context, ProductProvider value,
-              SearchProvider previous) {
-            return SearchProvider(searchResults: value.filteredProducts);
-          },
-        ),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
+        
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -16,13 +16,12 @@ class ProductsByCategoryGridList extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     final categoryProductList =
-        Provider.of<ProductProvider>(context, listen: false)
-            .getProductsByCategory(categoryId);
+        Provider.of<ProductProvider>(context, listen: false).items;
 
     final sliverGridDelegateWithFixedCrossAxisCount =
         SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 1,
-      childAspectRatio: 5 / 3,
+      crossAxisCount: 2,
+      childAspectRatio: 0.6,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
     );

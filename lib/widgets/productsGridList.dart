@@ -17,31 +17,27 @@ class ProductsGridList extends StatelessWidget {
 
     const sliverGridDelegateWithFixedCrossAxisCount =
         SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 1,
-      childAspectRatio: 5 / 3,
+      crossAxisCount: 2,
+      childAspectRatio: 0.6,
       mainAxisSpacing: 20,
+      crossAxisSpacing: 20,
     );
 
-    return SizedBox(
-      // Fixing the height of this gridview since it shrink wrap works only on the main axis.
-      height: size.height / 2.5,
-      child: productsList.isNotEmpty
-          ? GridView.builder(
-              shrinkWrap: true,
-              clipBehavior: Clip.antiAlias,
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              itemCount: productsList.length,
-              gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
-              itemBuilder: (context, index) {
-                return ProductWidget(
-                  product: productsList[index],
-                );
-              },
-            )
-          : Center(
-              child: Text("No products Found.."),
-            ),
-    );
+    return productsList.isNotEmpty
+        ? GridView.builder(
+            shrinkWrap: true,
+            clipBehavior: Clip.antiAlias,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: 5,
+            gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
+            itemBuilder: (context, index) {
+              return ProductWidget(
+                product: productsList[index],
+              );
+            },
+          )
+        : Center(
+            child: Text("No products Found.."),
+          );
   }
 }

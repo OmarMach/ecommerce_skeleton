@@ -2,9 +2,7 @@ import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/utils.dart';
-import 'package:ecommerce_app/widgets/filterOnlyWidget.dart';
 import 'package:ecommerce_app/widgets/productWidget.dart';
-import 'package:ecommerce_app/widgets/searchAndFilterWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woocommerce/models/product_category.dart';
@@ -24,10 +22,12 @@ class _SearchScreenState extends State<SearchScreen> {
     // Getting visual helpers.
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+    // Getting the categories
     final categoriesProvider =
         Provider.of<CategoriesProvider>(context, listen: false);
-    final productsProvider =
-        Provider.of<ProductProvider>(context, listen: false);
+    // keywords Text Controller
+    TextEditingController _keywordsController = TextEditingController();
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -38,10 +38,35 @@ class _SearchScreenState extends State<SearchScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 buildAppBarSpacer(size),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Search Products",
+                    style: textTheme.headline4,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Keywords",
+                    style: textTheme.headline6,
+                  ),
+                ),
+                TextFormField(
+                  controller: _keywordsController,
+                  decoration: buildFormInputDecoration(
+                    icon: Icons.search,
+                    label: 'Keywords..',
+                  ),
+                ),
                 verticalSeparator,
-                Text(
-                  "Select categories",
-                  style: textTheme.headline6,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Select categories",
+                    style: textTheme.headline6,
+                  ),
                 ),
                 Consumer<SearchProvider>(
                   builder: (context, searchProvider, _) {
@@ -73,7 +98,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                   else
                                     searchProvider
                                         .removeFilter(currentCatergory);
-                                  setState(() {});
                                 },
                                 title: Text(
                                   currentCatergory.name,
@@ -84,92 +108,118 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                           ),
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              searchProvider.addAll(
-                                  categoriesProvider.grouppedCategories);
-                            });
-                          },
-                          label: Text("select all"),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey.shade800,
-                          ),
-                          icon: Icon(Icons.add_box_sharp),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: selectedFilters.isEmpty
-                              ? null
-                              : () {
-                                  setState(() {
-                                    searchProvider.clearFilters();
-                                  });
-                                },
-                          label: Text("Clear filters"),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey.shade800,
-                          ),
-                          icon: Icon(Icons.delete),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: selectedFilters.isEmpty
-                              ? null
-                              : () {
-                                  final List<int> categoryIds = [];
-                                  selectedFilters.forEach(
-                                    (element) {
-                                      categoryIds.add(element.id);
-                                    },
-                                  );
-                                  productsProvider.searchProductsByFilters(
-                                    categoriesId: categoryIds,
-                                  );
-                                  setState(() {});
-                                },
-                          label: Text("Search"),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey.shade800,
-                          ),
-                          icon: Icon(Icons.search_rounded),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: selectedFilters.isEmpty
+                                    ? null
+                                    : () {
+                                        final List<int> categoryIds = [];
+                                        selectedFilters.forEach(
+                                          (element) {
+                                            categoryIds.add(element.id);
+                                          },
+                                        );
+                                        searchProvider
+                                            .searchProductByCategoriesId(
+                                                categoryIds);
+                                        searchProvider.clearSearchedProducts();
+                                      },
+                                label: Text("Search"),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey.shade800,
+                                ),
+                                icon: Icon(Icons.search_rounded),
+                              ),
+                            ),
+                            selectedFilters.isNotEmpty
+                                ? Row(
+                                    children: [
+                                      horizontalSeparator,
+                                      ElevatedButton.icon(
+                                        onPressed: selectedFilters.isEmpty
+                                            ? null
+                                            : () {
+                                                searchProvider.clearFilters();
+                                              },
+                                        label: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text("Clear filters"),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.grey.shade800,
+                                        ),
+                                        icon: Icon(Icons.delete),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                          ],
                         ),
                       ],
                     );
                   },
                 ),
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Search results",
-                    textAlign: TextAlign.center,
-                    style: textTheme.headline6,
-                  ),
-                ),
-                Divider(),
-                Consumer<ProductProvider>(
-                  builder: (context, productProvider, child) {
+                Consumer<SearchProvider>(
+                  builder: (context, searchProvider, child) {
                     final List<WooProduct> searchedProducts =
-                        productProvider.filteredProducts;
-
-                    return Container(
-                      width: size.width * .9,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.55,
-                          mainAxisSpacing: 10,
-                        ),
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: searchedProducts.length,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ProductWidget(
-                            product: searchedProducts[index],
-                          ),
-                        ),
-                      ),
-                    );
+                        searchProvider.searchedProducts;
+                    print(searchProvider.isLoading);
+                    return searchedProducts.length > 0
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Divider(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Search results",
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.headline6,
+                                ),
+                              ),
+                              Divider(),
+                              ElevatedButton.icon(
+                                onPressed: searchProvider
+                                        .searchedProducts.isEmpty
+                                    ? null
+                                    : () {
+                                        searchProvider.clearSearchedProducts();
+                                      },
+                                label: FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text("Clear results"),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey.shade800,
+                                ),
+                                icon: Icon(Icons.delete),
+                              ),
+                              GridView.builder(
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.55,
+                                  mainAxisSpacing: 10,
+                                ),
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: searchedProducts.length,
+                                itemBuilder: (context, index) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ProductWidget(
+                                    product: searchedProducts[index],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : searchProvider.isLoading
+                            ? Container(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Container();
                   },
                 )
               ],
@@ -179,4 +229,20 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+}
+
+InputDecoration buildFormInputDecoration({
+  IconData icon,
+  String hint,
+  String label,
+}) {
+  return InputDecoration(
+    suffixIcon: Icon(icon) ?? null,
+    hintText: hint ?? '',
+    labelText: label ?? '',
+    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+    border: new OutlineInputBorder(
+      borderSide: new BorderSide(),
+    ),
+  );
 }
