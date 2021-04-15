@@ -71,14 +71,57 @@ class ProductProvider with ChangeNotifier {
     return searchedProducts;
   }
 
-  List<WooProduct> getProductsByCategory(int categoryId) {
-    final List<WooProduct> products = [];
-    _products.forEach((element) {
-      if (element.categories
-          .where((element) => element.id == categoryId)
-          .isNotEmpty) products.add(element);
-    });
-    return products;
+  Future<List<WooProduct>> getProductsByCategory(int categoryId) async {
+    // Adding params
+    final Map<String, dynamic> params = {
+      'per_page': '100',
+      'status': 'publish',
+      'category': '$categoryId',
+    };
+    final List productList = [];
+    final List<WooProduct> searchedProducts = [];
+
+    final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
+    final response = await http.get(uri, headers: headers);
+
+    // decoding the results into a list.
+    productList.addAll(json.decode(response.body) as List);
+
+    // Converting each item to WooProduct.
+    productList.forEach(
+      (element) {
+        // Converting product from Json to WooProduct.
+        final WooProduct product = WooProduct.fromJson(element);
+
+        // Getting the categories
+        final List categories = element['categories'];
+        final List attributes = element['attributes'];
+
+        attributes.forEach(
+          (element) {
+            final WooProductItemAttribute productAttribute =
+                WooProductItemAttribute.fromJson(element);
+            product.attributes.add(productAttribute);
+          },
+        );
+
+        // Adding the categories to the product.
+        categories.forEach(
+          (element) {
+            final WooProductCategory category =
+                WooProductCategory.fromJson(element);
+            // Avoiding duplicates
+            if (product.categories
+                    .indexWhere((product) => product.id == category.id) ==
+                -1) product.categories.add(element);
+          },
+        );
+
+        // Adding the product to the list
+        if (!searchedProducts.contains(product)) searchedProducts.add(product);
+      },
+    );
+    return searchedProducts;
   }
 
   Future<List<WooProduct>> getProductsFromDb(BuildContext context) async {
@@ -90,7 +133,7 @@ class ProductProvider with ChangeNotifier {
 
     // Adding params
     final Map<String, dynamic> params = {
-      'per_page': '100',
+      'per_page': '10',
       'page': pageNumber.toString(),
       'status': 'publish',
     };
@@ -110,12 +153,12 @@ class ProductProvider with ChangeNotifier {
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
       // Sending the request
-      // final response = await http.get(uri, headers: headers);
-      final String response = await DefaultAssetBundle.of(context)
-          .loadString("assets/responseExample.json");
+      final response = await http.get(uri, headers: headers);
+      // final String response = await DefaultAssetBundle.of(context)
+      // .loadString("assets/responseExample.json");
 
       // decoding the results into a list.
-      productList.addAll(json.decode(response) as List);
+      productList.addAll(json.decode(response.body) as List);
 
       // Converting each item to WooProduct.
       productList.forEach((element) {

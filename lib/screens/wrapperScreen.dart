@@ -13,7 +13,7 @@ class WrapperScreen extends StatefulWidget {
 }
 
 class WrapperScreenState extends State<WrapperScreen> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     CartScreen(),

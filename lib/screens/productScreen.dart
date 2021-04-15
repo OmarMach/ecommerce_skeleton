@@ -224,6 +224,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         verticalSeparator,
                         ProductsByCategoryGridList(
                           categoryId: product.categories[0].id,
+                          limit: 5,
                         ),
                         // this box prevents from hiding the grid elements.
                         SizedBox(

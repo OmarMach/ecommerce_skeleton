@@ -19,13 +19,14 @@ class CarouselWidget extends StatelessWidget {
         Provider.of<ProductProvider>(context, listen: false);
 
     return Container(
-      height: size.height / 2,
+      height: size.height / 2.5,
       child: CarouselSlider(
         options: CarouselOptions(
           autoPlay: true,
           disableCenter: true,
           enlargeStrategy: CenterPageEnlargeStrategy.scale,
           initialPage: 0,
+          viewportFraction: 1,
         ),
         items: [
           ...productsProvider.items
@@ -53,24 +54,29 @@ class CarouselListViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Visual Getters
     final size = MediaQuery.of(context).size;
-    return SizedBox(
+
+    return Container(
+      height: size.width,
       width: size.width,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: NetworkImage(
+          product.images[0].src,
+        ),
+        fit: BoxFit.fill,
+      )),
       child: Column(
         children: [
           Flexible(
             flex: 2,
-            child: Image.network(
-              product.images[0].src,
-              height: size.height / 2,
-              width: size.height / 2,
-              fit: BoxFit.fill,
-            ),
+            child: Container(),
           ),
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.grey.shade700,
+              color: Colors.grey.shade700.withAlpha(230),
               padding: EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,10 +97,10 @@ class CarouselListViewItem extends StatelessWidget {
                     flex: 2,
                     child: Text(
                       product.name,
-                      maxLines: 3,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                   Flexible(

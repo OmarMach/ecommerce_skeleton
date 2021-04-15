@@ -55,7 +55,6 @@ class SearchProvider with ChangeNotifier {
 
     categoriesId.forEach(
       (element) async {
-        print("category $categoriesId " + isLoading.toString());
         await searchProductsByCategory(element);
       },
     );

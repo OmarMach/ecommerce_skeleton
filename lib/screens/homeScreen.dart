@@ -34,20 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "New Arrivals",
                   style: Theme.of(context).textTheme.headline5,
+                  textAlign: TextAlign.center,
                 ),
               ),
-              ProductsGridList(),
+              ProductsGridList(
+                limit: 5,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   "Screen Refurbish Tools",
                   style: Theme.of(context).textTheme.headline5,
+                  textAlign: TextAlign.center,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
-                  categoryId: 71,
+                  categoryId: 71,limit: 5,
                 ),
               ),
               Padding(
@@ -55,11 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "Soldering accessories",
                   style: Theme.of(context).textTheme.headline5,
+                  textAlign: TextAlign.center,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProductsByCategoryGridList(
+                  limit: 5,
                   categoryId: 79,
                 ),
               ),

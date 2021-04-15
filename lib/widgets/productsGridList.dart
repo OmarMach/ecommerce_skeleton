@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProductsGridList extends StatelessWidget {
+  final int limit;
   const ProductsGridList({
     Key key,
+    @required this.limit,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final productsList =
         Provider.of<ProductProvider>(context, listen: false).items;
-
-    final size = MediaQuery.of(context).size;
 
     const sliverGridDelegateWithFixedCrossAxisCount =
         SliverGridDelegateWithFixedCrossAxisCount(
@@ -28,7 +28,7 @@ class ProductsGridList extends StatelessWidget {
             shrinkWrap: true,
             clipBehavior: Clip.antiAlias,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: 5,
+            itemCount: limit,
             gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
             itemBuilder: (context, index) {
               return ProductWidget(
