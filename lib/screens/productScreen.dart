@@ -1,5 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
+import 'package:ecommerce_app/widgets/ProductImagesCarousel.dart';
+import 'package:ecommerce_app/widgets/ProductImagesNavigatorWidget.dart';
+import 'package:ecommerce_app/widgets/carouselWidget.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,64 +34,7 @@ class _ProductScreenState extends State<ProductScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      Image.network(
-                        product.images[currentImageIndex].src,
-                        fit: BoxFit.cover,
-                        height: size.height / 2,
-                        width: size.width,
-                      ),
-                      // Only show the controls if the products have more than 1 image.
-                      if (product.images.length > 1)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (currentImageIndex > 0)
-                              Material(
-                                color: Colors.black.withAlpha(150),
-                                child: InkWell(
-                                  child: SizedBox(
-                                    height: size.height / 2,
-                                    width: 35,
-                                    child: Icon(
-                                      Icons.keyboard_arrow_left_outlined,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    if (currentImageIndex > 0)
-                                      setState(() {
-                                        currentImageIndex--;
-                                      });
-                                  },
-                                ),
-                              ),
-                            // This box Prevents from the buttons changing their locations
-                            Expanded(child: SizedBox()),
-                            if (currentImageIndex < product.images.length - 1)
-                              Material(
-                                color: Colors.black.withAlpha(150),
-                                child: InkWell(
-                                  child: SizedBox(
-                                    height: size.height / 2,
-                                    width: 35,
-                                    child: Icon(
-                                      Icons.keyboard_arrow_right_outlined,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    if (currentImageIndex <
-                                        product.images.length)
-                                      setState(() {
-                                        currentImageIndex++;
-                                      });
-                                  },
-                                ),
-                              ),
-                          ],
-                        )
-                    ],
-                  ),
+                  ProductImagesCarousel(items: product.images),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
