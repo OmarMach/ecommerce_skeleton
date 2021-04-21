@@ -3,6 +3,7 @@ import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/widgets/ProductImagesCarousel.dart';
 import 'package:ecommerce_app/widgets/ProductImagesNavigatorWidget.dart';
+import 'package:ecommerce_app/widgets/ProductMiniatureImageListWidget.dart';
 import 'package:ecommerce_app/widgets/carouselWidget.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,15 @@ class _ProductScreenState extends State<ProductScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  ProductImagesCarousel(items: product.images),
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    color: Colors.blueGrey.shade700,
+                    child: Column(
+                      children: [
+                        ProductImagesCarousel(items: product.images),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
