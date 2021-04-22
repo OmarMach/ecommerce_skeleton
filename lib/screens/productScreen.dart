@@ -93,6 +93,46 @@ class _ProductScreenState extends State<ProductScreen> {
                     AddToCartButtons(
                       product: product,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                ScaffoldMessenger.of(context)
+                                    .removeCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text("Item Added to the favorites.."),
+                                  ),
+                                );
+                                Provider.of<FavoritesProvider>(context,
+                                        listen: false)
+                                    .addToFavorites(product);
+                              },
+                              child: SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.favorite_outline,
+                                        color: Colors.green,
+                                      ),
+                                      horizontalSeparator,
+                                      Text("Add to Wish list"),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Divider(),
                     // Aramex
                     Padding(
