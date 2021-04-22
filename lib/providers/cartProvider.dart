@@ -69,7 +69,7 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  void addCartItem(WooProduct product) {
+  void addCartItem(WooProduct product, {int quantity = 1}) {
     try {
       // Adding +1 to the quantity of the product if it exists already
       if (_cartItems.containsKey(product.id)) {
@@ -78,7 +78,7 @@ class CartProvider with ChangeNotifier {
           (value) => CartItem(
             id: value.id,
             product: value.product,
-            quantity: value.quantity + 1,
+            quantity: value.quantity + quantity ?? 1,
           ),
         );
       } else {
@@ -88,7 +88,7 @@ class CartProvider with ChangeNotifier {
           () => CartItem(
             id: product.id,
             product: product,
-            quantity: 1,
+            quantity: quantity ?? 1,
           ),
         );
       }

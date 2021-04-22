@@ -29,7 +29,7 @@ class ProductsByCategoryGridList extends StatelessWidget {
           .getProductsByCategory(categoryId),
       builder: (context, AsyncSnapshot<List<WooProduct>> snapshot) =>
           snapshot.connectionState == ConnectionState.waiting
-              ? Container(
+              ? Center(
                   child: CircularProgressIndicator(),
                 )
               : GridView.builder(
