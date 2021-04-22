@@ -153,12 +153,12 @@ class ProductProvider with ChangeNotifier {
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
 
       // Sending the request
-      final response = await http.get(uri, headers: headers);
-      // final String response = await DefaultAssetBundle.of(context)
-      // .loadString("assets/responseExample.json");
+      // final response = await http.get(uri, headers: headers);
+      final String response = await DefaultAssetBundle.of(context)
+          .loadString("assets/responseExample.json");
 
       // decoding the results into a list.
-      productList.addAll(json.decode(response.body) as List);
+      productList.addAll(json.decode(response) as List);
 
       // Converting each item to WooProduct.
       productList.forEach((element) {

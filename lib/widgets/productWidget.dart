@@ -60,24 +60,26 @@ class _ProductWidgetState extends State<ProductWidget> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            widget.product.name,
-                            maxLines: 3,
-                            textAlign: TextAlign.center,
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              widget.product.name,
+                              maxLines: 3,
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
-                        Expanded(
-                          child: Text(
-                            widget.product.price + " Tnd",
-                            maxLines: 1,
-                            textAlign: TextAlign.center,
-                            style: textTheme.subtitle1.copyWith(
-                              color: Colors.green,
-                            ),
+                        Text(
+                          widget.product.price + " Tnd",
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: textTheme.subtitle1.copyWith(
+                            color: Colors.green,
                           ),
                         ),
                         Flexible(

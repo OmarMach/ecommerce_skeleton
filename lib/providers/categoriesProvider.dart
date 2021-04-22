@@ -49,15 +49,15 @@ class CategoriesProvider with ChangeNotifier {
     final Uri uri =
         Uri.https('goods.tn', '/wp-json/wc/v3/products/categories', params);
     // Sending the request
-    final response = await http.get(uri, headers: headers);
+    // final response = await http.get(uri, headers: headers);
 
     // Local testing categoreis
-    // final String response = await DefaultAssetBundle.of(context)
-    //     .loadString("assets/responseCategoryExample.json");
+    final String response = await DefaultAssetBundle.of(context)
+        .loadString("assets/responseCategoryExample.json");
     print("Adding Categories..");
 
     // decoding the results into a list.
-    final List categoriesList = json.decode(response.body) as List;
+    final List categoriesList = json.decode(response) as List;
 
     categoriesList.forEach((element) {
       // Creating the category item
