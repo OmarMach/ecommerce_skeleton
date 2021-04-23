@@ -74,6 +74,27 @@ class DrawerMenuWidget extends StatelessWidget {
               ),
               DrawerCategoriesMenu(),
               Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Call us on",
+                  style: textTheme.caption,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  "31 137 337",
+                  style: textTheme.subtitle2,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  "53 768 766",
+                  style: textTheme.subtitle2,
+                ),
+              ),
             ],
           ),
         ),
@@ -167,14 +188,17 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                               arguments: {subCategory.name: subCategory.id},
                             );
                           },
-                          child: Text(subCategory.name),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(subCategory.name),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 );
               },
-            )
+            ),
         ],
       ),
     );
