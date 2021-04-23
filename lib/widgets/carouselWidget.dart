@@ -61,12 +61,14 @@ class CarouselListViewItem extends StatelessWidget {
       height: size.width,
       width: size.width,
       decoration: BoxDecoration(
-          image: DecorationImage(
-        image: NetworkImage(
-          product.images[0].src,
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: NetworkImage(
+            product.images[0].src,
+          ),
+          fit: BoxFit.fill,
         ),
-        fit: BoxFit.fill,
-      )),
+      ),
       child: Column(
         children: [
           Flexible(
@@ -76,7 +78,13 @@ class CarouselListViewItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.grey.shade700.withAlpha(230),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                color: Colors.grey.shade700.withAlpha(230),
+              ),
               padding: EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
