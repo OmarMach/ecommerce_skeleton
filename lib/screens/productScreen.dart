@@ -35,7 +35,6 @@ class _ProductScreenState extends State<ProductScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              AppBarWidget(),
               Container(
                 padding: EdgeInsets.all(10),
                 color: Colors.blueGrey.shade700,

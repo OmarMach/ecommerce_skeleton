@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/screens/cartScreen.dart';
+import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -10,17 +12,26 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.all(8.0),
         child: Image.asset(
           'assets/images/Logo.png',
-          height: size.height / 13,
           width: size.width * .3,
         ),
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(SearchScreen.routeName);
+          },
+          icon: Icon(
+            Icons.search,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(CartScreen.routeName);
+          },
           icon: Icon(
             Icons.shopping_bag_outlined,
           ),
-        )
+        ),
       ],
     );
   }
