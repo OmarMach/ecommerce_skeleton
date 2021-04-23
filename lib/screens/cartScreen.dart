@@ -26,7 +26,6 @@ class CartScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        buildAppBarSpacer(size),
                         Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
