@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
+import 'package:ecommerce_app/screens/cartScreen.dart';
+import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +100,13 @@ class _ProductWidgetState extends State<ProductWidget> {
                                       SnackBar(
                                         content:
                                             Text("Item Added to the cart.."),
+                                        action: SnackBarAction(
+                                          label: "View Cart",
+                                          onPressed: () {
+                                            Navigator.of(context).pushNamed(
+                                                CartScreen.routeName);
+                                          },
+                                        ),
                                       ),
                                     );
                                     Provider.of<CartProvider>(
@@ -154,7 +163,14 @@ class _ProductWidgetState extends State<ProductWidget> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content:
-                                      Text("Item removed to the favorites.."),
+                                      Text("Item removed to the Wish list.."),
+                                  action: SnackBarAction(
+                                    label: "View Wish List",
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed(FavoritesScreen.routeName);
+                                    },
+                                  ),
                                 ),
                               );
                               favoritesProvider
@@ -163,7 +179,14 @@ class _ProductWidgetState extends State<ProductWidget> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content:
-                                      Text("Item Added to the favorites.."),
+                                      Text("Item Added to the Wish list.."),
+                                  action: SnackBarAction(
+                                    label: "View Wish List",
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed(FavoritesScreen.routeName);
+                                    },
+                                  ),
                                 ),
                               );
                               favoritesProvider.addToFavorites(widget.product);

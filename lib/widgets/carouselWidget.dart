@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
+import 'package:ecommerce_app/screens/cartScreen.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -125,6 +126,13 @@ class CarouselListViewItem extends StatelessWidget {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text("Item Added to the cart.."),
+                                      action: SnackBarAction(
+                                        label: "View Cart",
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pushNamed(CartScreen.routeName);
+                                        },
+                                      ),
                                     ),
                                   );
                                   Provider.of<CartProvider>(
