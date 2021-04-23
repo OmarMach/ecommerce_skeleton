@@ -1,65 +1,181 @@
+import 'package:ecommerce_app/models/CategoryItem.dart';
+import 'package:ecommerce_app/providers/categoriesProvider.dart';
+import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/orderScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DrawerMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
+
     return Drawer(
       child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
-              child: Image.asset(
-                'assets/images/Logo.png',
-                width: size.width / 10,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 50.0, vertical: 20.0),
+                child: Image.asset(
+                  'assets/images/Logo.png',
+                  width: size.width / 10,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Browse",
-                style: textTheme.caption,
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Browse",
+                  style: textTheme.caption,
+                ),
               ),
-            ),
-            Divider(),
-            DrawerMenuItem(
-              icon: Icons.home,
-              label: 'Home',
-              onTap: () {
-                Navigator.of(context).pushNamed(HomeScreen.routeName);
-              },
-            ),
-            DrawerMenuItem(
-              icon: Icons.favorite,
-              label: 'My Wishlist',
-              onTap: () {
-                Navigator.of(context).pushNamed(FavoritesScreen.routeName);
-              },
-            ),
-            DrawerMenuItem(
-              icon: Icons.person,
-              label: 'My Account',
-              onTap: () {
-                Navigator.of(context).pushNamed(TestScreen.routeName);
-              },
-            ),
-            DrawerMenuItem(
-              icon: Icons.payment,
-              label: 'Checkout',
-              onTap: () {
-                Navigator.of(context).pushNamed(OrderScreen.routeName);
-              },
-            ),
-          ],
+              DrawerMenuItem(
+                icon: Icons.home,
+                label: 'Home',
+                onTap: () {
+                  Navigator.of(context).pushNamed(HomeScreen.routeName);
+                },
+              ),
+              DrawerMenuItem(
+                icon: Icons.favorite,
+                label: 'My Wishlist',
+                onTap: () {
+                  Navigator.of(context).pushNamed(FavoritesScreen.routeName);
+                },
+              ),
+              DrawerMenuItem(
+                icon: Icons.person,
+                label: 'My Account',
+                onTap: () {
+                  Navigator.of(context).pushNamed(TestScreen.routeName);
+                },
+              ),
+              DrawerMenuItem(
+                icon: Icons.payment,
+                label: 'Checkout',
+                onTap: () {
+                  Navigator.of(context).pushNamed(OrderScreen.routeName);
+                },
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Categories",
+                  style: textTheme.caption,
+                ),
+              ),
+              DrawerCategoriesMenu(),
+              Divider(),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class DrawerCategoriesMenu extends StatelessWidget {
+  const DrawerCategoriesMenu({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Getting the list of transformed categories
+    final List<CategoryItem> categories =
+        Provider.of<CategoriesProvider>(context, listen: false)
+            .transformedCategories;
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        final category = categories.elementAt(index);
+        return DrawerCategoryItem(
+          category: category,
+        );
+      },
+    );
+  }
+}
+
+class DrawerCategoryItem extends StatefulWidget {
+  final CategoryItem category;
+  const DrawerCategoryItem({
+    Key key,
+    @required this.category,
+  }) : super(key: key);
+
+  @override
+  _DrawerCategoryItemState createState() => _DrawerCategoryItemState();
+}
+
+class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
+  bool isExpanded = false;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                isExpanded = !isExpanded;
+              });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.category.name,
+                ),
+                Icon(
+                  isExpanded
+                      ? Icons.keyboard_arrow_up_rounded
+                      : Icons.keyboard_arrow_down_rounded,
+                ),
+              ],
+            ),
+          ),
+          if (isExpanded)
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.category.subCategories.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final subCategory =
+                    widget.category.subCategories.elementAt(index);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              CategoryProductsScreen.routeName,
+                              arguments: subCategory.name,
+                            );
+                          },
+                          child: Text(subCategory.name),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+        ],
       ),
     );
   }

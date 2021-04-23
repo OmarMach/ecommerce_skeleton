@@ -67,6 +67,7 @@ class _LoadingWidgetState extends State<LoadingWidget> {
 
           print("Loading cats");
           await categoriesProvider.getAllCategories(context);
+          categoriesProvider.transformCategories();
           return Future;
         }
 

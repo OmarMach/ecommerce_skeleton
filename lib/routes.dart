@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
+
 import 'screens/favoritesScreen.dart';
 
 import 'screens/homeScreen.dart';
@@ -21,4 +23,5 @@ final routes = {
   LoginScreen.routeName: (context) => LoginScreen(),
   RegisterScreen.routeName: (context) => RegisterScreen(),
   FavoritesScreen.routeName: (context) => FavoritesScreen(),
+  CategoryProductsScreen.routeName: (context) => CategoryProductsScreen(),
 };

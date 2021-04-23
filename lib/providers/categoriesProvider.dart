@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecommerce_app/models/CategoryItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:woocommerce/models/product_category.dart';
@@ -14,12 +15,51 @@ class CategoriesProvider with ChangeNotifier {
   };
   final List<WooProductCategory> _grouppedCategories = [];
 
+  final List<CategoryItem> _transformedCategories = [];
+
+  List<CategoryItem> get transformedCategories {
+    return [..._transformedCategories];
+  }
+
   List<WooProductCategory> get grouppedCategories {
     return [..._grouppedCategories];
   }
 
   Map<String, List<WooProductCategory>> get categories {
     return {..._categories};
+  }
+
+  List<CategoryItem> transformCategories() {
+    // Clearing the list before re transforming it.
+    _transformedCategories.clear();
+
+    // Creating the transformed categories
+    _categories['categories'].forEach(
+      (element) {
+        _transformedCategories.add(
+          CategoryItem(
+            name: element.name,
+            category: element,
+          ),
+        );
+      },
+    );
+
+    // This will add each sub category to it's parent by ID
+    _categories['sub-categories'].forEach(
+      (subCat) {
+        final category = _transformedCategories.firstWhere(
+          (cat) => subCat.parent == cat.category.id,
+          orElse: () {
+            // returning null if there are no parents for this category.
+            // which is very unlekely to happen since sub-categories are put in the subCat list only if their parents != null
+            return null;
+          },
+        );
+        if (category != null) category.subCategories.add(subCat);
+      },
+    );
+    return _transformedCategories;
   }
 
   List<WooProductCategory> getCategoriesByParentId(int id) {
@@ -50,15 +90,15 @@ class CategoriesProvider with ChangeNotifier {
       final Uri uri =
           Uri.https('goods.tn', '/wp-json/wc/v3/products/categories', params);
       // Sending the request
-      // final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers);
 
       // Local testing categoreis
-      final String response = await DefaultAssetBundle.of(context)
-          .loadString("assets/CategoryExample.json");
+      // final String response = await DefaultAssetBundle.of(context)
+      // .loadString("assets/CategoryExample.json");
       print("Adding Categories..");
 
       // decoding the results into a list.
-      final List categoriesList = json.decode(response) as List;
+      final List categoriesList = json.decode(response.body) as List;
 
       categoriesList.forEach((element) {
         // Creating the category item
