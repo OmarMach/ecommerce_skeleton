@@ -3,6 +3,7 @@ import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
 
 import 'favoritesScreen.dart';
@@ -13,6 +14,7 @@ class WrapperScreen extends StatefulWidget {
 }
 
 class WrapperScreenState extends State<WrapperScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
@@ -32,11 +34,13 @@ class WrapperScreenState extends State<WrapperScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      key: scaffoldKey,
+      drawer: DrawerMenuWidget(),
       body: SafeArea(
         child: Stack(
           children: [
             _widgetOptions.elementAt(_selectedIndex),
-            AppBarWidget(size: size)
+            AppBarWidget(),
           ],
         ),
       ),

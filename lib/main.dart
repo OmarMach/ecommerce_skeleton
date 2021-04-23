@@ -4,8 +4,8 @@ import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/routes.dart';
+import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
-import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
-        ChangeNotifierProvider(create: (_) => SearchProvider()),       
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'ProductSans',
-          primaryColor: Colors.grey,
+          primaryColor: Colors.grey.shade800,
           accentColor: Colors.redAccent,
         ),
         routes: routes,
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting)
                       return SplashScreen();
                     else
-                      return WrapperScreen();
+                      return HomeScreen();
                   },
                 );
             },

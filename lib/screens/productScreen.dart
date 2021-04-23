@@ -30,13 +30,12 @@ class _ProductScreenState extends State<ProductScreen> {
     final product = ModalRoute.of(context).settings.arguments as WooProduct;
 
     return Scaffold(
+      appBar: AppBarWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              AppBarWidget(
-                size: size,
-              ),
+              AppBarWidget(),
               Container(
                 padding: EdgeInsets.all(10),
                 color: Colors.blueGrey.shade700,

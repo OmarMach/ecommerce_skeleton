@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
+import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatefulWidget {
@@ -13,20 +14,23 @@ class TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          checkDatabaseConnection(context);
-        },
-        style: ElevatedButton.styleFrom(
-          primary: error ? Colors.red : Colors.green,
+    return Scaffold(
+      appBar: AppBarWidget(),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            checkDatabaseConnection(context);
+          },
+          style: ElevatedButton.styleFrom(
+            primary: error ? Colors.red : Colors.green,
+          ),
+          child: isLoading
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                )
+              : Text("Test DB Connection"),
         ),
-        child: isLoading
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircularProgressIndicator(),
-              )
-            : Text("Test DB Connection"),
       ),
     );
   }

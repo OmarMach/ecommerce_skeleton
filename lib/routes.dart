@@ -1,3 +1,5 @@
+import 'screens/favoritesScreen.dart';
+
 import 'screens/homeScreen.dart';
 import 'screens/loginScreen.dart';
 import 'screens/registerScreen.dart';
@@ -18,4 +20,5 @@ final routes = {
   SplashScreen.routeName: (context) => SplashScreen(),
   LoginScreen.routeName: (context) => LoginScreen(),
   RegisterScreen.routeName: (context) => RegisterScreen(),
+  FavoritesScreen.routeName: (context) => FavoritesScreen(),
 };

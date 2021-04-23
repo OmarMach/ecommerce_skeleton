@@ -1,4 +1,6 @@
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
+import 'package:ecommerce_app/screens/searchScreen.dart';
+import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/favoritesGridList.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,51 +15,48 @@ class FavoritesScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildAppBarSpacer(size),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Wish list",
-                style: textTheme.headline4,
+    return Scaffold(
+      appBar: AppBarWidget(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Consumer<FavoritesProvider>(
+                builder: (context, favoritesProvider, _) {
+                  return favoritesProvider.favorites.isNotEmpty
+                      ? FavoritesGridList(
+                          favoritesList: favoritesProvider.favorites,
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.star_border_rounded,
+                                size: size.width / 3,
+                              ),
+                              Text(
+                                "Your wish list is empty",
+                                style: textTheme.subtitle1,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      SearchScreen.routeName);
+                                },
+                                child: Text("View Products"),
+                              )
+                            ],
+                          ),
+                        );
+                },
               ),
-              Text(
-                "This list helps you to easily find saved items..",
-                style: textTheme.bodyText2,
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Consumer<FavoritesProvider>(
-              builder: (context, favoritesProvider, _) {
-                return favoritesProvider.favorites.isNotEmpty
-                    ? FavoritesGridList(
-                        favoritesList: favoritesProvider.favorites,
-                      )
-                    : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Your wish list is empty..",
-                              style: textTheme.subtitle1,
-                            ),
-                          ],
-                        ),
-                      );
-              },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

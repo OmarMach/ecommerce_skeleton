@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
+import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/cartItemWidget.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
@@ -13,72 +14,74 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
-    return Consumer<CartProvider>(
-      builder: (context, cartProvider, _) {
-        print('rebuildin cart');
-        return cartProvider.items.isNotEmpty
-            ? SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      buildAppBarSpacer(size),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Shopping Cart",
-                          style: Theme.of(context).textTheme.headline6,
-                          textAlign: TextAlign.center,
+    return Scaffold(
+      appBar: AppBarWidget(),
+      body: Consumer<CartProvider>(
+        builder: (context, cartProvider, _) {
+          return cartProvider.items.isNotEmpty
+              ? SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        buildAppBarSpacer(size),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Shopping Cart",
+                            style: Theme.of(context).textTheme.headline6,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      StepWidget(step: 1),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Cart Items",
-                          style: Theme.of(context).textTheme.headline5,
+                        StepWidget(step: 1),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Cart Items",
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
                         ),
-                      ),
-                      Divider(),
-                      ListView.builder(
-                        itemCount: cartProvider.items.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return CartItemWidget(
-                            cartItem:
-                                cartProvider.items.values.elementAt(index),
-                          );
-                        },
-                      ),
-                      Divider(),
-                      CartTotalWidget(
-                        cartProvider: cartProvider,
-                      ),
-                      Divider(),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(OrderScreen.routeName);
-                        },
-                        child: Text("Order"),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey.shade800,
+                        Divider(),
+                        ListView.builder(
+                          itemCount: cartProvider.items.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return CartItemWidget(
+                              cartItem:
+                                  cartProvider.items.values.elementAt(index),
+                            );
+                          },
                         ),
-                      ),
-                    ],
+                        Divider(),
+                        CartTotalWidget(
+                          cartProvider: cartProvider,
+                        ),
+                        Divider(),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(OrderScreen.routeName);
+                          },
+                          child: Text("Order"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey.shade800,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            : Center(
-                child: Text(
-                  "There are no items In the cart.",
-                  style: textTheme.subtitle1,
-                ),
-              );
-      },
+                )
+              : Center(
+                  child: Text(
+                    "There are no items In the cart.",
+                    style: textTheme.subtitle1,
+                  ),
+                );
+        },
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/utils.dart';
+import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/productWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
     TextEditingController _keywordsController = TextEditingController();
 
     return Scaffold(
+      appBar: AppBarWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -37,15 +39,6 @@ class _SearchScreenState extends State<SearchScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                buildAppBarSpacer(size),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Search Products",
-                    style: textTheme.headline4,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(

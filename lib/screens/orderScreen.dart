@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/utils.dart';
+import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/orderCartItemsWidget.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +34,7 @@ class _OrderScreenState extends State<OrderScreen> {
     final cart = cartProvider.items;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Billing and shipping"),
-      ),
+      appBar: AppBarWidget(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
