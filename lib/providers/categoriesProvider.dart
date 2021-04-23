@@ -45,34 +45,38 @@ class CategoriesProvider with ChangeNotifier {
       'page': '1',
     };
 
-    // Creating the URL
-    final Uri uri =
-        Uri.https('goods.tn', '/wp-json/wc/v3/products/categories', params);
-    // Sending the request
-    // final response = await http.get(uri, headers: headers);
+    try {
+      // Creating the URL
+      final Uri uri =
+          Uri.https('goods.tn', '/wp-json/wc/v3/products/categories', params);
+      // Sending the request
+      // final response = await http.get(uri, headers: headers);
 
-    // Local testing categoreis
-    final String response = await DefaultAssetBundle.of(context)
-        .loadString("assets/responseCategoryExample.json");
-    print("Adding Categories..");
+      // Local testing categoreis
+      final String response = await DefaultAssetBundle.of(context)
+          .loadString("assets/CategoryExample.json");
+      print("Adding Categories..");
 
-    // decoding the results into a list.
-    final List categoriesList = json.decode(response) as List;
+      // decoding the results into a list.
+      final List categoriesList = json.decode(response) as List;
 
-    categoriesList.forEach((element) {
-      // Creating the category item
-      final WooProductCategory category = WooProductCategory.fromJson(element);
-      _grouppedCategories.add(category);
-      // Dividing categories and subcategories.
-      if (category.parent == 0)
-        _categories['categories'].add(category);
-      else
-        _categories['sub-categories'].add(category);
-    });
+      categoriesList.forEach((element) {
+        // Creating the category item
+        final WooProductCategory category =
+            WooProductCategory.fromJson(element);
+        _grouppedCategories.add(category);
+        // Dividing categories and subcategories.
+        if (category.parent == 0)
+          _categories['categories'].add(category);
+        else
+          _categories['sub-categories'].add(category);
+      });
 
-    print("${_categories['categories'].length} Categories added.");
-    print("${_categories['sub-categories'].length} Sub-Categories added.");
-
+      print("${_categories['categories'].length} Categories added.");
+      print("${_categories['sub-categories'].length} Sub-Categories added.");
+    } catch (e) {
+      print("Error while Loading categories :" + e.toString());
+    }
     return _categories;
   }
 
