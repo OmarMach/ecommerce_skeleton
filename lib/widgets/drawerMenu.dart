@@ -164,7 +164,7 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                           onTap: () {
                             Navigator.of(context).pushNamed(
                               CategoryProductsScreen.routeName,
-                              arguments: subCategory.name,
+                              arguments: {subCategory.name: subCategory.id},
                             );
                           },
                           child: Text(subCategory.name),
