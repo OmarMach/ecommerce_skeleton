@@ -41,18 +41,39 @@ class _ProductWidgetState extends State<ProductWidget> {
                     padding: const EdgeInsets.all(8.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            ProductScreen.routeName,
-                            arguments: widget.product,
-                          );
-                        },
-                        child: Image.network(
-                          widget.product.images[0].src,
-                          fit: BoxFit.fill,
-                          width: size.width,
-                        ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                ProductScreen.routeName,
+                                arguments: widget.product,
+                              );
+                            },
+                            child: Image.network(
+                              widget.product.images[0].src,
+                              fit: BoxFit.fill,
+                              width: size.width,
+                            ),
+                          ),
+                          if (widget.product.stockStatus != 'instock')
+                            Positioned(
+                              bottom: 0,
+                              child: Row(
+                                children: [
+                                  Chip(
+                                    label: Text(
+                                      "Out of stock",
+                                      style: TextStyle(
+                                        color: Colors.redAccent.shade200,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                        ],
                       ),
                     ),
                   ),
