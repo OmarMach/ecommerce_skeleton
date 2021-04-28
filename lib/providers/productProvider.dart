@@ -124,7 +124,8 @@ class ProductProvider with ChangeNotifier {
     return searchedProducts;
   }
 
-  Future<List<WooProduct>> getProductsFromDb(BuildContext context) async {
+  Future<List<WooProduct>> getProductsFromDb(BuildContext context,
+      {int limit = 0}) async {
     // Pagination variable
     int pageNumber = 0;
 
@@ -133,7 +134,7 @@ class ProductProvider with ChangeNotifier {
 
     // Adding params
     final Map<String, dynamic> params = {
-      'per_page': '10',
+      'per_page': limit > 0 ? limit.toString() : '10',
       'page': pageNumber.toString(),
       'status': 'publish',
     };

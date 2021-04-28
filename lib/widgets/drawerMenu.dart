@@ -72,6 +72,18 @@ class DrawerMenuWidget extends StatelessWidget {
                   style: textTheme.caption,
                 ),
               ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    CategoryProductsScreen.routeName,
+                    arguments: {'New Arrivals': 0},
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("New Arrivals"),
+                ),
+              ),
               DrawerCategoriesMenu(),
               Divider(),
               Padding(
@@ -150,15 +162,27 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
         children: [
           InkWell(
             onTap: () {
-              setState(() {
-                isExpanded = !isExpanded;
-              });
+              setState(
+                () {
+                  isExpanded = !isExpanded;
+                },
+              );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.category.name,
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      CategoryProductsScreen.routeName,
+                      arguments: {
+                        widget.category.name: widget.category.category.id
+                      },
+                    );
+                  },
+                  child: Text(
+                    widget.category.name,
+                  ),
                 ),
                 Icon(
                   isExpanded
