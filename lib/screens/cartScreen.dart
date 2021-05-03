@@ -5,7 +5,6 @@ import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../utils.dart';
 import 'orderScreen.dart';
 
 class CartScreen extends StatelessWidget {

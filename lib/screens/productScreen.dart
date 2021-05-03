@@ -1,11 +1,7 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/widgets/ProductImagesCarousel.dart';
-import 'package:ecommerce_app/widgets/ProductImagesNavigatorWidget.dart';
-import 'package:ecommerce_app/widgets/ProductMiniatureImageListWidget.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
-import 'package:ecommerce_app/widgets/carouselWidget.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +18,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   int currentImageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -88,9 +85,11 @@ class _ProductScreenState extends State<ProductScreen> {
                     ),
                     Divider(),
                     // Add to cart Buttons
-                    AddToCartButtons(
-                      product: product,
-                    ),
+                    if (product.stockStatus == 'instock')
+                      AddToCartButtons(
+                        product: product,
+                      ),
+                    if (product.stockStatus != 'instock') NotifyMeWidget(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -283,7 +282,9 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
                           _controller.text.toString(),
                         );
                         if (quantity == null) quantity = 1;
-                        if (_formKey.currentState.validate()) quantity++;
+                        if (_formKey.currentState.validate()) if (widget
+                                .product.stockQuantity >
+                            quantity) quantity++;
 
                         _controller.text = quantity.toString();
                         setState(() {});
@@ -327,6 +328,10 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
                     ? null
                     : () {
                         if (_formKey.currentState.validate()) {
+                          if (widget.product.stockQuantity >
+                              int.tryParse(
+                                _controller.text.toString(),
+                              )) return;
                           ScaffoldMessenger.of(context).removeCurrentSnackBar();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -487,6 +492,121 @@ class FixedBottomButtons extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class NotifyMeWidget extends StatefulWidget {
+  @override
+  _NotifyMeWidgetState createState() => _NotifyMeWidgetState();
+}
+
+class _NotifyMeWidgetState extends State<NotifyMeWidget> {
+  bool _agreeToContact;
+  TextEditingController _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _agreeToContact = true;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Container(
+        decoration: BoxDecoration(
+          // borderRadius: BorderRadius.circular(10),
+          color: Colors.grey.shade800,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Notify me when the item is back in stock.",
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                validator: (v) {
+                  if (v.isEmpty)
+                    return 'Please provide an email';
+                  else
+                    return RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(v)
+                        ? null
+                        : 'Please provide a valid email address.';
+                },
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey.shade700,
+                  labelText: 'Email',
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: _agreeToContact,
+                  activeColor: Colors.blue,
+                  onChanged: (v) {
+                    setState(() {
+                      _agreeToContact = !_agreeToContact;
+                    });
+                  },
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _agreeToContact = !_agreeToContact;
+                        });
+                      },
+                      child: Text(
+                        "I Agree to being contacted by the store owner.",
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                color: Colors.grey.shade700,
+                borderRadius: BorderRadius.circular(10),
+                child: InkWell(
+                  onTap: () {
+                    if (_formKey.currentState.validate()) ;
+                  },
+                  child: SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: Text("Join mailling list"),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

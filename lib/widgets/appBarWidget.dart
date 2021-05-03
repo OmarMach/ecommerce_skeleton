@@ -20,7 +20,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(SearchScreen.routeName);
+            if (ModalRoute.of(context).settings.name != SearchScreen.routeName)
+              Navigator.of(context).pushNamed(SearchScreen.routeName);
           },
           icon: Icon(
             Icons.search,
@@ -28,7 +29,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         ),
         IconButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(CartScreen.routeName);
+            if (ModalRoute.of(context).settings.name != CartScreen.routeName)
+              Navigator.of(context).pushNamed(CartScreen.routeName);
           },
           icon: Consumer<CartProvider>(
             child: Icon(
