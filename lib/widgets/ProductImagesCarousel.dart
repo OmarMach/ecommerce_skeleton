@@ -118,7 +118,7 @@ class _ImageDialogState extends State<ImageDialog> {
             Container(
               width: size.width,
               height: size.height,
-              color: Colors.black.withAlpha(175),
+              color: Colors.black,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ClipRRect(
