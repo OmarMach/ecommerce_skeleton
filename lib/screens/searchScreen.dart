@@ -18,8 +18,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final List<WooProductCategory> selectedFilters = [];
   bool isLoading = false;
-  final label = "Some Label";
-  final dummyList = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
   TextEditingController myController = TextEditingController();
 
   @override
@@ -31,7 +29,6 @@ class _SearchScreenState extends State<SearchScreen> {
     final categoriesProvider =
         Provider.of<CategoriesProvider>(context, listen: false);
     // keywords Text Controller
-    TextEditingController _keywordsController = TextEditingController();
 
     return Scaffold(
       appBar: AppBarWidget(),
@@ -185,6 +182,17 @@ class SearchByCategoryResultsWidget extends StatefulWidget {
 class _SearchByCategoryResultsWidgetState
     extends State<SearchByCategoryResultsWidget> {
   int page;
+  String dropdownValue = 'Sort By Latest';
+
+  final options = <String>[
+    'Sort By Popularity',
+    'Sort By Latest',
+    'Sort By Price: Low to High',
+    'Sort By Price: High to Low',
+    'Sort By Title: A to Z',
+    'Sort By Title: Z to A',
+  ];
+
   @override
   void initState() {
     page = 0;
@@ -197,9 +205,11 @@ class _SearchByCategoryResultsWidgetState
       builder: (context, searchProvider, child) {
         final List<WooProduct> searchedProducts =
             searchProvider.searchedProducts;
+
         int productsCount = searchedProducts.length;
         int pagesCount = productsCount ~/ 10;
         int remainingProductsCount = productsCount % 10;
+
         if (remainingProductsCount > 0) pagesCount++;
 
         print("productsCount : $productsCount");
@@ -234,6 +244,90 @@ class _SearchByCategoryResultsWidgetState
                       primary: Colors.grey.shade800,
                     ),
                     icon: Icon(Icons.delete),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        onChanged: (String newValue) {
+                          setState(
+                            () {
+                              dropdownValue = newValue;
+                              final options = <String>[
+                                'Sort By Popularity',
+                                'Sort By Latest',
+                                'Sort By Price: Low to High',
+                                'Sort By Price: High to Low',
+                                'Sort By Title: A to Z',
+                                'Sort By Title: Z to A',
+                              ];
+                              if (newValue == 'Sort By Popularity')
+                                searchedProducts.sort(
+                                  (WooProduct a, WooProduct b) =>
+                                      a.totalSales.compareTo(b.totalSales),
+                                );
+                              if (newValue == 'Sort By Latest')
+                                searchedProducts.sort(
+                                  (WooProduct a, WooProduct b) =>
+                                      a.id.compareTo(b.id),
+                                );
+                              if (newValue == 'Sort By Title: A to Z')
+                                searchedProducts.sort(
+                                  (WooProduct a, WooProduct b) =>
+                                      a.name.toLowerCase().compareTo(
+                                            b.name.toLowerCase(),
+                                          ),
+                                );
+                              if (newValue == 'Sort By Title: Z to A')
+                                searchedProducts.sort(
+                                  (WooProduct a, WooProduct b) =>
+                                      b.name.toLowerCase().compareTo(
+                                            a.name.toLowerCase(),
+                                          ),
+                                );
+                              if (newValue == 'Sort By Price: Low to High')
+                                searchedProducts.sort(
+                                  (WooProduct a, WooProduct b) =>
+                                      a.price.toLowerCase().compareTo(
+                                            b.price.toLowerCase(),
+                                          ),
+                                );
+                              if (newValue == 'Sort By Price: High to Low')
+                                searchedProducts.sort(
+                                  (WooProduct a, WooProduct b) =>
+                                      b.price.toLowerCase().compareTo(
+                                            a.price.toLowerCase(),
+                                          ),
+                                );
+                            },
+                          );
+                        },
+                        selectedItemBuilder: (BuildContext context) {
+                          return options.map((String value) {
+                            return Center(
+                              child: Text(
+                                dropdownValue,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            );
+                          }).toList();
+                        },
+                        items: options
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
                   Row(
                     children: [
