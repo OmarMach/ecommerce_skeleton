@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
 
     return Scaffold(
       appBar: AppBarWidget(),
+      drawer: DrawerMenuWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

@@ -1,8 +1,8 @@
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
-import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/productWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +17,10 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final List<WooProductCategory> selectedFilters = [];
+  bool isLoading = false;
+  final label = "Some Label";
+  final dummyList = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
+  TextEditingController myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBarWidget(),
+      drawer: DrawerMenuWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -39,21 +44,6 @@ class _SearchScreenState extends State<SearchScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Keywords",
-                    style: textTheme.headline6,
-                  ),
-                ),
-                TextFormField(
-                  controller: _keywordsController,
-                  decoration: buildFormInputDecoration(
-                    icon: Icons.search,
-                    label: 'Keywords..',
-                  ),
-                ),
-                verticalSeparator,
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -86,9 +76,17 @@ class _SearchScreenState extends State<SearchScreen> {
                                     selectedFilters.contains(currentCatergory),
                                 onChanged: (value) {
                                   if (!selectedFilters
-                                      .contains(currentCatergory))
+                                      .contains(currentCatergory)) {
                                     searchProvider.addFilter(currentCatergory);
-                                  else
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    searchProvider.searchProductsByCategory(
+                                        currentCatergory.id);
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  } else
                                     searchProvider
                                         .removeFilter(currentCatergory);
                                 },
@@ -116,14 +114,17 @@ class _SearchScreenState extends State<SearchScreen> {
                                         );
                                         searchProvider
                                             .searchProductByCategoriesId(
-                                                categoryIds);
+                                          categoryIds,
+                                        );
                                         searchProvider.clearSearchedProducts();
                                       },
                                 label: Text("Search"),
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey.shade800,
                                 ),
-                                icon: Icon(Icons.search_rounded),
+                                icon: Icon(
+                                  Icons.search_rounded,
+                                ),
                               ),
                             ),
                             selectedFilters.isNotEmpty
@@ -154,11 +155,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     );
                   },
                 ),
+                // Results widget
                 Consumer<SearchProvider>(
                   builder: (context, searchProvider, child) {
                     final List<WooProduct> searchedProducts =
                         searchProvider.searchedProducts;
-                    print(searchProvider.isLoading);
+
                     return searchedProducts.length > 0
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -208,8 +210,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                             ],
                           )
-                        : searchProvider.isLoading
-                            ? Container(
+                        : isLoading
+                            ? Center(
                                 child: CircularProgressIndicator(),
                               )
                             : Container();

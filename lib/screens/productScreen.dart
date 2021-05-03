@@ -2,6 +2,7 @@ import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/widgets/ProductImagesCarousel.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
     return Scaffold(
       appBar: AppBarWidget(),
+      drawer: DrawerMenuWidget(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

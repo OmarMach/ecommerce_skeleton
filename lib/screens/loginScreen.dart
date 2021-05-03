@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/utils.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -27,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
+      drawer: DrawerMenuWidget(),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,

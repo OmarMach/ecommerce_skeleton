@@ -4,6 +4,7 @@ import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/orderScreen.dart';
+import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,13 @@ class DrawerMenuWidget extends StatelessWidget {
                 label: 'My Wishlist',
                 onTap: () {
                   Navigator.of(context).pushNamed(FavoritesScreen.routeName);
+                },
+              ),
+              DrawerMenuItem(
+                icon: Icons.search,
+                label: 'Search products',
+                onTap: () {
+                  Navigator.of(context).pushNamed(SearchScreen.routeName);
                 },
               ),
               DrawerMenuItem(

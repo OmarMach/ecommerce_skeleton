@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/favoritesGridList.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class FavoritesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBarWidget(),
+      drawer: DrawerMenuWidget(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

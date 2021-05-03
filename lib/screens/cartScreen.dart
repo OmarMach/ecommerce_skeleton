@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/cartItemWidget.dart';
+import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +13,10 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBarWidget(),
+      drawer: DrawerMenuWidget(),
       body: Consumer<CartProvider>(
         builder: (context, cartProvider, _) {
           return cartProvider.items.isNotEmpty
