@@ -97,12 +97,18 @@ class _ProductWidgetState extends State<ProductWidget> {
                             ),
                           ),
                         ),
-                        Text(
-                          widget.product.price + " Tnd",
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          style: textTheme.subtitle1.copyWith(
-                            color: Colors.green,
+                        Material(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(5),
+                          child: Center(
+                            child: Text(
+                              widget.product.price + " TND",
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: textTheme.subtitle1.copyWith(
+                                color: Colors.green,
+                              ),
+                            ),
                           ),
                         ),
                         Flexible(
