@@ -86,14 +86,16 @@ class _ProductWidgetState extends State<ProductWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Flexible(
+                        Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              widget.product.name,
-                              maxLines: 3,
-                              overflow: TextOverflow.fade,
-                              textAlign: TextAlign.center,
+                            child: SizedBox(
+                              child: Text(
+                                widget.product.name,
+                                maxLines: 3,
+                                overflow: TextOverflow.fade,
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),

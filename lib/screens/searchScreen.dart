@@ -260,14 +260,7 @@ class _SearchByCategoryResultsWidgetState
                           setState(
                             () {
                               dropdownValue = newValue;
-                              final options = <String>[
-                                'Sort By Popularity',
-                                'Sort By Latest',
-                                'Sort By Price: Low to High',
-                                'Sort By Price: High to Low',
-                                'Sort By Title: A to Z',
-                                'Sort By Title: Z to A',
-                              ];
+
                               if (newValue == 'Sort By Popularity')
                                 searchedProducts.sort(
                                   (WooProduct a, WooProduct b) =>
