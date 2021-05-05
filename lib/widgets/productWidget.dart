@@ -42,6 +42,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Stack(
+                        fit: StackFit.expand,
                         alignment: Alignment.center,
                         children: [
                           GestureDetector(
@@ -92,8 +93,8 @@ class _ProductWidgetState extends State<ProductWidget> {
                             child: SizedBox(
                               child: Text(
                                 widget.product.name,
-                                maxLines: 3,
-                                overflow: TextOverflow.fade,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.center,
                               ),
                             ),
