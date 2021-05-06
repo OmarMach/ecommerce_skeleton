@@ -171,43 +171,48 @@ class CitySearch extends SearchDelegate<String> {
         shrinkWrap: true,
         itemBuilder: (context, index) {
           final suggestion = suggestions[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed(
-                  ProductScreen.routeName,
-                  arguments: suggestion,
-                );
-              },
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Image.network(
-                  suggestion.images[0].src,
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.cover,
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).pushReplacementNamed(
+                      ProductScreen.routeName,
+                      arguments: suggestion,
+                    );
+                  },
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.network(
+                      suggestion.images[0].src,
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        suggestion.name,
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        suggestion.price.toString() + ' TND',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    suggestion.name,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    suggestion.price.toString() + ' TND',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+              Divider(color: Colors.black),
+            ],
           );
         },
       );
