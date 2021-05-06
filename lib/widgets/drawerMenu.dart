@@ -170,10 +170,9 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
         children: [
           InkWell(
             onTap: () {
-              setState(
-                () {
-                  isExpanded = !isExpanded;
-                },
+              Navigator.of(context).pushNamed(
+                CategoryProductsScreen.routeName,
+                arguments: {widget.category.name: widget.category.category.id},
               );
             },
             child: Row(
@@ -192,10 +191,20 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                     widget.category.name,
                   ),
                 ),
-                Icon(
-                  isExpanded
-                      ? Icons.keyboard_arrow_up_rounded
-                      : Icons.keyboard_arrow_down_rounded,
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Icon(
+                      isExpanded
+                          ? Icons.keyboard_arrow_up_rounded
+                          : Icons.keyboard_arrow_down_rounded,
+                    ),
+                  ),
                 ),
               ],
             ),

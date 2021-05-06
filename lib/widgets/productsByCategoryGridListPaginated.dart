@@ -161,12 +161,16 @@ class _ProductsByCategoryGridListPaginatedState
                 GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount:
-                      page == pagesCount - 1 ? remainingProductsCount : 10,
+                  itemCount: widget.categoryId == 0
+                      ? 10
+                      : page == pagesCount - 1
+                          ? remainingProductsCount
+                          : 10,
                   gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
                   itemBuilder: (context, index) {
                     return ProductWidget(
-                      product: searchedProducts[page * 10 + index],
+                      product: searchedProducts[
+                          widget.categoryId == 0 ? index : page * 10 + index],
                     );
                   },
                 ),
