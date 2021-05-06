@@ -30,6 +30,7 @@ class SearchProvider with ChangeNotifier {
 
   void removeFilter(WooProductCategory category) {
     selectedFilters.remove(category);
+    removeSearchedItemsByCategory(category.id);
     notifyListeners();
   }
 
@@ -37,7 +38,7 @@ class SearchProvider with ChangeNotifier {
     searchedProducts.removeWhere((prod) {
       return prod.categories.where((cat) {
         print("deleting item with category ${cat.name}");
-        return cat.id == id;
+        return cat.id == id || cat.parent == id;
       }).isNotEmpty;
     });
     notifyListeners();
