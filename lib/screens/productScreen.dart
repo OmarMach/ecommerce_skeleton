@@ -241,7 +241,7 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
     return Row(
       children: [
         Material(
-          color: Colors.blue,
+          color: Colors.grey.shade700,
           borderRadius: BorderRadius.circular(5),
           child: Row(
             children: [

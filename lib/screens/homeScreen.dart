@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: SafeArea(
           child: Center(
             child: Padding(
