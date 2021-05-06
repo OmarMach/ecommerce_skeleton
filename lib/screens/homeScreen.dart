@@ -7,6 +7,7 @@ import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:ecommerce_app/widgets/productsGridList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -21,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
@@ -68,33 +68,59 @@ class _HomeScreenState extends State<HomeScreen> {
 class HomeTitleWidget extends StatelessWidget {
   final String title;
 
-  const HomeTitleWidget({
+  HomeTitleWidget({
     Key key,
     @required this.title,
   }) : super(key: key);
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-   
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent / 2);
+    });
+    final size = MediaQuery.of(context).size;
+    final redBox = Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Container(
+        width: 10,
+        height: 20,
+        color: Colors.redAccent,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          redBox,
-          redBox,
-          redBox,
-          redBox,
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headline5,
-            textAlign: TextAlign.center,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: _scrollController,
+        physics: NeverScrollableScrollPhysics(),
+        child: SizedBox(
+          width: size.width * 1.2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              redBox,
+              redBox,
+              redBox,
+              redBox,
+              InkWell(
+                onTap: () {
+                  _scrollController
+                      .jumpTo(_scrollController.position.maxScrollExtent / 2);
+                },
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.headline5,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              redBox,
+              redBox,
+              redBox,
+              redBox,
+            ],
           ),
-          redBox,
-          redBox,
-          redBox,
-          redBox,
-        ],
+        ),
       ),
     );
   }
