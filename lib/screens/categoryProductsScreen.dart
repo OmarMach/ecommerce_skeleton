@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
+import 'package:ecommerce_app/widgets/productsByCategoryGridListPaginated.dart';
 import 'package:flutter/material.dart';
 
 import '../utils.dart';
@@ -35,7 +36,7 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
                 ),
               ),
               verticalSeparator,
-              ProductsByCategoryGridList(
+              ProductsByCategoryGridListPaginated(
                 categoryId: category.values.first,
                 limit: 20,
               ),
