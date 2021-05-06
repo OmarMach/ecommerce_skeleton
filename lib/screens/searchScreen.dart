@@ -212,10 +212,6 @@ class _SearchByCategoryResultsWidgetState
 
         if (remainingProductsCount > 0) pagesCount++;
 
-        print("productsCount : $productsCount");
-        print("pagesCount : $pagesCount");
-        print("remainingProductsCount : $remainingProductsCount");
-
         return searchedProducts.length > 0
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -235,6 +231,7 @@ class _SearchByCategoryResultsWidgetState
                         ? null
                         : () {
                             searchProvider.clearSearchedProducts();
+                            searchProvider.clearFilters();
                           },
                     label: FittedBox(
                       fit: BoxFit.fitWidth,

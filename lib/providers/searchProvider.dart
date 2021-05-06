@@ -37,8 +37,11 @@ class SearchProvider with ChangeNotifier {
   void removeSearchedItemsByCategory(int id) {
     searchedProducts.removeWhere((prod) {
       return prod.categories.where((cat) {
-        print("deleting item with category ${cat.name}");
-        return cat.id == id || cat.parent == id;
+        if (cat.id == id || cat.parent == id) {
+          print("Deleting Product : ${prod.name} : ${cat.id}");
+          return true;
+        } else
+          return false;
       }).isNotEmpty;
     });
     notifyListeners();
@@ -107,7 +110,15 @@ class SearchProvider with ChangeNotifier {
                 -1) product.categories.add(element);
           },
         );
-
+        print(product);
+        product.categories.forEach((element) {
+          print(
+            element.name + ' ' + element.id.toString(),
+          );
+          print(
+            'parent ' + element.parent.toString(),
+          );
+        });
         // Adding the product to the list
         if (!searchedProducts.contains(product)) searchedProducts.add(product);
         notifyListeners();
