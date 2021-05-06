@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/screens/cartScreen.dart';
+import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,19 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     final size = MediaQuery.of(context).size;
     return AppBar(
       centerTitle: true,
-      title: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.asset(
-          'assets/images/Logo.png',
-          width: size.width * .3,
+      title: InkWell(
+        onTap: () {
+          if (ModalRoute.of(context).settings.name != HomeScreen.routeName)
+            Navigator.of(context).pushReplacementNamed(
+              HomeScreen.routeName,
+            );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset(
+            'assets/images/Logo.png',
+            width: size.width * .3,
+          ),
         ),
       ),
       actions: [
