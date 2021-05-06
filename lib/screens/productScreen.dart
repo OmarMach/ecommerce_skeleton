@@ -217,19 +217,12 @@ class AddToCartButtons extends StatefulWidget {
 }
 
 class _AddToCartButtonsState extends State<AddToCartButtons> {
-  final TextEditingController _controller = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  int _cartValue;
 
   @override
   void initState() {
-    _controller.text = '1';
+    _cartValue = 1;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -237,41 +230,14 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
     return Row(
       children: [
         Material(
-          color: Colors.grey,
+          color: Colors.blue,
           borderRadius: BorderRadius.circular(5),
           child: Row(
             children: [
               SizedBox(
                 height: 60,
                 width: 60,
-                child: Center(
-                  child: Form(
-                    key: _formKey,
-                    child: TextFormField(
-                      controller: _controller,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        errorBorder: new OutlineInputBorder(
-                          borderSide:
-                              new BorderSide(color: Colors.red, width: 2),
-                        ),
-                      ),
-                      keyboardType: TextInputType.numberWithOptions(
-                        signed: false,
-                        decimal: false,
-                      ),
-                      textAlign: TextAlign.center,
-                      validator: (value) {
-                        int parsedValue = int.tryParse(value.toString());
-                        if (parsedValue == null || parsedValue <= 0)
-                          return "";
-                        else
-                          return null;
-                      },
-                    ),
-                  ),
-                ),
+                child: Center(child: Text(_cartValue.toString())),
               ),
               Column(
                 children: [
@@ -280,15 +246,8 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
                     width: 60,
                     child: InkWell(
                       onTap: () {
-                        int quantity = int.tryParse(
-                          _controller.text.toString(),
-                        );
-                        if (quantity == null) quantity = 1;
-                        if (_formKey.currentState.validate()) if (widget
-                                .product.stockQuantity >
-                            quantity) quantity++;
-
-                        _controller.text = quantity.toString();
+                        if (widget.product.stockQuantity > _cartValue)
+                          _cartValue++;
                         setState(() {});
                       },
                       child: Icon(Icons.keyboard_arrow_up_rounded),
@@ -296,14 +255,8 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
                   ),
                   InkWell(
                     onTap: () {
-                      int quantity = int.tryParse(
-                        _controller.text.toString(),
-                      );
-                      if (quantity == null) quantity = 1;
-                      if (_formKey.currentState.validate() && quantity > 1)
-                        --quantity;
+                      if (_cartValue > 1) --_cartValue;
 
-                      _controller.text = quantity.toString();
                       setState(() {});
                     },
                     child: SizedBox(
@@ -322,34 +275,28 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Material(
               color: widget.product.stockStatus == 'instock'
-                  ? Colors.grey
+                  ? Colors.blue
                   : Colors.redAccent.shade100,
               borderRadius: BorderRadius.circular(5),
               child: InkWell(
                 onTap: widget.product.stockStatus != 'instock'
                     ? null
                     : () {
-                        if (_formKey.currentState.validate()) {
-                          if (widget.product.stockQuantity >
-                              int.tryParse(
-                                _controller.text.toString(),
-                              )) return;
-                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Item Added to the cart.."),
-                            ),
-                          );
-                          Provider.of<CartProvider>(
-                            context,
-                            listen: false,
-                          ).addCartItem(
-                            widget.product,
-                            quantity: int.tryParse(
-                              _controller.text.toString(),
-                            ),
-                          );
-                        }
+                      final cartProvider = Provider.of<CartProvider>(
+                          context,
+                          listen: false,
+                        );
+                        if (widget.product.stockQuantity < _cartValue) return;
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Item Added to the cart.."),
+                          ),
+                        );
+                        cartProvider.addCartItem(
+                          widget.product,
+                          quantity: _cartValue,
+                        );
                       },
                 child: SizedBox(
                   height: 60,

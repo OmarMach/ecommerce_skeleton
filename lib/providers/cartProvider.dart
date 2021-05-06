@@ -69,17 +69,36 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  CartItem getCartItemById(int id) {
+    return _cartItems[id] ?? null;
+  }
+
   void addCartItem(WooProduct product, {int quantity = 1}) {
     try {
-      // Adding +1 to the quantity of the product if it exists already
+      // Adding  to the quantity of the product if it exists already
       if (_cartItems.containsKey(product.id)) {
         _cartItems.update(
           product.id,
-          (value) => CartItem(
-            id: value.id,
-            product: value.product,
-            quantity: value.quantity + quantity ?? 1,
-          ),
+          (value) {
+            int quantityToAdd;
+
+            // The qte is at it's max, can't add more in the cart.
+            if (value.quantity == value.product.stockQuantity)
+              return value;
+            // the qte and the added qte are > than the stock
+            else if ((value.quantity + quantity) > value.product.stockQuantity)
+              quantityToAdd = value.product.stockQuantity - value.quantity;
+            else
+              quantityToAdd = value.quantity + quantity;
+
+            print(quantityToAdd);
+
+            return CartItem(
+              id: value.id,
+              product: value.product,
+              quantity: quantityToAdd,
+            );
+          },
         );
       } else {
         // Creating a new entry to the cartitems list
@@ -88,7 +107,9 @@ class CartProvider with ChangeNotifier {
           () => CartItem(
             id: product.id,
             product: product,
-            quantity: quantity ?? 1,
+            quantity: quantity > product.stockQuantity
+                ? product.stockQuantity
+                : quantity ?? 1,
           ),
         );
       }

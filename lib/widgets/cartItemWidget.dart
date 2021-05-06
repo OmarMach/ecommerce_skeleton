@@ -48,7 +48,9 @@ class CartItemWidget extends StatelessWidget {
                               maxLines: 2,
                             ),
                             Divider(),
-                            Text("Price : " + cartItem.product.price + " Tnd"),
+                            Text(
+                              "Price : " + cartItem.product.price + " Tnd",
+                            ),
                             Divider(),
                             Text("Quantity : x" + cartItem.quantity.toString()),
                           ],
@@ -101,17 +103,29 @@ class CartItemWidget extends StatelessWidget {
                                     )),
                                 onTap: () {
                                   // Clearing all the currently displayed snackbars.
-
                                   scaffoldMessenger.removeCurrentSnackBar();
-                                  // Creating a snack bar showing delete message.
-                                  final incrementSnackBar = SnackBar(
-                                    content: Text('Item added from cart..'),
-                                  );
-                                  // Showing the snackbar.
-                                  scaffoldMessenger
-                                      .showSnackBar(incrementSnackBar);
-                                  cartProvider
-                                      .incrementCartItemQuantity(cartItem);
+                                  if (cartItem.quantity <
+                                      cartItem.product.stockQuantity) {
+                                    // Creating a snack bar showing delete message.
+                                    final incrementSnackBar = SnackBar(
+                                      content: Text('Item added from cart..'),
+                                    );
+                                    // Showing the snackbar.
+                                    scaffoldMessenger
+                                        .showSnackBar(incrementSnackBar);
+                                    cartProvider
+                                        .incrementCartItemQuantity(cartItem);
+                                  } else {
+                                    // Creating a snack bar showing delete message.
+                                    final cannotIncrementSnackBar = SnackBar(
+                                      content: Text(
+                                        'Can\'t add anymore of this product.',
+                                      ),
+                                    );
+                                    // Showing the snackbar.
+                                    scaffoldMessenger
+                                        .showSnackBar(cannotIncrementSnackBar);
+                                  }
                                 },
                               ),
                             ),

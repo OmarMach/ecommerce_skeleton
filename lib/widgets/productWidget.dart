@@ -1,6 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
-import 'package:ecommerce_app/screens/cartScreen.dart';
 import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:ecommerce_app/utils.dart';
@@ -124,25 +123,47 @@ class _ProductWidgetState extends State<ProductWidget> {
                                     );
                                   }
                                 : () {
-                                    ScaffoldMessenger.of(context)
-                                        .removeCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content:
-                                            Text("Item Added to the cart.."),
-                                        action: SnackBarAction(
-                                          label: "View Cart",
-                                          onPressed: () {
-                                            Navigator.of(context).pushNamed(
-                                                CartScreen.routeName);
-                                          },
+                                    final scaffoldMessenger =
+                                        ScaffoldMessenger.of(context);
+
+                                    // Clearing all the currently displayed snackbars.
+                                    scaffoldMessenger.removeCurrentSnackBar();
+                                    final cartProvider =
+                                        Provider.of<CartProvider>(context,
+                                            listen: false);
+                                    final cartItem = cartProvider
+                                        .getCartItemById(widget.product.id);
+                                    if (cartItem == null) {
+                                      // Creating a snack bar showing delete message.
+                                      final incrementSnackBar = SnackBar(
+                                        content: Text('Item added from cart..'),
+                                      );
+                                      // Showing the snackbar.
+                                      scaffoldMessenger
+                                          .showSnackBar(incrementSnackBar);
+                                      cartProvider.addCartItem(widget.product);
+                                    } else if (cartItem.quantity <
+                                        cartItem.product.stockQuantity) {
+                                      // Creating a snack bar showing delete message.
+                                      final incrementSnackBar = SnackBar(
+                                        content: Text('Item added from cart..'),
+                                      );
+                                      // Showing the snackbar.
+                                      scaffoldMessenger
+                                          .showSnackBar(incrementSnackBar);
+                                      cartProvider
+                                          .incrementCartItemQuantity(cartItem);
+                                    } else {
+                                      // Creating a snack bar showing delete message.
+                                      final cannotIncrementSnackBar = SnackBar(
+                                        content: Text(
+                                          'Can\'t add anymore of this product.',
                                         ),
-                                      ),
-                                    );
-                                    Provider.of<CartProvider>(
-                                      context,
-                                      listen: false,
-                                    ).addCartItem(widget.product);
+                                      );
+                                      // Showing the snackbar.
+                                      scaffoldMessenger.showSnackBar(
+                                          cannotIncrementSnackBar);
+                                    }
                                   },
                             child: Text(
                               widget.product.stockStatus != 'instock'
