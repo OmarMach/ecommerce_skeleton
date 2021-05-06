@@ -171,16 +171,27 @@ class _ProductScreenState extends State<ProductScreen> {
                         textAlign: TextAlign.start,
                         style: textTheme.headline5,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          removeAllHtmlTags(product.description)
-                                  .trim()
-                                  .replaceAll('\n\n', '\n') +
-                              ".",
-                          textAlign: TextAlign.justify,
+                      if (product.description.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              removeAllHtmlTags(product.description)
+                                      .trim()
+                                      .replaceAll('\n\n', '\n') +
+                                  ".",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
                         ),
-                      ),
                     ],
                     Divider(),
                     // Similar products
@@ -282,7 +293,7 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
                 onTap: widget.product.stockStatus != 'instock'
                     ? null
                     : () {
-                      final cartProvider = Provider.of<CartProvider>(
+                        final cartProvider = Provider.of<CartProvider>(
                           context,
                           listen: false,
                         );
