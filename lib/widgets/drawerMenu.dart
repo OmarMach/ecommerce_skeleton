@@ -6,7 +6,9 @@ import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/orderScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
+import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class DrawerMenuWidget extends StatelessWidget {
@@ -143,17 +145,46 @@ class DrawerCategoriesMenu extends StatelessWidget {
         final category = categories.elementAt(index);
         return DrawerCategoryItem(
           category: category,
+          icon: buildCategoryIcon(category.name),
         );
       },
     );
   }
 }
 
+IconData buildCategoryIcon(String category) {
+  switch (category) {
+    case 'Accessories':
+      return FontAwesomeIcons.toolbox;
+      break;
+    case 'Equipments Tools':
+      return FontAwesomeIcons.chargingStation;
+      break;
+    case 'Hand tools':
+      return FontAwesomeIcons.wrench;
+      break;
+    case 'IC Chips':
+      return FontAwesomeIcons.microchip;
+      break;
+    case 'Programming Tools':
+      return FontAwesomeIcons.laptopCode;
+      break;
+    case 'Soldering • Desoldering':
+      return FontAwesomeIcons.screwdriver;
+      break;
+    default:
+      return FontAwesomeIcons.wrench;
+      break;
+  }
+}
+
 class DrawerCategoryItem extends StatefulWidget {
   final CategoryItem category;
+  final IconData icon;
   const DrawerCategoryItem({
     Key key,
     @required this.category,
+    @required this.icon,
   }) : super(key: key);
 
   @override
@@ -178,18 +209,24 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                      CategoryProductsScreen.routeName,
-                      arguments: {
-                        widget.category.name: widget.category.category.id
+                Row(
+                  children: [
+                    FaIcon(widget.icon),
+                    horizontalSeparator,
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          CategoryProductsScreen.routeName,
+                          arguments: {
+                            widget.category.name: widget.category.category.id
+                          },
+                        );
                       },
-                    );
-                  },
-                  child: Text(
-                    widget.category.name,
-                  ),
+                      child: Text(
+                        widget.category.name,
+                      ),
+                    ),
+                  ],
                 ),
                 InkWell(
                   onTap: () {
