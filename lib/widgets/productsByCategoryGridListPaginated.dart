@@ -174,37 +174,117 @@ class _ProductsByCategoryGridListPaginatedState
                     );
                   },
                 ),
-                productsCount <= 10
-                    ? Container()
-                    : Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              child: Text("Previous"),
-                              onPressed: page > 0
-                                  ? () {
-                                      setState(() {
-                                        page--;
-                                      });
-                                    }
-                                  : null,
+                if (pagesCount > 1)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: InkWell(
+                          onTap: page > 0
+                              ? () {
+                                  setState(() {
+                                    page--;
+                                  });
+                                }
+                              : null,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Material(
+                                color: Colors.grey.shade800,
+                                borderRadius: BorderRadius.circular(
+                                  5,
+                                ),
+                                child: SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.arrow_back_rounded,
+                                      color:
+                                          page > 0 ? Colors.white : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          horizontalSeparator,
-                          Expanded(
-                            child: ElevatedButton(
-                              child: Text("Next"),
-                              onPressed: page < pagesCount - 1
-                                  ? () {
-                                      setState(() {
-                                        page++;
-                                      });
-                                    }
-                                  : null,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
+                      for (var i = 0; i < pagesCount; i++)
+                        Flexible(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                page = i;
+                              });
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Material(
+                                  color: Colors.grey.shade800,
+                                  borderRadius: BorderRadius.circular(
+                                    5,
+                                  ),
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: Center(
+                                      child: Text(
+                                        (i + 1).toString(),
+                                        style: TextStyle(
+                                          color: page == i
+                                              ? Colors.redAccent
+                                              : Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      Flexible(
+                        child: InkWell(
+                          onTap: page < pagesCount - 1
+                              ? () {
+                                  setState(() {
+                                    page++;
+                                  });
+                                }
+                              : null,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Material(
+                                color: Colors.grey.shade800,
+                                borderRadius: BorderRadius.circular(
+                                  5,
+                                ),
+                                child: SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: Icon(
+                                      Icons.arrow_forward,
+                                      color: page < pagesCount - 1
+                                          ? Colors.white
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             );
           }
