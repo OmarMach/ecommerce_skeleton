@@ -219,7 +219,7 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                   children: [
                     FaIcon(
                       widget.icon,
-                      color: Colors.grey,
+                      color: Colors.white,
                     ),
                     horizontalSeparator,
                     InkWell(

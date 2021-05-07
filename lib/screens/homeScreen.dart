@@ -22,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
@@ -56,6 +57,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       categoryId: 79,
                     ),
                   ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      'assets/images/proff.jpg',
+                      width: size.width,
+                    ),
+                  )
                 ],
               ),
             ),
