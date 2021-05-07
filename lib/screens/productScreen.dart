@@ -245,38 +245,47 @@ class _AddToCartButtonsState extends State<AddToCartButtons> {
           borderRadius: BorderRadius.circular(5),
           child: Row(
             children: [
+              InkWell(
+                onTap: () {
+                  if (_cartValue > 1) --_cartValue;
+
+                  setState(() {});
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade800,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      bottomLeft: Radius.circular(5),
+                    ),
+                  ),
+                  height: 60,
+                  width: 30,
+                  child: Icon(Icons.remove),
+                ),
+              ),
               SizedBox(
                 height: 60,
                 width: 60,
                 child: Center(child: Text(_cartValue.toString())),
               ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 30,
-                    width: 60,
-                    child: InkWell(
-                      onTap: () {
-                        if (widget.product.stockQuantity > _cartValue)
-                          _cartValue++;
-                        setState(() {});
-                      },
-                      child: Icon(Icons.keyboard_arrow_up_rounded),
-                    ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade800,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(5),
+                    bottomRight: Radius.circular(5),
                   ),
-                  InkWell(
-                    onTap: () {
-                      if (_cartValue > 1) --_cartValue;
-
-                      setState(() {});
-                    },
-                    child: SizedBox(
-                      height: 30,
-                      width: 60,
-                      child: Icon(Icons.keyboard_arrow_down_rounded),
-                    ),
-                  ),
-                ],
+                ),
+                height: 60,
+                width: 30,
+                child: InkWell(
+                  onTap: () {
+                    if (widget.product.stockQuantity > _cartValue) _cartValue++;
+                    setState(() {});
+                  },
+                  child: Icon(Icons.add),
+                ),
               ),
             ],
           ),

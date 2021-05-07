@@ -91,7 +91,13 @@ class DrawerMenuWidget extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("New Arrivals"),
+                  child: Row(
+                    children: [
+                      FaIcon(FontAwesomeIcons.fire),
+                      horizontalSeparator,
+                      Text("New Arrivals"),
+                    ],
+                  ),
                 ),
               ),
               DrawerCategoriesMenu(),
@@ -211,7 +217,10 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
               children: [
                 Row(
                   children: [
-                    FaIcon(widget.icon),
+                    FaIcon(
+                      widget.icon,
+                      color: Colors.grey,
+                    ),
                     horizontalSeparator,
                     InkWell(
                       onTap: () {
