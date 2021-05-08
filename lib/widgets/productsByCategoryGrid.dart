@@ -18,9 +18,14 @@ class ProductsByCategoryGridList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final sliverGridDelegateWithFixedCrossAxisCount =
         SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
+      crossAxisCount: size.width >= 1000
+          ? 5
+          : size.width >= 600
+              ? 3
+              : 2,
       childAspectRatio: 0.6,
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,

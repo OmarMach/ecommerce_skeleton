@@ -203,6 +203,7 @@ class _SearchByCategoryResultsWidgetState
   Widget build(BuildContext context) {
     return Consumer<SearchProvider>(
       builder: (context, searchProvider, child) {
+        final size = MediaQuery.of(context).size;
         final List<WooProduct> searchedProducts =
             searchProvider.searchedProducts;
 
@@ -323,7 +324,11 @@ class _SearchByCategoryResultsWidgetState
                   GridView.builder(
                     shrinkWrap: true,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
+                      crossAxisCount: size.width >= 1000
+                          ? 5
+                          : size.width >= 600
+                              ? 3
+                              : 2,
                       childAspectRatio: 0.55,
                       mainAxisSpacing: 10,
                     ),

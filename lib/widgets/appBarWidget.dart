@@ -22,10 +22,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             );
         },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(20.0),
           child: Image.asset(
             'assets/images/Logo.png',
-            width: size.width * .3,
+            width: size.height * .3,
           ),
         ),
       ),

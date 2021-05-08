@@ -27,7 +27,11 @@ class CarouselWidget extends StatelessWidget {
           disableCenter: true,
           enlargeStrategy: CenterPageEnlargeStrategy.scale,
           initialPage: 0,
-          viewportFraction: 1,
+          viewportFraction: size.width >= 1200
+              ? 1 / 3
+              : size.width >= 600
+                  ? 1 / 2
+                  : 1,
         ),
         items: [
           ...productsProvider.items
@@ -72,11 +76,12 @@ class CarouselListViewItem extends StatelessWidget {
       ),
       child: Column(
         children: [
+          // This prevents the container below from taking all the image.
           Flexible(
             flex: 2,
             child: Container(),
           ),
-          Expanded(
+          Flexible(
             flex: 1,
             child: Container(
               decoration: BoxDecoration(

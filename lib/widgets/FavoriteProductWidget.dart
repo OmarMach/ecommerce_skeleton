@@ -25,54 +25,53 @@ class _FavoriteProductWidgetState extends State<FavoriteProductWidget> {
     return Column(
       children: [
         Expanded(
-          child: InkWell(
-            onTap: () {
-              ScaffoldMessenger.of(context).removeCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Item removed from wish list.."),
-                ),
-              );
-              Provider.of<FavoritesProvider>(
-                context,
-                listen: false,
-              ).deleteFromFavorites(widget.product);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade700,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(Icons.close),
-                  Text("Remove"),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Expanded(
           flex: 5,
-          child: ClipRRect(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  ProductScreen.routeName,
-                  arguments: widget.product,
-                );
-              },
-              child: Image.network(
-                widget.product.images[0].src,
-                fit: BoxFit.fill,
-                width: size.width,
+          child: Stack(
+            children: [
+              ClipRRect(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      ProductScreen.routeName,
+                      arguments: widget.product,
+                    );
+                  },
+                  child: Image.network(
+                    widget.product.images[0].src,
+                    fit: BoxFit.fill,
+                    width: size.width,
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Item removed from wish list.."),
+                        ),
+                      );
+                      Provider.of<FavoritesProvider>(
+                        context,
+                        listen: false,
+                      ).deleteFromFavorites(widget.product);
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey.shade700,
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.redAccent.shade200,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
         ),
         Expanded(

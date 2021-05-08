@@ -62,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Image.asset(
                       'assets/images/proff.jpg',
                       width: size.width,
+                      fit: BoxFit.fill,
                     ),
                   )
                 ],
@@ -88,15 +89,9 @@ class HomeTitleWidget extends StatelessWidget {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent / 2);
     });
+
     final size = MediaQuery.of(context).size;
-    final redBox = Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Container(
-        width: 10,
-        height: 20,
-        color: Colors.redAccent,
-      ),
-    );
+
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: SingleChildScrollView(

@@ -6,6 +6,9 @@ import '../config.dart';
 class UserProvider with ChangeNotifier {
   String userName;
   String email;
+  String token;
+  bool isConnected;
+
   Future<void> login(String userName, String password) async {
     // Adding params
     final Map<String, dynamic> params = {
