@@ -4,6 +4,7 @@ import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/orderScreen.dart';
+import 'package:ecommerce_app/screens/profileScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:ecommerce_app/utils.dart';
@@ -64,7 +65,7 @@ class DrawerMenuWidget extends StatelessWidget {
                 icon: Icons.person,
                 label: 'My Account',
                 onTap: () {
-                  Navigator.of(context).pushNamed(TestScreen.routeName);
+                  Navigator.of(context).pushNamed(ProfileScreen.routeName);
                 },
               ),
               DrawerMenuItem(

@@ -3,6 +3,7 @@ import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/providers/favoritesProvider.dart';
 import 'package:ecommerce_app/providers/productProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
+import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/routes.dart';
 import 'package:ecommerce_app/screens/errorScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
@@ -24,18 +25,20 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Goods.tn',
         theme: ThemeData(
           brightness: Brightness.dark,
-          buttonTheme: Theme.of(context)
-              .buttonTheme
-              .copyWith(buttonColor: Colors.grey.shade700),
+          buttonTheme: Theme.of(context).buttonTheme.copyWith(
+                buttonColor: Colors.grey.shade700,
+              ),
           fontFamily: 'ProductSans',
           primaryColor: Colors.grey.shade800,
           accentColor: Colors.redAccent,
+          errorColor: Colors.redAccent,
         ),
         routes: routes,
 
@@ -59,14 +62,19 @@ class LoadingWidget extends StatefulWidget {
 class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ProductProvider, CategoriesProvider>(
-      builder: (context, productProvider, categoriesProvider, child) {
+    return Consumer3<ProductProvider, CategoriesProvider, UserProvider>(
+      builder:
+          (context, productProvider, categoriesProvider, userProvider, child) {
         Future<dynamic> load(BuildContext context) async {
-          print("Loading prods");
+          print("Loading Products..");
           await productProvider.getProductsFromDb(context);
 
-          print("Loading cats");
+          print("Loading User Information..");
+          await userProvider.initUserStatus();
+
+          print("Loading Categories..");
           await categoriesProvider.getAllCategories(context);
+
           categoriesProvider.transformCategories();
           return Future;
         }

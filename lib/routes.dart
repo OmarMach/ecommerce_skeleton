@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
+import 'package:ecommerce_app/screens/profileScreen.dart';
 
 import 'screens/favoritesScreen.dart';
 
@@ -15,6 +16,7 @@ import 'screens/searchScreen.dart';
 final routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   ProductScreen.routeName: (context) => ProductScreen(),
+  ProfileScreen.routeName: (context) => ProfileScreen(),
   CartScreen.routeName: (context) => CartScreen(),
   OrderScreen.routeName: (context) => OrderScreen(),
   SearchScreen.routeName: (context) => SearchScreen(),
