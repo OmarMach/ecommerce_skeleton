@@ -62,12 +62,16 @@ class LoadingWidget extends StatefulWidget {
 class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer3<ProductProvider, CategoriesProvider, UserProvider>(
-      builder:
-          (context, productProvider, categoriesProvider, userProvider, child) {
+    return Consumer4<ProductProvider, CategoriesProvider, UserProvider,
+        FavoritesProvider>(
+      builder: (context, productProvider, categoriesProvider, userProvider,
+          favProvider, child) {
         Future<dynamic> load(BuildContext context) async {
           print("Loading Products..");
           await productProvider.getProductsFromDb(context);
+
+          print("Loading Favorites..");
+          await favProvider.loadFavoritesFromSharedPrefs();
 
           print("Loading User Information..");
           await userProvider.initUserStatus();
