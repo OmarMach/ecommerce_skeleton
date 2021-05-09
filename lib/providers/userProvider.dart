@@ -8,6 +8,10 @@ class UserProvider with ChangeNotifier {
   User _user;
   String _token;
 
+  User get user {
+    return _user;
+  }
+
   bool get isConnected {
     if (_token == null) return false;
     return _token.isEmpty ? false : true;

@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
+import 'package:ecommerce_app/screens/editAccountDetails.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
 
 import 'screens/favoritesScreen.dart';
@@ -26,4 +27,5 @@ final routes = {
   RegisterScreen.routeName: (context) => RegisterScreen(),
   FavoritesScreen.routeName: (context) => FavoritesScreen(),
   CategoryProductsScreen.routeName: (context) => CategoryProductsScreen(),
+  EditAccountDetails.routeName: (context) => EditAccountDetails(),
 };
