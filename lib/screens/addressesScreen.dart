@@ -20,7 +20,26 @@ class AddressesScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               !userProvider.isConnected
-                  ? AddressWidget(textTheme: textTheme)
+                  ? Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Billing Address",
+                            textAlign: TextAlign.center,
+                            style: textTheme.headline5,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "This address will be auto filled for each new order.",
+                            style: textTheme.caption,
+                          ),
+                        ),
+                        AddressWidget(textTheme: textTheme),
+                      ],
+                    )
                   : NoAddressWidget(textTheme: textTheme),
             ],
           ),
@@ -82,65 +101,46 @@ class AddressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Billing Address",
-            textAlign: TextAlign.center,
-            style: textTheme.headline5,
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade800,
+          borderRadius: BorderRadius.circular(5),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "This address will be auto filled for each new order.",
-            style: textTheme.caption,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade800,
-              borderRadius: BorderRadius.circular(5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AddressItemWidget(
+              label: 'Full name',
+              value: 'Goods Tn User',
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                AddressItemWidget(
-                  label: 'Full name',
-                  value: 'Goods Tn User',
-                ),
-                AddressItemWidget(
-                  label: 'Email Address',
-                  value: 'Goodstn@contact.tn',
-                ),
-                AddressItemWidget(
-                  label: 'Location',
-                  value: 'Cité Ibn Khaldoun, Tunis',
-                ),
-                AddressItemWidget(
-                  label: 'Zip code',
-                  value: '2062',
-                ),
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AddAddressScreen.routeName);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey.shade700,
-                  ),
-                  child: Text("Edit Address"),
-                ),
-              ],
+            AddressItemWidget(
+              label: 'Email Address',
+              value: 'Goodstn@contact.tn',
             ),
-          ),
+            AddressItemWidget(
+              label: 'Location',
+              value: 'Cité Ibn Khaldoun, Tunis',
+            ),
+            AddressItemWidget(
+              label: 'Zip code',
+              value: '2062',
+            ),
+            Divider(),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AddAddressScreen.routeName);
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey.shade700,
+              ),
+              child: Text("Edit Address"),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

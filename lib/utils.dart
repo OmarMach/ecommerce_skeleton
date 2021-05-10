@@ -17,6 +17,12 @@ String removeAllHtmlTags(String htmlText) {
   return htmlText.replaceAll(exp, '');
 }
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
+}
+
 // extension CapExtension on String {
 
 //   String get inCaps => '${this[0].toUpperCase()}${this.substring(1)}';

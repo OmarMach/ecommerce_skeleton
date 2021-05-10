@@ -2,6 +2,8 @@ import 'package:ecommerce_app/screens/AddAddressScreen.dart';
 import 'package:ecommerce_app/screens/addressesScreen.dart';
 import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/editAccountDetails.dart';
+import 'package:ecommerce_app/screens/orderDetailsScreen.dart';
+import 'package:ecommerce_app/screens/ordersScreen.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
 
 import 'screens/favoritesScreen.dart';
@@ -32,4 +34,6 @@ final routes = {
   CategoryProductsScreen.routeName: (context) => CategoryProductsScreen(),
   EditAccountDetails.routeName: (context) => EditAccountDetails(),
   AddAddressScreen.routeName: (context) => AddAddressScreen(),
+  OrdersScreen.routeName: (context) => OrdersScreen(),
+  OrderDetailsScreen.routeName: (context) => OrderDetailsScreen(),
 };

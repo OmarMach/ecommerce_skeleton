@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/screens/addressesScreen.dart';
 import 'package:ecommerce_app/screens/editAccountDetails.dart';
+import 'package:ecommerce_app/screens/ordersScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
@@ -63,7 +64,9 @@ class DashboardWidget extends StatelessWidget {
             DashboardMenuItemWidget(
               title: 'Orders',
               icon: Icons.shopping_bag_rounded,
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(OrdersScreen.routeName);
+              },
             ),
             DashboardMenuItemWidget(
               title: 'Addresses',

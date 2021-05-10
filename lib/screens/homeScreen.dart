@@ -39,24 +39,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   verticalSeparator,
                   HomeTitleWidget(title: "New Arrivals"),
                   ProductsGridList(
-                    limit: 5,
+                    limit: 6,
                   ),
                   HomeTitleWidget(title: "Screen Refurbish Tools"),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ProductsByCategoryGridList(
                       categoryId: 71,
-                      limit: 5,
+                      limit: 6,
                     ),
                   ),
                   HomeTitleWidget(title: "Soldering accessories"),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ProductsByCategoryGridList(
-                      limit: 5,
+                      limit: 6,
                       categoryId: 79,
                     ),
                   ),
+                  verticalSeparator,
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Image.asset(
@@ -114,7 +115,7 @@ class HomeTitleWidget extends StatelessWidget {
                 },
                 child: Text(
                   title,
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
               ),
