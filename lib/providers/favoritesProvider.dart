@@ -23,10 +23,12 @@ class FavoritesProvider with ChangeNotifier {
 
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     final List<String> loadedFavs = _prefs.getStringList('favorites');
-    _favsIdList.addAll(loadedFavs);
 
     // Getting the product information from the database
-    if (loadedFavs.isNotEmpty) await getFavoritesFromDb();
+    if (loadedFavs != null && loadedFavs.isNotEmpty) {
+      _favsIdList.addAll(loadedFavs);
+      await getFavoritesFromDb();
+    }
   }
 
   Future addFavoritesToSharedPrefs(int id) async {

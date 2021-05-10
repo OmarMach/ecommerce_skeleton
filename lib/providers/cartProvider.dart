@@ -40,12 +40,12 @@ class CartProvider with ChangeNotifier {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
 
       String encodedCart = _prefs.getString('cart');
-
-      final Map decodedCart = json.decoder.convert(encodedCart);
-      decodedCart.forEach((key, value) {
-        _compressedCart[key] = value;
-      });
-
+      if (encodedCart != null) {
+        final Map decodedCart = json.decoder.convert(encodedCart);
+        decodedCart.forEach((key, value) {
+          _compressedCart[key] = value;
+        });
+      }
       if (_compressedCart.isNotEmpty) getcartItemsFromDb();
     } catch (e) {
       print("Error while Loading the cart from cache : " + e.toString());
