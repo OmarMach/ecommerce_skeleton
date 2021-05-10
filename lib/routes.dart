@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/screens/AddAddressScreen.dart';
+import 'package:ecommerce_app/screens/addressesScreen.dart';
 import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/editAccountDetails.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
@@ -18,6 +20,7 @@ final routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   ProductScreen.routeName: (context) => ProductScreen(),
   ProfileScreen.routeName: (context) => ProfileScreen(),
+  AddressesScreen.routeName: (context) => AddressesScreen(),
   CartScreen.routeName: (context) => CartScreen(),
   OrderScreen.routeName: (context) => OrderScreen(),
   SearchScreen.routeName: (context) => SearchScreen(),
@@ -28,4 +31,5 @@ final routes = {
   FavoritesScreen.routeName: (context) => FavoritesScreen(),
   CategoryProductsScreen.routeName: (context) => CategoryProductsScreen(),
   EditAccountDetails.routeName: (context) => EditAccountDetails(),
+  AddAddressScreen.routeName: (context) => AddAddressScreen(),
 };

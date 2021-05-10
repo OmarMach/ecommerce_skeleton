@@ -168,7 +168,7 @@ class EditAccountDetails extends StatelessWidget {
                         primary: Colors.grey.shade900,
                       ),
                       child: Text("Save Changes"),
-                    )
+                    ),
                   ],
                 ),
               ),
