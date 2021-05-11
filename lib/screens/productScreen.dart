@@ -23,7 +23,6 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final size = MediaQuery.of(context).size;
 
     final product = ModalRoute.of(context).settings.arguments as WooProduct;
 
@@ -36,7 +35,7 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               Container(
                 padding: EdgeInsets.all(10),
-                color: Colors.blueGrey.shade700,
+                color: Colors.blue,
                 child: Column(
                   children: [
                     ProductImagesCarousel(items: product.images),

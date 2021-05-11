@@ -6,11 +6,11 @@ import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/orderScreen.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
-import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerMenuWidget extends StatelessWidget {
   @override
@@ -103,26 +103,70 @@ class DrawerMenuWidget extends StatelessWidget {
               ),
               DrawerCategoriesMenu(),
               Divider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Call us on",
-                  style: textTheme.caption,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(
-                  "31 137 337",
-                  style: textTheme.subtitle2,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(
-                  "53 768 766",
-                  style: textTheme.subtitle2,
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Call us on",
+                      style: textTheme.caption,
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: InkWell(
+                        onTap: () {
+                          launch("tel://31137337");
+                        },
+                        child: Chip(
+                          avatar: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Icon(
+                              Icons.call,
+                              size: 20,
+                            ),
+                          ),
+                          backgroundColor: Colors.green,
+                          label: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              "31 137 337",
+                              style: textTheme.subtitle2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: InkWell(
+                        onTap: () {
+                          launch("tel://53768766");
+                        },
+                        child: Chip(
+                          avatar: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Icon(
+                              Icons.call,
+                              size: 20,
+                            ),
+                          ),
+                          backgroundColor: Colors.green,
+                          label: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              "53 768 766",
+                              style: textTheme.subtitle2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
