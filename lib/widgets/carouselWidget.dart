@@ -34,7 +34,7 @@ class CarouselWidget extends StatelessWidget {
                   : 1,
         ),
         items: [
-          ...productsProvider.items
+          ...productsProvider.carouselItems
               .map(
                 (e) => Padding(
                   padding: const EdgeInsets.all(8.0),

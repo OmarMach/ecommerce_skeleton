@@ -9,9 +9,14 @@ import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
   final List<WooProduct> _products = [];
+  final List<WooProduct> _carouselProducts = [];
 
   List<WooProduct> get items {
     return _products;
+  }
+
+  List<WooProduct> get carouselItems {
+    return _carouselProducts;
   }
 
   final List<WooProduct> filteredProducts = [];
@@ -122,6 +127,59 @@ class ProductProvider with ChangeNotifier {
       },
     );
     return searchedProducts;
+  }
+
+  Future<List<WooProduct>> getCarouselProducts() async {
+    // Adding params
+    final Map<String, dynamic> params = {
+      'per_page': '100',
+      'status': 'publish',
+      'featured': 'true',
+    };
+    final List productList = [];
+
+    final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
+    final response = await http.get(uri, headers: headers);
+
+    // decoding the results into a list.
+    productList.addAll(json.decode(response.body) as List);
+
+    // Converting each item to WooProduct.
+    productList.forEach(
+      (element) {
+        // Converting product from Json to WooProduct.
+        final WooProduct product = WooProduct.fromJson(element);
+
+        // Getting the categories
+        final List categories = element['categories'];
+        final List attributes = element['attributes'];
+
+        attributes.forEach(
+          (element) {
+            final WooProductItemAttribute productAttribute =
+                WooProductItemAttribute.fromJson(element);
+            product.attributes.add(productAttribute);
+          },
+        );
+
+        // Adding the categories to the product.
+        categories.forEach(
+          (element) {
+            final WooProductCategory category =
+                WooProductCategory.fromJson(element);
+            // Avoiding duplicates
+            if (product.categories
+                    .indexWhere((product) => product.id == category.id) ==
+                -1) product.categories.add(element);
+          },
+        );
+
+        // Adding the product to the list
+        if (!_carouselProducts.contains(product))
+          _carouselProducts.add(product);
+      },
+    );
+    return _carouselProducts;
   }
 
   Future<List<WooProduct>> getProductsFromDb(BuildContext context,
