@@ -63,7 +63,7 @@ class _ProductsByCategoryGridListPaginatedState
             ? Provider.of<ProductProvider>(context, listen: false)
                 .getProductsByCategory(widget.categoryId)
             : Provider.of<ProductProvider>(context, listen: false)
-                .getProductsFromDb(context, limit: 10),
+                .getProductsFromDb(context, limit: 100),
         builder: (context, AsyncSnapshot<List<WooProduct>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center(

@@ -17,7 +17,6 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
     final category =
         ModalRoute.of(context).settings.arguments as Map<String, int>;
     final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
@@ -37,7 +36,7 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
               verticalSeparator,
               ProductsByCategoryGridListPaginated(
                 categoryId: category.values.first,
-                limit: 20,
+                limit: category.values.first == 0 ? 100 : 20,
               ),
             ],
           ),

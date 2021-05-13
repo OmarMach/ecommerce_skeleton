@@ -76,7 +76,9 @@ class ProductProvider with ChangeNotifier {
     return searchedProducts;
   }
 
-  Future<List<WooProduct>> getProductsByCategory(int categoryId) async {
+  Future<List<WooProduct>> getProductsByCategory(
+    int categoryId,
+  ) async {
     // Adding params
     final Map<String, dynamic> params = {
       'per_page': '100',
