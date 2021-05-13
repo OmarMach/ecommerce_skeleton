@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/models/address.dart';
 import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/screens/AddAddressScreen.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
@@ -19,7 +20,7 @@ class AddressesScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              !userProvider.isConnected
+              userProvider.userAddress != null
                   ? Column(
                       children: [
                         Padding(
@@ -37,7 +38,10 @@ class AddressesScreen extends StatelessWidget {
                             style: textTheme.caption,
                           ),
                         ),
-                        AddressWidget(textTheme: textTheme),
+                        AddressWidget(
+                          textTheme: textTheme,
+                          address: userProvider.userAddress,
+                        ),
                       ],
                     )
                   : NoAddressWidget(textTheme: textTheme),
@@ -96,8 +100,11 @@ class AddressWidget extends StatelessWidget {
   const AddressWidget({
     Key key,
     @required this.textTheme,
+    @required this.address,
   }) : super(key: key);
+
   final TextTheme textTheme;
+  final Address address;
 
   @override
   Widget build(BuildContext context) {
@@ -114,19 +121,22 @@ class AddressWidget extends StatelessWidget {
           children: [
             AddressItemWidget(
               label: 'Full name',
-              value: 'Goods Tn User',
+              value: (address.firstName + ' ' + address.lastName ?? ''),
             ),
             AddressItemWidget(
               label: 'Email Address',
-              value: 'Goodstn@contact.tn',
+              value: address.email ?? '',
             ),
             AddressItemWidget(
               label: 'Location',
-              value: 'Cité Ibn Khaldoun, Tunis',
+              value: address.city ??
+                  '' + ', ' + address.address1 ??
+                  '' + ' ' + address.address2 ??
+                  '',
             ),
             AddressItemWidget(
               label: 'Zip code',
-              value: '2062',
+              value: address.postcode ?? '',
             ),
             Divider(),
             ElevatedButton(

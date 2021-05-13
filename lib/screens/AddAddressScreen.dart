@@ -1,5 +1,7 @@
+import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../utils.dart';
 import 'editAccountDetails.dart';
@@ -15,145 +17,180 @@ class AddAddressScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(),
       body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Address Management",
-                  textAlign: TextAlign.center,
-                  style: textTheme.headline4,
-                ),
-                verticalSeparator,
-                EditAccountDetailsSectionTitleWidget(
-                  textTheme: textTheme,
-                  label: 'Customer Information',
-                ),
-                verticalSeparator,
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        onSaved: (value) {
-                          _credentials['firstName'] = value.toString().trim();
-                        },
-                        decoration: buildFormInputDecoration(
-                          hint: "First Name..",
-                          label: 'First Name',
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    "Address Management",
+                    textAlign: TextAlign.center,
+                    style: textTheme.headline4,
+                  ),
+                  verticalSeparator,
+                  EditAccountDetailsSectionTitleWidget(
+                    textTheme: textTheme,
+                    label: 'Customer Information',
+                  ),
+                  verticalSeparator,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          onSaved: (value) {
+                            _credentials['first_name'] =
+                                value.toString().trim();
+                          },
+                          decoration: buildFormInputDecoration(
+                            hint: "First Name..",
+                            label: 'First Name',
+                          ),
+                          validator: (value) => value.isNotEmpty
+                              ? null
+                              : 'Please enter First Name',
                         ),
-                        validator: (value) =>
-                            value.isNotEmpty ? null : 'Please enter First Name',
                       ),
-                    ),
-                    horizontalSeparator,
-                    Expanded(
-                      child: TextFormField(
-                        onSaved: (value) {
-                          _credentials['lastName'] = value.toString().trim();
-                        },
-                        decoration: buildFormInputDecoration(
-                          hint: "Last Name..",
-                          label: 'Last Name',
+                      horizontalSeparator,
+                      Expanded(
+                        child: TextFormField(
+                          onSaved: (value) {
+                            _credentials['last_name'] = value.toString().trim();
+                          },
+                          decoration: buildFormInputDecoration(
+                            hint: "Last Name..",
+                            label: 'Last Name',
+                          ),
+                          validator: (value) => value.isNotEmpty
+                              ? null
+                              : 'Please enter a last Name',
                         ),
-                        validator: (value) => value.isNotEmpty
+                      ),
+                    ],
+                  ),
+                  verticalSeparator,
+                  TextFormField(
+                    onSaved: (value) {
+                      _credentials['phone'] = value.toString().trim();
+                    },
+                    keyboardType: TextInputType.phone,
+                    decoration: buildFormInputDecoration(
+                      hint: "Phone..",
+                      label: 'Phone',
+                    ),
+                    validator: (value) => value.isNotEmpty
+                        ? value.length == 8
                             ? null
-                            : 'Please enter a last Name',
-                      ),
+                            : 'Please enter a valid phone number'
+                        : 'Please enter a phone number',
+                  ),
+                  verticalSeparator,
+                  TextFormField(
+                    onSaved: (value) {
+                      _credentials['firstName'] = value.toString().trim();
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: buildFormInputDecoration(
+                      hint: "Email ..",
+                      label: 'Email ',
                     ),
-                  ],
-                ),
-                verticalSeparator,
-                TextFormField(
-                  onSaved: (value) {
-                    _credentials['phone'] = value.toString().trim();
-                  },
-                  keyboardType: TextInputType.phone,
-                  decoration: buildFormInputDecoration(
-                    hint: "Phone..",
-                    label: 'Phone',
+                    validator: (value) => value.isNotEmpty
+                        ? null
+                        : 'Please enter an email address..',
                   ),
-                  validator: (value) => value.isNotEmpty
-                      ? value.length == 8
-                          ? null
-                          : 'Please enter a valid phone number'
-                      : 'Please enter a phone number',
-                ),
-                verticalSeparator,
-                TextFormField(
-                  onSaved: (value) {
-                    _credentials['firstName'] = value.toString().trim();
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: buildFormInputDecoration(
-                    hint: "Email ..",
-                    label: 'Email ',
+                  verticalSeparator,
+                  EditAccountDetailsSectionTitleWidget(
+                    textTheme: textTheme,
+                    label: 'Address',
                   ),
-                  validator: (value) => value.isNotEmpty
-                      ? null
-                      : 'Please enter an email address..',
-                ),
-                verticalSeparator,
-                EditAccountDetailsSectionTitleWidget(
-                  textTheme: textTheme,
-                  label: 'Address',
-                ),
-                verticalSeparator,
-                TextFormField(
-                  onSaved: (value) {
-                    _credentials['street'] = value.toString().trim();
-                  },
-                  keyboardType: TextInputType.streetAddress,
-                  decoration: buildFormInputDecoration(
-                    hint: "Street Address ..",
-                    label: 'Street Address ',
+                  verticalSeparator,
+                  TextFormField(
+                    enabled: false,
+                    initialValue: 'Tunisia',
+                    onSaved: (value) {
+                      _credentials['country'] = value.toString().trim();
+                    },
+                    keyboardType: TextInputType.streetAddress,
+                    decoration: buildFormInputDecoration(
+                      hint: "Country ..",
+                      label: 'Country ',
+                    ),
                   ),
-                  validator: (value) => value.isNotEmpty
-                      ? null
-                      : 'Please enter a street address..',
-                ),
-                verticalSeparator,
-                TextFormField(
-                  onSaved: (value) {
-                    _credentials['town'] = value.toString().trim();
-                  },
-                  keyboardType: TextInputType.streetAddress,
-                  decoration: buildFormInputDecoration(
-                    hint: "Town/city  ..",
-                    label: 'Town/city  ',
+                  verticalSeparator,
+                  TextFormField(
+                    onSaved: (value) {
+                      _credentials['address_1'] = value.toString().trim();
+                    },
+                    keyboardType: TextInputType.streetAddress,
+                    decoration: buildFormInputDecoration(
+                      hint: "Street Address ..",
+                      label: 'Street Address ',
+                    ),
+                    validator: (value) => value.isNotEmpty
+                        ? null
+                        : 'Please enter a street address..',
                   ),
-                  validator: (value) =>
-                      value.isNotEmpty ? null : 'Please enter a Toww/city ..',
-                ),
-                verticalSeparator,
-                TextFormField(
-                  onSaved: (value) {
-                    _credentials['zip'] = value.toString().trim();
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: buildFormInputDecoration(
-                    hint: "Zip Code  ..",
-                    label: 'Zip Code  ',
+                  verticalSeparator,
+                  TextFormField(
+                    onSaved: (value) {
+                      _credentials['city'] = value.toString().trim();
+                    },
+                    keyboardType: TextInputType.streetAddress,
+                    decoration: buildFormInputDecoration(
+                      hint: "Town/city  ..",
+                      label: 'Town/city  ',
+                    ),
+                    validator: (value) =>
+                        value.isNotEmpty ? null : 'Please enter a Toww/city ..',
                   ),
-                  validator: (value) =>
-                      value.isNotEmpty ? null : 'Please enter a Zip Code ..',
-                ),
-                verticalSeparator,
-                Divider(),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey.shade900,
+                  verticalSeparator,
+                  TextFormField(
+                    onSaved: (value) {
+                      _credentials['postcode'] = value.toString().trim();
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: buildFormInputDecoration(
+                      hint: "Zip Code  ..",
+                      label: 'Zip Code  ',
+                    ),
+                    validator: (value) =>
+                        value.isNotEmpty ? null : 'Please enter a Zip Code ..',
                   ),
-                  child: Text("Save Address"),
-                )
-              ],
+                  verticalSeparator,
+                  Divider(),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        Provider.of<UserProvider>(context, listen: false)
+                            .createAddress(_credentials);
+                      }
+                    },
+                    onLongPress: () {
+                      Map<String, String> map = {
+                        "first_name": "Testing",
+                        "last_name": "On Mobile",
+                        "address_1": "969 Market",
+                        "address_2": "",
+                        "city": "San Francisco",
+                        "state": "CA",
+                        "postcode": "94103",
+                        "country": "US",
+                        "email": "Omarmachhouty@gmail.com",
+                        "phone": "(555) 555-5555"
+                      };
+                      Provider.of<UserProvider>(context, listen: false)
+                          .createAddress(map);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey.shade900,
+                    ),
+                    child: Text("Save Address"),
+                  )
+                ],
+              ),
             ),
           ),
         ),
