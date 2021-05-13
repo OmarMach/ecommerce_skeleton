@@ -2,6 +2,7 @@ import 'package:ecommerce_app/config.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/carouselWidget.dart';
+import 'package:ecommerce_app/widgets/comingsoonCarouselWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:ecommerce_app/widgets/productsGridList.dart';
@@ -56,6 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       limit: 6,
                       categoryId: 79,
                     ),
+                  ),
+                  verticalSeparator,
+                  HomeTitleWidget(title: "Coming Soon"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ComingSoonCarouselWidget(),
                   ),
                   verticalSeparator,
                   ClipRRect(
