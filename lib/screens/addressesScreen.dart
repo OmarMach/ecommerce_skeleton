@@ -128,11 +128,16 @@ class AddressWidget extends StatelessWidget {
               value: address.email ?? '',
             ),
             AddressItemWidget(
-              label: 'Location',
-              value: address.city ??
-                  '' + ', ' + address.address1 ??
-                  '' + ' ' + address.address2 ??
-                  '',
+              label: 'Country',
+              value: address.country ?? '',
+            ),
+            AddressItemWidget(
+              label: 'Street Address',
+              value: address.address1 ?? '',
+            ),
+            AddressItemWidget(
+              label: 'Town/City',
+              value: address.address2 ?? '',
             ),
             AddressItemWidget(
               label: 'Zip code',

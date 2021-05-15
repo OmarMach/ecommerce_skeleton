@@ -7,13 +7,13 @@ import 'package:woocommerce/models/products.dart';
 import '../utils.dart';
 
 class ProductsByCategoryGridListPaginated extends StatefulWidget {
-  final int limit;
   const ProductsByCategoryGridListPaginated({
     Key key,
     @required this.categoryId,
     @required this.limit,
   }) : super(key: key);
 
+  final int limit;
   final int categoryId;
 
   @override

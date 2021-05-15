@@ -54,7 +54,11 @@ class UserProvider with ChangeNotifier {
       String encodedAddress = _prefs.getString("address");
 
       if (encodedAddress != null)
-        _address = Address.fromJSON(json.decode(encodedAddress));
+        _address = Address.fromJSON(
+          json.decode(encodedAddress),
+        );
+
+      notifyListeners();
     } catch (e) {
       print(e);
     }

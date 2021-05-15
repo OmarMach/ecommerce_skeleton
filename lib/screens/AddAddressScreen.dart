@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/userProvider.dart';
+import 'package:ecommerce_app/screens/addressesScreen.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,8 @@ class AddAddressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final initialAddress =
+        Provider.of<UserProvider>(context, listen: false).userAddress;
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBarWidget(),
@@ -40,6 +43,7 @@ class AddAddressScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          initialValue: initialAddress.firstName ?? '',
                           onSaved: (value) {
                             _credentials['first_name'] =
                                 value.toString().trim();
@@ -56,6 +60,7 @@ class AddAddressScreen extends StatelessWidget {
                       horizontalSeparator,
                       Expanded(
                         child: TextFormField(
+                          initialValue: initialAddress.lastName ?? '',
                           onSaved: (value) {
                             _credentials['last_name'] = value.toString().trim();
                           },
@@ -72,6 +77,7 @@ class AddAddressScreen extends StatelessWidget {
                   ),
                   verticalSeparator,
                   TextFormField(
+                    initialValue: initialAddress.phone ?? '',
                     onSaved: (value) {
                       _credentials['phone'] = value.toString().trim();
                     },
@@ -88,8 +94,9 @@ class AddAddressScreen extends StatelessWidget {
                   ),
                   verticalSeparator,
                   TextFormField(
+                    initialValue: initialAddress.email ?? '',
                     onSaved: (value) {
-                      _credentials['firstName'] = value.toString().trim();
+                      _credentials['email'] = value.toString().trim();
                     },
                     keyboardType: TextInputType.emailAddress,
                     decoration: buildFormInputDecoration(
@@ -120,6 +127,7 @@ class AddAddressScreen extends StatelessWidget {
                   ),
                   verticalSeparator,
                   TextFormField(
+                    initialValue: initialAddress.address1 ?? '',
                     onSaved: (value) {
                       _credentials['address_1'] = value.toString().trim();
                     },
@@ -134,8 +142,9 @@ class AddAddressScreen extends StatelessWidget {
                   ),
                   verticalSeparator,
                   TextFormField(
+                    initialValue: initialAddress.address2 ?? '',
                     onSaved: (value) {
-                      _credentials['city'] = value.toString().trim();
+                      _credentials['address_2'] = value.toString().trim();
                     },
                     keyboardType: TextInputType.streetAddress,
                     decoration: buildFormInputDecoration(
@@ -147,6 +156,7 @@ class AddAddressScreen extends StatelessWidget {
                   ),
                   verticalSeparator,
                   TextFormField(
+                    initialValue: initialAddress.postcode ?? '',
                     onSaved: (value) {
                       _credentials['postcode'] = value.toString().trim();
                     },
@@ -161,11 +171,39 @@ class AddAddressScreen extends StatelessWidget {
                   verticalSeparator,
                   Divider(),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        Provider.of<UserProvider>(context, listen: false)
-                            .createAddress(_credentials);
+                        await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Text(
+                              "Are you sure that you want add this address?",
+                            ),
+                            title: Text(
+                              "Address",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  await Provider.of<UserProvider>(context,
+                                          listen: false)
+                                      .createAddress(_credentials);
+                                  Navigator.pop(context);
+                                  Navigator.of(context).popAndPushNamed(
+                                      AddressesScreen.routeName);
+                                },
+                                child: Text("OK"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Cancel"),
+                              ),
+                            ],
+                          ),
+                        );
                       }
                     },
                     onLongPress: () {
@@ -177,9 +215,9 @@ class AddAddressScreen extends StatelessWidget {
                         "city": "San Francisco",
                         "state": "CA",
                         "postcode": "94103",
-                        "country": "US",
+                        "country": "TUN",
                         "email": "Omarmachhouty@gmail.com",
-                        "phone": "(555) 555-5555"
+                        "phone": "21244434"
                       };
                       Provider.of<UserProvider>(context, listen: false)
                           .createAddress(map);
