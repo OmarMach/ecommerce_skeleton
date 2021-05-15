@@ -68,7 +68,7 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           favProvider, cartProvider, child) {
         Future<dynamic> load(BuildContext context) async {
           print("Loading Products..");
-          await productProvider.getProductsFromDb(context);
+          await productProvider.getProductsFromDb();
           await productProvider.getCarouselProducts();
 
           print("Loading Favorites..");

@@ -10,5 +10,5 @@ Future loadData(BuildContext context) async {
   final productsProvider = Provider.of<ProductProvider>(context);
 
   final loadedcat = await categoriesProvider.getAllCategories(context);
-  final loadedprod = await productsProvider.getProductsFromDb(context);
+  final loadedprod = await productsProvider.getProductsFromDb();
 }

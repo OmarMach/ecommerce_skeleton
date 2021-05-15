@@ -83,8 +83,9 @@ class ProductProvider with ChangeNotifier {
     final Map<String, dynamic> params = {
       'per_page': '100',
       'status': 'publish',
-      'category': '$categoryId',
     };
+    if (categoryId != 0) params['category'] = '$categoryId';
+
     final List productList = [];
     final List<WooProduct> searchedProducts = [];
 
@@ -184,8 +185,7 @@ class ProductProvider with ChangeNotifier {
     return _carouselProducts;
   }
 
-  Future<List<WooProduct>> getProductsFromDb(BuildContext context,
-      {int limit = 0}) async {
+  Future<List<WooProduct>> getProductsFromDb({int limit = 0}) async {
     // Pagination variable
     int pageNumber = 0;
 

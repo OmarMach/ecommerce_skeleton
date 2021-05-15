@@ -36,7 +36,7 @@ class ProductsByCategoryGridList extends StatelessWidget {
           ? Provider.of<ProductProvider>(context, listen: false)
               .getProductsByCategory(categoryId)
           : Provider.of<ProductProvider>(context, listen: false)
-              .getProductsFromDb(context, limit: 10),
+              .getProductsFromDb( limit: 10),
       builder: (context, AsyncSnapshot<List<WooProduct>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(

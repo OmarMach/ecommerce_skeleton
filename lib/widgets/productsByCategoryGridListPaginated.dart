@@ -59,11 +59,8 @@ class _ProductsByCategoryGridListPaginatedState
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: FutureBuilder(
-        future: widget.categoryId != 0
-            ? Provider.of<ProductProvider>(context, listen: false)
-                .getProductsByCategory(widget.categoryId)
-            : Provider.of<ProductProvider>(context, listen: false)
-                .getProductsFromDb(context, limit: 100),
+        future: Provider.of<ProductProvider>(context, listen: false)
+            .getProductsByCategory(widget.categoryId),
         builder: (context, AsyncSnapshot<List<WooProduct>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center(
@@ -100,7 +97,6 @@ class _ProductsByCategoryGridListPaginatedState
                         setState(
                           () {
                             dropdownValue = newValue;
-
                             if (newValue == 'Sort By Popularity')
                               searchedProducts.sort(
                                 (WooProduct a, WooProduct b) =>
@@ -166,16 +162,12 @@ class _ProductsByCategoryGridListPaginatedState
                 GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: widget.categoryId == 0
-                      ? 10
-                      : page == pagesCount - 1
-                          ? remainingProductsCount
-                          : 10,
+                  itemCount:
+                      page == pagesCount - 1 ? remainingProductsCount : 10,
                   gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
                   itemBuilder: (context, index) {
                     return ProductWidget(
-                      product: searchedProducts[
-                          widget.categoryId == 0 ? index : page * 10 + index],
+                      product: searchedProducts[page * 10 + index],
                     );
                   },
                 ),
