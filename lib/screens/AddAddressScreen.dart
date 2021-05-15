@@ -9,6 +9,7 @@ import 'editAccountDetails.dart';
 
 class AddAddressScreen extends StatelessWidget {
   static const routeName = '/add-address';
+
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _credentials = {};
 
@@ -17,6 +18,7 @@ class AddAddressScreen extends StatelessWidget {
     final initialAddress =
         Provider.of<UserProvider>(context, listen: false).userAddress;
     final textTheme = Theme.of(context).textTheme;
+    
     return Scaffold(
       appBar: AppBarWidget(),
       body: SafeArea(
@@ -189,6 +191,7 @@ class AddAddressScreen extends StatelessWidget {
                                   await Provider.of<UserProvider>(context,
                                           listen: false)
                                       .createAddress(_credentials);
+                                  Navigator.pop(context);
                                   Navigator.pop(context);
                                   Navigator.of(context).popAndPushNamed(
                                       AddressesScreen.routeName);
