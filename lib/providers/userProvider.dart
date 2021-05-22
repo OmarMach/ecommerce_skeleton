@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ecommerce_app/models/address.dart';
@@ -33,7 +34,25 @@ class UserProvider with ChangeNotifier {
     await loadUserFromSharedPrefs();
   }
 
-  Future loadUserFromSharedPrefs() async {}
+  Future loadUserFromSharedPrefs() async {
+    try {
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      _token = _prefs.getString('token') ?? '';
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future saveUserToSharedPrefs(String cookie) async {
+    try {
+      SharedPreferences _prefs = await SharedPreferences.getInstance();
+      await _prefs.setString('token', cookie);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future<void> createAddress(Map map) async {
     try {
@@ -64,35 +83,81 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future registerUser(String email) async {
+  Future<bool> registerUser(String email, String password) async {
     // Adding params
     final Map<String, dynamic> params = {
-      'per_page': '100',
-      'page': '1',
-      'status': 'publish',
+      'rest_route': '/simple-jwt-login/v1/users',
+      'email': 'omramch@fmak.cmo',
+      'password': '$password',
+      'test-auth-key': 'test-auth-key',
     };
+    
+    try {
+      // Creating the URL
+      final Uri uri = Uri.https('goods.tn', '', params);
 
-    // Creating the URL
-    final Uri uri = Uri.https('goods.tn', '/wp-json/wc/v3/customers', params);
+      // Sending the request
+      final response = await http.post(uri, headers: headers).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('Please verify your internet connection.');
+        },
+      );
 
-    // Sending the request
-    final response = await http.get(uri, headers: headers);
+      final decodedBody = json.decode(response.body) as Map;
+
+      if (decodedBody['success'] == 'true') {
+        await login(email: email, password: password);
+        return true;
+      } else
+        throw ("error");
+    } on TimeoutException catch (_) {
+      throw ('Please verify your internet connection');
+    } catch (e) {
+      throw ('You can\'t use this email address.');
+    }
   }
 
-  Future login(String userName, String password) async {
+  Future login(
+      {@required String password, String email, String username}) async {
     // Adding params
     final Map<String, dynamic> params = {
-      'per_page': '100',
-      'page': '1',
-      'status': 'publish',
+      'password': password,
     };
 
-    // Creating the URL
-    final Uri uri = Uri.https('goods.tn', '/wp-json/wc/v3/customers', params);
+    try {
+      if (email != null) params['email'] = email;
+      if (username != null) params['username'] = username;
 
-    // Sending the request
-    final response = await http.get(uri, headers: headers);
-    return false;
+      // Creating the URL
+      final Uri uri =
+          Uri.https('goods.tn', '/api/user/generate_auth_cookie/', params);
+
+      // Sending the request
+      final response = await http.get(uri, headers: headers).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('Please verify your internet connection.');
+        },
+      );
+      final decodedBody = json.decode(response.body) as Map;
+
+      if (decodedBody['status'].toString() == 'ok') {
+        _token = decodedBody['cookie'] as String;
+        _user = User.fromJson(decodedBody['user'] as Map);
+      } else
+        throw (decodedBody['error']);
+    } on TimeoutException catch (_) {
+      throw ('Please verify your internet connection');
+    } catch (e) {
+      print("Error while logging : $e");
+      throw ('Please verify your credentials.');
+    }
+  }
+
+  void logout() {
+    _token = '';
+    notifyListeners();
   }
 
   Future createOrder({Address address, List<WooProduct> products}) async {

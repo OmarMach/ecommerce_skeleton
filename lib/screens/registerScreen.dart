@@ -14,12 +14,33 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+
   String email;
+  String password;
+
+  bool _isLoading;
+  bool _error;
+  String _errorMessage = '';
+  UserProvider userProvider;
+  TextTheme textTheme;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = true;
+    _error = false;
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+  }
+
+  @override
+  void didChangeDependencies() {
+    textTheme = Theme.of(context).textTheme;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-
+    print(_isLoading);
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
@@ -41,48 +62,99 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: textTheme.caption,
                 ),
                 verticalSeparator,
+                verticalSeparator,
                 TextFormField(
+                  initialValue: 'soulaamal256@gmail.com',
                   onSaved: (value) {
                     email = value.toString().trim();
                   },
                   keyboardType: TextInputType.emailAddress,
                   decoration: buildFormInputDecoration(
                     icon: Icons.alternate_email,
-                    hint: "Email..",
-                    label: 'Email Address..',
+                    hint: "Email",
+                    label: 'Email Address',
                   ),
                   validator: (value) => value.contains('@')
                       ? null
-                      : 'Please enter a valid Email address..',
+                      : 'Please enter a valid Email address',
                 ),
                 verticalSeparator,
+                TextFormField(
+                  obscureText: true,
+                  initialValue: 'azerty123',
+                  onSaved: (value) {
+                    password = value.toString();
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: buildFormInputDecoration(
+                    icon: Icons.lock,
+                    hint: "Password",
+                    label: 'Password',
+                  ),
+                  validator: (value) => value.length > 6
+                      ? null
+                      : 'The password needs to have at least 6 characters',
+                ),
+                verticalSeparator,
+                TextFormField(
+                  obscureText: true,
+                  initialValue: 'azerty123',
+                  onSaved: (value) {
+                    password = value.toString();
+                  },
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: buildFormInputDecoration(
+                    icon: Icons.lock,
+                    hint: "Confirm Password",
+                    label: 'Confirm Password',
+                  ),
+                  validator: (value) =>
+                      password == value ? null : 'The passwords doesn\'t match',
+                ),
+                if (_error)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _errorMessage,
+                      style: textTheme.caption.copyWith(
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
                 ElevatedButton(
                   onPressed: () async {
+                    _formKey.currentState.save();
                     if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      userProvider.registerUser(email);
-                      await showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Success'),
-                          content: Text(email ?? ''),
-                        ),
-                      );
+                      _isLoading = true;
+                      setState(() {});
+                      try {
+                        bool isRegistred =
+                            await userProvider.registerUser(email, password);
+                        if (!isRegistred) throw ('e');
+                      } catch (e) {
+                        _error = true;
+                        _errorMessage = e;
+                      }
+                      _isLoading = false;
+                      setState(() {});
                     }
                   },
-                  child: Text("Create Account"),
+                  child: _isLoading
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                          ),
+                        )
+                      : Text("Create Account"),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "An email will be sent containing the password.",
-                    style: textTheme.bodyText1,
+                    "Your personal data will be used to support your experience throughout this applicaiton, to manage access to your account, and for other purposes described in our privacy policy..",
+                    style: textTheme.caption,
+                    textAlign: TextAlign.justify,
                   ),
-                ),
-                verticalSeparator,
-                Text(
-                  "Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our privacy policy..",
-                  style: textTheme.bodyText2,
                 ),
               ],
             ),

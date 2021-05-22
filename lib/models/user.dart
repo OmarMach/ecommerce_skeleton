@@ -7,6 +7,7 @@ class User {
   final String imageUrl;
   final String email;
   final String userName;
+  final String displayName;
 
   User({
     @required this.id,
@@ -15,16 +16,18 @@ class User {
     @required this.imageUrl,
     @required this.email,
     @required this.userName,
+    @required this.displayName,
   });
 
   factory User.fromJson(Map map) {
     return User(
-      id: map['id'],
-      email: map['email'],
-      firstName: map['first_name'],
-      imageUrl: map['last_name'],
-      lastName: map['avatar_url'],
-      userName: map['username'],
+      id: map['id'].toString(),
+      email: map['email'].toString(),
+      firstName: map['first_name'].toString(),
+      imageUrl: map['last_name'].toString(),
+      lastName: map['avatar'].toString(),
+      userName: map['username'].toString(),
+      displayName: map['displayname'].toString(),
     );
   }
 }

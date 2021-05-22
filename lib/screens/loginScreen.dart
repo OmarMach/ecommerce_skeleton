@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/registerScreen.dart';
@@ -18,7 +20,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, String> _credentials = {};
+  final Map<String, String> _credentials = {
+    'email': 'soulaamal256@gmail.com',
+    'password': 'azerty123',
+    'username': 'omarmachhouty'
+  };
+
+  bool _isLoading = false;
+  bool _error = false;
+  String _errorMessage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +68,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             // Email text field
                             TextFormField(
+                              initialValue: _credentials['email'],
                               onSaved: (value) {
                                 _credentials['email'] = value.toString().trim();
                               },
                               keyboardType: TextInputType.emailAddress,
                               decoration: buildFormInputDecoration(
                                 icon: Icons.alternate_email,
-                                hint: "Email..",
-                                label: 'Email Address..',
+                                hint: "Email Address..",
+                                label: 'Email',
                               ),
                               validator: (value) => value.contains('@')
                                   ? null
@@ -74,11 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             verticalSeparator,
                             // Password textfield
                             TextFormField(
+                              initialValue: _credentials['password'],
                               onSaved: (value) {
                                 _credentials['password'] =
                                     value.toString().trim();
                               },
-                              obscureText: true,
+                              // obscureText: true,
                               validator: (value) => value.isNotEmpty
                                   ? null
                                   : 'Please enter a password..',
@@ -88,6 +100,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 label: 'Password',
                               ),
                             ),
+                            if (_error)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "$_errorMessage",
+                                  style: textTheme.caption.copyWith(
+                                    color: Colors.red,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
                             verticalSeparator,
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -97,8 +120,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onTap: () {
                                       ScaffoldMessenger.of(context)
                                           .hideCurrentSnackBar();
+
                                       final SnackBar snackBar = SnackBar(
-                                          content: Text("Sorry for you.."));
+                                        content: Text("Sorry for you.."),
+                                      );
+
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                     },
@@ -118,32 +144,52 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
-                              final results = await userProvider.login(
-                                _credentials['email'],
-                                _credentials['password'],
-                              );
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text('Success'),
-                                  content: Text(results),
-                                ),
-                              );
+                              _isLoading = true;
+                              setState(() {});
+
+                              try {
+                                await userProvider.login(
+                                  email: _credentials['email'],
+                                  password: _credentials['password'],
+                                );
+                                _error = false;
+                              } catch (e) {
+                                _error = true;
+                                _errorMessage = e.toString();
+                              }
+
+                              _isLoading = false;
+                              setState(() {});
+
+                              if (userProvider.isConnected) {
+                                Navigator.of(context).popUntil(
+                                  ModalRoute.withName(HomeScreen.routeName),
+                                );
+                                Navigator.of(context)
+                                    .pushNamed(HomeScreen.routeName);
+                              }
                             }
                           },
-                          child: Text("Login"),
+                          child: _isLoading
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                  ),
+                                )
+                              : Text("Login"),
                         ),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.of(context)
-                                .pushNamed(RegisterScreen.routeName);
+                                .pushReplacementNamed(RegisterScreen.routeName);
                           },
                           child: Text("Create an account"),
                         ),
                         TextButton(
                           onPressed: () {
                             Navigator.of(context)
-                                .pushNamed(HomeScreen.routeName);
+                                .pushReplacementNamed(HomeScreen.routeName);
                           },
                           child: Text(
                             "Continue without logging in",

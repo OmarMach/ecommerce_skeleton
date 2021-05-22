@@ -24,11 +24,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: Consumer<UserProvider>(
           builder: (context, provider, _) {
-            // if (provider.isConnected)
-            //   return Container();
-            // else
-            //   return NotconnectedWidget();
-            return DashboardWidget();
+            if (provider.isConnected)
+              return DashboardWidget();
+            else
+              return NotconnectedWidget();
           },
         ),
       ),
@@ -85,7 +84,9 @@ class DashboardWidget extends StatelessWidget {
             DashboardMenuItemWidget(
               title: 'Logout',
               icon: Icons.logout,
-              onTap: () {},
+              onTap: () {
+                Provider.of<UserProvider>(context, listen: false).logout();
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
