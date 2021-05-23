@@ -27,7 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    _isLoading = true;
+    _isLoading = false;
     _error = false;
     userProvider = Provider.of<UserProvider>(context, listen: false);
   }

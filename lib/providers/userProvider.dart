@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ecommerce_app/models/address.dart';
+import 'package:ecommerce_app/models/order.dart';
 import 'package:ecommerce_app/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +15,11 @@ class UserProvider with ChangeNotifier {
   User _user;
   String _token;
   Address _address;
+  List<Order> _userOrders = [];
+
+  List<Order> get userOrders {
+    return _userOrders;
+  }
 
   User get user {
     return _user;
@@ -29,9 +35,9 @@ class UserProvider with ChangeNotifier {
   }
 
   Future initUserStatus() async {
-    _token = '';
     await loadAddressFromSharedPrefs();
     await loadUserFromSharedPrefs();
+    await getUserOrders();
   }
 
   Future loadUserFromSharedPrefs() async {
@@ -150,6 +156,7 @@ class UserProvider with ChangeNotifier {
         _token = decodedBody['cookie'] as String;
         _user = User.fromJson(decodedBody['user'] as Map);
         saveUserToSharedPrefs(_token);
+        await initUserStatus();
       } else
         throw (decodedBody['error']);
     } on TimeoutException catch (_) {
@@ -222,7 +229,37 @@ class UserProvider with ChangeNotifier {
       headers: headers,
       body: {},
     );
+  }
 
-    return false;
+  Future getUserOrders({Address address, List<WooProduct> products}) async {
+    _userOrders.clear();
+    
+    // Adding params
+    final Map<String, dynamic> params = {
+      'per_page': '100',
+      'customer': "0",
+    };
+
+    try {
+      // Creating the URL
+      final Uri uri = Uri.https('goods.tn', '/wp-json/wc/v3/orders', params);
+
+      // Sending the request
+      final response = await http.get(
+        uri,
+        headers: headers,
+      );
+
+      final ordersList = json.decode(response.body) as List;
+
+      if (ordersList.isNotEmpty) {
+        ordersList.forEach((element) {
+          final Order order = Order.fromJSON(element);
+          _userOrders.add(order);
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

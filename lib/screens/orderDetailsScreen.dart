@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/models/address.dart';
+import 'package:ecommerce_app/models/order.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,8 @@ class OrderDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final order = ModalRoute.of(context).settings.arguments as Order;
+
     return Scaffold(
       appBar: AppBarWidget(),
       body: SingleChildScrollView(
@@ -32,7 +36,23 @@ class OrderDetailsScreen extends StatelessWidget {
                 ),
               ),
               verticalSeparator,
-              OrderDetailsWidget(),
+              OrderDetailsWidget(order: order),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Products",
+                      style: textTheme.subtitle1,
+                    ),
+                    Expanded(
+                      child: Divider(),
+                    ),
+                  ],
+                ),
+              ),
+              OrderItemsListWidget(orderItems: order.products),
+              verticalSeparator,
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
@@ -47,7 +67,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              OrderAddressWidget(),
+              OrderAddressWidget(address: order.address),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -75,7 +95,10 @@ class OrderDetailsScreen extends StatelessWidget {
 class OrderAddressWidget extends StatelessWidget {
   const OrderAddressWidget({
     Key key,
+    @required this.address,
   }) : super(key: key);
+
+  final Address address;
 
   @override
   Widget build(BuildContext context) {
@@ -92,19 +115,19 @@ class OrderAddressWidget extends StatelessWidget {
           children: [
             AddressItemWidget(
               label: 'Full name',
-              value: 'Goods Tn User',
+              value: '${address.firstName} ${address.lastName}',
             ),
             AddressItemWidget(
               label: 'Email Address',
-              value: 'Goodstn@contact.tn',
+              value: '${address.email}',
             ),
             AddressItemWidget(
               label: 'Location',
-              value: 'Cité Ibn Khaldoun, Tunis',
+              value: '${address.city} ${address.country} ${address.state}',
             ),
             AddressItemWidget(
               label: 'Zip code',
-              value: '2062',
+              value: '${address.postcode}',
             ),
           ],
         ),
@@ -116,60 +139,125 @@ class OrderAddressWidget extends StatelessWidget {
 class OrderDetailsWidget extends StatelessWidget {
   const OrderDetailsWidget({
     Key key,
+    @required this.order,
   }) : super(key: key);
+
+  final Order order;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(15.0),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade800,
-        borderRadius: BorderRadius.circular(5),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade800,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Shipping"),
+                  Text("${order.shipping.keys.first}"),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Payment method"),
+                  Text("Cash on delivery"),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Shipping Price"),
+                  Text("${order.shipping.values.first} Tnd"),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Total"),
+                  Text("${order.total} Tnd "),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Subtotal"),
-                Text("125.00 TND"),
-              ],
-            ),
+    );
+  }
+}
+
+class OrderItemsListWidget extends StatelessWidget {
+  const OrderItemsListWidget({
+    Key key,
+    @required this.orderItems,
+  }) : super(key: key);
+
+  final List<OrderItem> orderItems;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+          padding: const EdgeInsets.all(15.0),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade800,
+            borderRadius: BorderRadius.circular(5),
           ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Shipping"),
-                Text("Local pickup"),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Payment method"),
-                Text("Cash on delivery"),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Total"),
-                Text("125.00 TND"),
-              ],
-            ),
-          ),
-        ],
-      ),
+          child: ListView.builder(
+            itemCount: orderItems.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final item = orderItems.elementAt(index);
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey.shade900,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${item.name}'),
+                              Text('Quantity : x${item.quantity}'),
+                            ],
+                          ),
+                          Text('${item.price} Tnd'),
+                        ],
+                      ),
+                      Divider(),
+                      Text("Total : ${item.total} Tnd")
+                    ],
+                  ),
+                ),
+              );
+            },
+          )),
     );
   }
 }

@@ -1,9 +1,12 @@
+import 'package:ecommerce_app/models/order.dart';
+import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/screens/orderDetailsScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'cartScreen.dart';
 
@@ -12,6 +15,8 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBarWidget(),
       body: SafeArea(
@@ -36,13 +41,15 @@ class OrdersScreen extends StatelessWidget {
                     ),
                   ),
                   ListView.separated(
-                    itemCount: 4,
+                    itemCount: userProvider.userOrders.length,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: OrderListItem(),
+                        child: OrderListItem(
+                          order: userProvider.userOrders.elementAt(index),
+                        ),
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -62,7 +69,10 @@ class OrdersScreen extends StatelessWidget {
 class OrderListItem extends StatelessWidget {
   const OrderListItem({
     Key key,
+    @required this.order,
   }) : super(key: key);
+
+  final Order order;
 
   @override
   Widget build(BuildContext context) {
@@ -76,19 +86,28 @@ class OrderListItem extends StatelessWidget {
         children: [
           OrderRowItem(
             label: 'Order ID',
-            value: '#12345',
+            value: '#${order.id}',
           ),
           OrderRowItem(
             label: 'Date',
-            value: '19/11/2021',
+            value:
+                '${DateTime.tryParse(order.date).day}/${DateTime.tryParse(order.date).month}/${DateTime.tryParse(order.date).year}  ${DateTime.tryParse(order.date).hour}:${DateTime.tryParse(order.date).second}',
+          ),
+          OrderRowItem(
+            label: 'Shipping Method',
+            value: '${order.shipping.keys.first}',
+          ),
+          OrderRowItem(
+            label: 'Shipping Price',
+            value: '${order.shipping.values.first}',
           ),
           OrderRowItem(
             label: 'Status',
-            value: 'pending',
+            value: '${order.status}',
           ),
           OrderRowItem(
             label: 'Total',
-            value: '32.000 TND',
+            value: '${order.total}',
           ),
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -96,7 +115,10 @@ class OrderListItem extends StatelessWidget {
             ),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(OrderDetailsScreen.routeName);
+                Navigator.of(context).pushNamed(
+                  OrderDetailsScreen.routeName,
+                  arguments: order,
+                );
               },
               child: Text("View Order"),
               style: ElevatedButton.styleFrom(
