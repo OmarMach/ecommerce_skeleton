@@ -38,6 +38,8 @@ class UserProvider with ChangeNotifier {
     try {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       _token = _prefs.getString('token') ?? '';
+      await getUserInformation();
+
       notifyListeners();
     } catch (e) {
       print(e);
@@ -91,7 +93,7 @@ class UserProvider with ChangeNotifier {
       'password': '$password',
       'test-auth-key': 'test-auth-key',
     };
-    
+
     try {
       // Creating the URL
       final Uri uri = Uri.https('goods.tn', '', params);
@@ -108,6 +110,7 @@ class UserProvider with ChangeNotifier {
 
       if (decodedBody['success'] == 'true') {
         await login(email: email, password: password);
+        notifyListeners();
         return true;
       } else
         throw ("error");
@@ -140,19 +143,61 @@ class UserProvider with ChangeNotifier {
           throw TimeoutException('Please verify your internet connection.');
         },
       );
+
       final decodedBody = json.decode(response.body) as Map;
 
       if (decodedBody['status'].toString() == 'ok') {
         _token = decodedBody['cookie'] as String;
         _user = User.fromJson(decodedBody['user'] as Map);
+        saveUserToSharedPrefs(_token);
       } else
         throw (decodedBody['error']);
+    } on TimeoutException catch (_) {
+      throw ('Please verify your internet connection.');
+    } catch (e) {
+      print("Error while logging : $e");
+      throw ('Please verify your credentials.');
+    }
+    notifyListeners();
+  }
+
+  Future getUserInformation() async {
+    // Adding params
+    final Map<String, dynamic> params = {
+      'cookie': '$_token',
+    };
+
+    try {
+      // Creating the URL
+      final Uri uri = Uri.https(
+        'goods.tn',
+        '/api/user/get_currentuserinfo/',
+        params,
+      );
+
+      // Sending the request
+      final response = await http.get(uri, headers: headers).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('Please verify your internet connection.');
+        },
+      );
+
+      final decodedBody = json.decode(response.body) as Map;
+
+      if (decodedBody['status'].toString() == 'ok') {
+        _user = User.fromJson(decodedBody['user'] as Map);
+        saveUserToSharedPrefs(_token);
+      } else {
+        logout();
+      }
     } on TimeoutException catch (_) {
       throw ('Please verify your internet connection');
     } catch (e) {
       print("Error while logging : $e");
       throw ('Please verify your credentials.');
     }
+    notifyListeners();
   }
 
   void logout() {

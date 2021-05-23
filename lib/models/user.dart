@@ -30,4 +30,16 @@ class User {
       displayName: map['displayname'].toString(),
     );
   }
+
+  Map toJSON() {
+    return {
+      'id': id,
+      'email': email,
+      'first_name': firstName,
+      'last_name': imageUrl,
+      'avatar': lastName,
+      'username': userName,
+      'displayname': displayName,
+    };
+  }
 }
