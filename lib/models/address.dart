@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 class Address {
@@ -40,16 +42,16 @@ class Address {
     );
   }
 
-  Map<String, String> toJson() => {
-        'first_name': firstName,
-        'last_name': lastName,
-        'address_1': address1,
-        'address_2': address2,
-        'city': city,
-        'state': state,
-        'postcode': postcode,
-        'country': country,
-        'email': email,
-        'phone': phone,
-      };
+  String toJson() => json.encode({
+        'first_name': firstName.toString(),
+        'last_name': lastName.toString(),
+        'address_1': address1.toString(),
+        'address_2': address2.toString(),
+        'city': city.toString(),
+        'state': state.toString(),
+        'postcode': postcode.toString(),
+        'country': country.toString(),
+        'email': email.toString(),
+        'phone': phone.toString(),
+      });
 }

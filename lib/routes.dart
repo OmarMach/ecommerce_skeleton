@@ -14,7 +14,7 @@ import 'screens/registerScreen.dart';
 import 'screens/splashScreen.dart';
 import 'screens/testScreen.dart';
 import 'screens/cartScreen.dart';
-import 'screens/orderScreen.dart';
+import 'screens/checkoutScreen.dart';
 import 'screens/productScreen.dart';
 import 'screens/searchScreen.dart';
 
@@ -24,7 +24,7 @@ final routes = {
   ProfileScreen.routeName: (context) => ProfileScreen(),
   AddressesScreen.routeName: (context) => AddressesScreen(),
   CartScreen.routeName: (context) => CartScreen(),
-  OrderScreen.routeName: (context) => OrderScreen(),
+  CheckoutScreen.routeName: (context) => CheckoutScreen(),
   SearchScreen.routeName: (context) => SearchScreen(),
   TestScreen.routeName: (context) => TestScreen(),
   SplashScreen.routeName: (context) => SplashScreen(),

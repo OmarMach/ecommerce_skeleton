@@ -3,7 +3,7 @@ import 'package:ecommerce_app/providers/categoriesProvider.dart';
 import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
-import 'package:ecommerce_app/screens/orderScreen.dart';
+import 'package:ecommerce_app/screens/checkoutScreen.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/utils.dart';
@@ -72,7 +72,7 @@ class DrawerMenuWidget extends StatelessWidget {
                 icon: Icons.payment,
                 label: 'Checkout',
                 onTap: () {
-                  Navigator.of(context).pushNamed(OrderScreen.routeName);
+                  Navigator.of(context).pushNamed(CheckoutScreen.routeName);
                 },
               ),
               Divider(),

@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 const baseUrl = "https://goods.tn/";

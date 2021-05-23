@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/registerScreen.dart';
@@ -156,6 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               } catch (e) {
                                 _error = true;
                                 _errorMessage = e.toString();
+                                print(e.toString());
                               }
 
                               _isLoading = false;

@@ -93,14 +93,16 @@ class OrderListItem extends StatelessWidget {
             value:
                 '${DateTime.tryParse(order.date).day}/${DateTime.tryParse(order.date).month}/${DateTime.tryParse(order.date).year}  ${DateTime.tryParse(order.date).hour}:${DateTime.tryParse(order.date).second}',
           ),
-          OrderRowItem(
-            label: 'Shipping Method',
-            value: '${order.shipping.keys.first}',
-          ),
-          OrderRowItem(
-            label: 'Shipping Price',
-            value: '${order.shipping.values.first}',
-          ),
+          if (order.shipping.isNotEmpty) ...[
+            OrderRowItem(
+              label: 'Shipping Method',
+              value: '${order.shipping.keys.first}',
+            ),
+            OrderRowItem(
+              label: 'Shipping Price',
+              value: '${order.shipping.values.first}',
+            ),
+          ],
           OrderRowItem(
             label: 'Status',
             value: '${order.status}',

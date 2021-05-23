@@ -29,20 +29,27 @@ class Order {
       );
 
       final recievedProducts = map['line_items'] as List;
-
+      print(recievedProducts);
       recievedProducts.forEach((element) {
         final orderItem = OrderItem.fromJSON(element);
         order.products.add(orderItem);
       });
 
-      order.shipping.putIfAbsent(
-        map['shipping_lines'][0]['method_title'].toString(),
-        () => map['shipping_lines'][0]['total'].toString(),
-      );
+      if (map['shipping_lines'] != null &&
+          (map['shipping_lines'] as List).isNotEmpty) {
+        if (map['shipping_lines'][0] != null) {
+          if (map['shipping_lines'][0]['method_title'] != null) {
+            order.shipping.putIfAbsent(
+              map['shipping_lines'][0]['method_title'].toString(),
+              () => map['shipping_lines'][0]['total'].toString(),
+            );
+          }
+        }
+      }
 
       return order;
     } catch (e) {
-      print("error here");
+      print("Error While getting the orders.");
       throw (e);
     }
   }

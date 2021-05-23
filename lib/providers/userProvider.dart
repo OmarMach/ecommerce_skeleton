@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ecommerce_app/models/address.dart';
+import 'package:ecommerce_app/models/cartItem.dart';
 import 'package:ecommerce_app/models/order.dart';
 import 'package:ecommerce_app/models/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -212,32 +213,47 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future createOrder({Address address, List<WooProduct> products}) async {
-    // Adding params
-    final Map<String, dynamic> params = {
-      'per_page': '100',
-      'page': '1',
-      'status': 'publish',
-    };
+  Future createOrder({Address address, Map<int, CartItem> cartItems}) async {
+    try {
+      // Creating the URL
+      final Uri uri = Uri.https('goods.tn', '/wp-json/wc/v3/orders/');
 
-    // Creating the URL
-    final Uri uri = Uri.https('goods.tn', '/wp-json/wc/v3/orders', params);
+      final transformedCart = [];
+      cartItems.forEach(
+        (k, v) => transformedCart.add(
+          {
+            'product_id': '$k',
+            'quantity': '${v.quantity}',
+          },
+        ),
+      );
 
-    // Sending the request
-    final response = await http.post(
-      uri,
-      headers: headers,
-      body: {},
-    );
+      // Sending the request
+      final response = await http.post(
+        uri,
+        headers: headers,
+        body: json.encode(
+          {
+            'customer_id': _user.id,
+            'billing': [address.toJson()],
+            'shipping': [address.toJson()],
+            'line_items': transformedCart,
+          },
+        ),
+      );
+
+      print(response.body);
+    } catch (e) {
+      print("error : " + e.toString());
+    }
   }
 
   Future getUserOrders({Address address, List<WooProduct> products}) async {
     _userOrders.clear();
-    
+    print(user.id);
     // Adding params
     final Map<String, dynamic> params = {
-      'per_page': '100',
-      'customer': "0",
+      'customer': '${user.id}',
     };
 
     try {

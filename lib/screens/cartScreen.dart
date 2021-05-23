@@ -6,7 +6,7 @@ import 'package:ecommerce_app/widgets/stepWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'orderScreen.dart';
+import 'checkoutScreen.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = "/cart";
@@ -63,9 +63,9 @@ class CartScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             Navigator.of(context)
-                                .pushNamed(OrderScreen.routeName);
+                                .pushNamed(CheckoutScreen.routeName);
                           },
-                          child: Text("Order"),
+                          child: Text("Checkout"),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.grey.shade800,
                           ),
