@@ -85,7 +85,9 @@ class DrawerMenuWidget extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () {
+                onTap: () async {
+                  await Provider.of<SearchProvider>(context, listen: false)
+                      .searchProductsByCategory(0);
                   Navigator.of(context).pushNamed(
                     CategoryProductsScreen.routeName,
                     arguments: {'New Arrivals': 0},
@@ -95,7 +97,7 @@ class DrawerMenuWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      FaIcon(FontAwesomeIcons.fire),
+                      FaIcon(FontAwesomeIcons.fire, size: 15),
                       horizontalSeparator,
                       Text("New Arrivals"),
                     ],
@@ -277,6 +279,7 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                   children: [
                     FaIcon(
                       widget.icon,
+                      size: 15,
                       color: Colors.white,
                     ),
                     horizontalSeparator,
@@ -383,7 +386,10 @@ class DrawerMenuItem extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Icon(icon),
+            Icon(
+              icon,
+              size: 20,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(label),
