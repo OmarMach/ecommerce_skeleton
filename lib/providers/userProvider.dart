@@ -241,8 +241,6 @@ class UserProvider with ChangeNotifier {
           },
         ),
       );
-
-      print(response.body);
     } catch (e) {
       print("error : " + e.toString());
     }
@@ -250,7 +248,6 @@ class UserProvider with ChangeNotifier {
 
   Future getUserOrders({Address address, List<WooProduct> products}) async {
     _userOrders.clear();
-    print(user.id);
     // Adding params
     final Map<String, dynamic> params = {
       'customer': '${user.id}',

@@ -33,47 +33,56 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CarouselWidget(),
-                  verticalSeparator,
-                  HomeTitleWidget(title: "New Arrivals"),
-                  ProductsGridList(
-                    limit: 6,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.contain,
+                    repeat: ImageRepeat.repeat,
+                    image: AssetImage('assets/images/background.jpg'),
                   ),
-                  HomeTitleWidget(title: "Screen Refurbish Tools"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProductsByCategoryGridList(
-                      categoryId: 71,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CarouselWidget(),
+                    verticalSeparator,
+                    HomeTitleWidget(title: "New Arrivals"),
+                    ProductsGridList(
                       limit: 6,
                     ),
-                  ),
-                  HomeTitleWidget(title: "Soldering accessories"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProductsByCategoryGridList(
-                      limit: 6,
-                      categoryId: 79,
+                    HomeTitleWidget(title: "Screen Refurbish Tools"),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProductsByCategoryGridList(
+                        categoryId: 71,
+                        limit: 6,
+                      ),
                     ),
-                  ),
-                  verticalSeparator,
-                  HomeTitleWidget(title: "Coming Soon"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ComingSoonCarouselWidget(),
-                  ),
-                  verticalSeparator,
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      'assets/images/proff.jpg',
-                      width: size.width,
-                      fit: BoxFit.fill,
+                    HomeTitleWidget(title: "Soldering accessories"),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProductsByCategoryGridList(
+                        limit: 6,
+                        categoryId: 79,
+                      ),
                     ),
-                  )
-                ],
+                    verticalSeparator,
+                    HomeTitleWidget(title: "Coming Soon"),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ComingSoonCarouselWidget(),
+                    ),
+                    // verticalSeparator,
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(10),
+                    //   child: Image.asset(
+                    //     'assets/images/proff.jpg',
+                    //     width: size.width,
+                    //     fit: BoxFit.fill,
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -29,7 +29,6 @@ class Order {
       );
 
       final recievedProducts = map['line_items'] as List;
-      print(recievedProducts);
       recievedProducts.forEach((element) {
         final orderItem = OrderItem.fromJSON(element);
         order.products.add(orderItem);

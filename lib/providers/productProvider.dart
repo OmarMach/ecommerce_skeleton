@@ -208,7 +208,6 @@ class ProductProvider with ChangeNotifier {
       // Incrementing the page
       pageNumber++;
       params['page'] = pageNumber.toString();
-      print(params);
 
       // Creating the URL
       final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);

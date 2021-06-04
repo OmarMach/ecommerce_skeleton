@@ -62,3 +62,20 @@ String notEmptyValidator(String string) {
   else
     return 'Please fill this field.';
 }
+
+final List<String> sortingListItem = [
+  'Sort By Popularity',
+  'Sort By Latest',
+  'Sort By Title: A to Z',
+  'Sort By Title: Z to A',
+  'Sort By Price: Low to High',
+  'Sort By Price: High to Low',
+];
+
+final List<DropdownMenuItem<String>> mappedSortingListItems =
+    sortingListItem.map<DropdownMenuItem<String>>((String value) {
+  return DropdownMenuItem<String>(
+    value: value,
+    child: Text(value),
+  );
+}).toList();

@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/models/CategoryItem.dart';
 import 'package:ecommerce_app/providers/categoriesProvider.dart';
+import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/screens/categoryProductsScreen.dart';
 import 'package:ecommerce_app/screens/favoritesScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
@@ -244,6 +245,14 @@ class DrawerCategoryItem extends StatefulWidget {
 
 class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
   bool isExpanded = false;
+  bool isLoading = false;
+
+  void _toggleLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -251,7 +260,11 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
       child: Column(
         children: [
           InkWell(
-            onTap: () {
+            onTap: () async {
+              _toggleLoading();
+              await Provider.of<SearchProvider>(context, listen: false)
+                  .searchProductsByCategory(widget.category.category.id);
+              _toggleLoading();
               Navigator.of(context).pushNamed(
                 CategoryProductsScreen.routeName,
                 arguments: {widget.category.name: widget.category.category.id},
@@ -268,7 +281,13 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                     ),
                     horizontalSeparator,
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        _toggleLoading();
+                        await Provider.of<SearchProvider>(context,
+                                listen: false)
+                            .searchProductsByCategory(
+                                widget.category.category.id);
+                        _toggleLoading();
                         Navigator.of(context).pushNamed(
                           CategoryProductsScreen.routeName,
                           arguments: {
@@ -282,6 +301,8 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                     ),
                   ],
                 ),
+                if (isLoading)
+                  Container(width: 20, child: LinearProgressIndicator()),
                 InkWell(
                   onTap: () {
                     setState(() {
@@ -314,7 +335,13 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                     children: [
                       Expanded(
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            _toggleLoading();
+                            await Provider.of<SearchProvider>(context,
+                                    listen: false)
+                                .searchProductsByCategory(
+                                    widget.category.category.id);
+                            _toggleLoading();
                             Navigator.of(context).pushNamed(
                               CategoryProductsScreen.routeName,
                               arguments: {subCategory.name: subCategory.id},

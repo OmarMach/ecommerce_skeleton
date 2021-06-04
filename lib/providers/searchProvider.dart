@@ -11,10 +11,16 @@ class SearchProvider with ChangeNotifier {
   final List<WooProductCategory> selectedFilters = [];
   final List<WooProduct> searchedProducts = [];
   bool isLoading = false;
+  String sortValue;
 
   void clearFilters() {
     selectedFilters.clear();
     searchedProducts.clear();
+    notifyListeners();
+  }
+
+  void toggleLoadingState() {
+    isLoading = !isLoading;
     notifyListeners();
   }
 
@@ -66,20 +72,72 @@ class SearchProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void sortSearchedProducts(String sortMethod) {
+    sortValue = sortMethod;
+    switch (sortValue) {
+      case 'Sort By Popularity':
+        searchedProducts.sort(
+          (WooProduct a, WooProduct b) => a.totalSales.compareTo(b.totalSales),
+        );
+        break;
+      case 'Sort By Latest':
+        searchedProducts.sort(
+          (WooProduct a, WooProduct b) => a.id.compareTo(b.id),
+        );
+        break;
+      case 'Sort By Title: A to Z':
+        searchedProducts.sort(
+          (WooProduct a, WooProduct b) => a.name.toLowerCase().compareTo(
+                b.name.toLowerCase(),
+              ),
+        );
+        break;
+      case 'Sort By Title: Z to A':
+        searchedProducts.sort(
+          (WooProduct a, WooProduct b) => b.name.toLowerCase().compareTo(
+                a.name.toLowerCase(),
+              ),
+        );
+        break;
+      case 'Sort By Price: Low to High':
+        searchedProducts.sort(
+          (WooProduct a, WooProduct b) => a.price.toLowerCase().compareTo(
+                b.price.toLowerCase(),
+              ),
+        );
+        break;
+      case 'Sort By Price: High to Low':
+        searchedProducts.sort(
+          (WooProduct a, WooProduct b) => b.price.toLowerCase().compareTo(
+                a.price.toLowerCase(),
+              ),
+        );
+        break;
+    }
+    notifyListeners();
+  }
+
   Future searchProductsByCategory(int categoryId) async {
-    // Adding params
+    // Clearing the searched products.
+    searchedProducts.clear();
+
+    // Setting the state to loading
+    // toggleLoadingState();
+
+    // Setting the params to send into the request
     final Map<String, dynamic> params = {
       'per_page': '100',
       'status': 'publish',
-      'category': '$categoryId',
     };
-    final List productList = [];
+
+    // search by category
+    if (categoryId != 0) params['category'] = categoryId.toString();
 
     final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
     final response = await http.get(uri, headers: headers);
 
     // decoding the results into a list.
-    productList.addAll(json.decode(response.body) as List);
+    final List productList = json.decode(response.body) as List;
 
     // Converting each item to WooProduct.
     productList.forEach(
@@ -110,20 +168,13 @@ class SearchProvider with ChangeNotifier {
                 -1) product.categories.add(element);
           },
         );
-        print(product);
-        product.categories.forEach((element) {
-          print(
-            element.name + ' ' + element.id.toString(),
-          );
-          print(
-            'parent ' + element.parent.toString(),
-          );
-        });
+
         // Adding the product to the list
         if (!searchedProducts.contains(product)) searchedProducts.add(product);
-        notifyListeners();
       },
     );
+    // Setting the state to loading
+    toggleLoadingState();
   }
 
   Future<List<WooProduct>> searchProductByKeyword(String keyword) async {

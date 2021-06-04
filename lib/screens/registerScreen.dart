@@ -40,7 +40,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_isLoading);
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
