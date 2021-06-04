@@ -33,49 +33,49 @@ class DrawerMenuWidget extends StatelessWidget {
                   width: size.width / 10,
                 ),
               ),
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Browse",
-                  style: textTheme.caption,
-                ),
-              ),
-              DrawerMenuItem(
-                icon: Icons.home,
-                label: 'Home',
-                onTap: () {
-                  Navigator.of(context).pushNamed(HomeScreen.routeName);
-                },
-              ),
-              DrawerMenuItem(
-                icon: Icons.favorite,
-                label: 'My Wishlist',
-                onTap: () {
-                  Navigator.of(context).pushNamed(FavoritesScreen.routeName);
-                },
-              ),
-              DrawerMenuItem(
-                icon: Icons.search,
-                label: 'Search products',
-                onTap: () {
-                  Navigator.of(context).pushNamed(SearchScreen.routeName);
-                },
-              ),
-              DrawerMenuItem(
-                icon: Icons.person,
-                label: 'My Account',
-                onTap: () {
-                  Navigator.of(context).pushNamed(ProfileScreen.routeName);
-                },
-              ),
-              DrawerMenuItem(
-                icon: Icons.payment,
-                label: 'Checkout',
-                onTap: () {
-                  Navigator.of(context).pushNamed(CheckoutScreen.routeName);
-                },
-              ),
+              // Divider(),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(
+              //     "Browse",
+              //     style: textTheme.caption,
+              //   ),
+              // ),
+              // DrawerMenuItem(
+              //   icon: Icons.home,
+              //   label: 'Home',
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(HomeScreen.routeName);
+              //   },
+              // ),
+              // DrawerMenuItem(
+              //   icon: Icons.favorite,
+              //   label: 'My Wishlist',
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(FavoritesScreen.routeName);
+              //   },
+              // ),
+              // DrawerMenuItem(
+              //   icon: Icons.search,
+              //   label: 'Search products',
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(SearchScreen.routeName);
+              //   },
+              // ),
+              // DrawerMenuItem(
+              //   icon: Icons.person,
+              //   label: 'My Account',
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(ProfileScreen.routeName);
+              //   },
+              // ),
+              // DrawerMenuItem(
+              //   icon: Icons.payment,
+              //   label: 'Checkout',
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(CheckoutScreen.routeName);
+              //   },
+              // ),
               Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),

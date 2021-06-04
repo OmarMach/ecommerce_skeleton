@@ -8,6 +8,7 @@ import 'package:ecommerce_app/routes.dart';
 import 'package:ecommerce_app/screens/errorScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
+import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -102,12 +103,12 @@ class _LoadingWidgetState extends State<LoadingWidget> {
               if (snapshot.hasError)
                 return ErrorScreen(errorMessage: snapshot.error.toString());
               else
-                return HomeScreen();
+                return WrapperScreen();
             },
           );
         else
           // going directly to homescreen while there are items in the state
-          return HomeScreen();
+          return WrapperScreen();
       },
     );
   }

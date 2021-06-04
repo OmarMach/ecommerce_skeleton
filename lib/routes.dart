@@ -5,6 +5,7 @@ import 'package:ecommerce_app/screens/editAccountDetails.dart';
 import 'package:ecommerce_app/screens/orderDetailsScreen.dart';
 import 'package:ecommerce_app/screens/ordersScreen.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
+import 'package:ecommerce_app/screens/wrapperScreen.dart';
 
 import 'screens/favoritesScreen.dart';
 
@@ -36,4 +37,5 @@ final routes = {
   AddAddressScreen.routeName: (context) => AddAddressScreen(),
   OrdersScreen.routeName: (context) => OrdersScreen(),
   OrderDetailsScreen.routeName: (context) => OrderDetailsScreen(),
+  WrapperScreen.routeName: (context) => WrapperScreen(),
 };

@@ -4,6 +4,7 @@ import 'package:ecommerce_app/screens/cartScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
+import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woocommerce/models/products.dart';
@@ -18,7 +19,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         onTap: () {
           if (ModalRoute.of(context).settings.name != HomeScreen.routeName)
             Navigator.of(context).pushReplacementNamed(
-              HomeScreen.routeName,
+              WrapperScreen.routeName,
             );
         },
         child: Padding(
@@ -34,7 +35,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             // if (ModalRoute.of(context).settings.name != SearchScreen.routeName)
             //   Navigator.of(context).pushNamed(SearchScreen.routeName);
-            showSearch(context: context, delegate: CitySearch());
+            showSearch(context: context, delegate: ProductSearch());
           },
           icon: Icon(
             Icons.search,
@@ -88,7 +89,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class CitySearch extends SearchDelegate<String> {
+class ProductSearch extends SearchDelegate<String> {
   @override
   List<Widget> buildActions(BuildContext context) => [
         IconButton(

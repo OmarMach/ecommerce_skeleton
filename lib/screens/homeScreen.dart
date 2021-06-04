@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    print("home");
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),

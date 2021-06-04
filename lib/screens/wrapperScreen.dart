@@ -1,7 +1,7 @@
 import 'package:ecommerce_app/screens/cartScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
+import 'package:ecommerce_app/screens/profileScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
-import 'package:ecommerce_app/screens/testScreen.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'favoritesScreen.dart';
 
 class WrapperScreen extends StatefulWidget {
+  static const routeName = '/wrapper';
   @override
   WrapperScreenState createState() => WrapperScreenState();
 }
@@ -21,7 +22,7 @@ class WrapperScreenState extends State<WrapperScreen> {
     CartScreen(),
     SearchScreen(),
     FavoritesScreen(),
-    TestScreen(),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -33,16 +34,12 @@ class WrapperScreenState extends State<WrapperScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    print(_selectedIndex);
     return Scaffold(
       key: scaffoldKey,
       drawer: DrawerMenuWidget(),
       body: SafeArea(
-        child: Stack(
-          children: [
-            _widgetOptions.elementAt(_selectedIndex),
-            AppBarWidget(),
-          ],
-        ),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

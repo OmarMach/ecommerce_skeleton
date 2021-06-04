@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/providers/userProvider.dart';
-import 'package:ecommerce_app/screens/homeScreen.dart';
+import 'package:ecommerce_app/screens/WrapperScreen.dart';
 import 'package:ecommerce_app/screens/registerScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
@@ -171,10 +171,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 if (userProvider.isConnected) {
                                   Navigator.of(context).popUntil(
-                                    ModalRoute.withName(HomeScreen.routeName),
+                                    ModalRoute.withName(
+                                        WrapperScreen.routeName),
                                   );
                                   Navigator.of(context)
-                                      .pushNamed(HomeScreen.routeName);
+                                      .pushNamed(WrapperScreen.routeName);
                                 }
                               }
                             },
@@ -196,8 +197,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(HomeScreen.routeName);
+                              Navigator.of(context).pushReplacementNamed(
+                                  WrapperScreen.routeName);
                             },
                             child: Text(
                               "Continue without logging in",
