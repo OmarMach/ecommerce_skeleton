@@ -117,6 +117,7 @@ class CategoriesProvider with ChangeNotifier {
     } catch (e) {
       print("Error while Loading categories :" + e.toString());
     }
+    notifyListeners();
     return _categories;
   }
 

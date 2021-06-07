@@ -159,6 +159,26 @@ class _ProductScreenState extends State<ProductScreen> {
                         ],
                       ),
                     ),
+                    // Product shortdescription
+                    if (removeAllHtmlTags(product.description)
+                        .trim()
+                        .replaceAll('\n\n', '\n')
+                        .isNotEmpty) ...[
+                      if (product.shortDescription.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              removeAllHtmlTags(product.shortDescription)
+                                      .trim()
+                                      .replaceAll('\n\n', '\n') +
+                                  ".",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        ),
+                    ],
                     // Product description
                     if (removeAllHtmlTags(product.description)
                         .trim()
@@ -192,6 +212,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                         ),
                     ],
+
                     Divider(),
                     // Similar products
                     Text(

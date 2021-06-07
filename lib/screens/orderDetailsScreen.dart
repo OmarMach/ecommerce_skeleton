@@ -243,15 +243,15 @@ class OrderItemsListWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${item.name}'),
-                              Text('Quantity : x${item.quantity}'),
+                              Text('${item?.name}'),
+                              Text('Quantity : x${item?.quantity}'),
                             ],
                           ),
-                          Text('${item.price} Tnd'),
+                          Text('${item?.price} Tnd'),
                         ],
                       ),
                       Divider(),
-                      Text("Total : ${item.total} Tnd")
+                      Text("Total : ${item?.total} Tnd")
                     ],
                   ),
                 ),

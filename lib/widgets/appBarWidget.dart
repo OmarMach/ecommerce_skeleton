@@ -1,9 +1,7 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/screens/cartScreen.dart';
-import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/productScreen.dart';
-import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +15,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: InkWell(
         onTap: () {
-          if (ModalRoute.of(context).settings.name != HomeScreen.routeName)
+          if (ModalRoute.of(context).settings.name != WrapperScreen.routeName)
             Navigator.of(context).pushReplacementNamed(
               WrapperScreen.routeName,
             );
