@@ -18,91 +18,119 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
-      body: Container(
-        width: size.width,
-        height: size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.contain,
-            repeat: ImageRepeat.repeat,
-            image: AssetImage('assets/images/background.jpg'),
+      body: Stack(
+        children: [
+          Container(
+            width: size.width,
+            height: size.height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                repeat: ImageRepeat.repeat,
+                image: AssetImage('assets/images/background.jpg'),
+              ),
+            ),
+            child: Consumer<CartProvider>(
+              builder: (context, cartProvider, _) {
+                return cartProvider.items.isNotEmpty
+                    ? SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  "Shopping Cart",
+                                  style: Theme.of(context).textTheme.headline6,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              StepWidget(step: 1),
+                              Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  "Cart Items",
+                                  style: Theme.of(context).textTheme.headline5,
+                                ),
+                              ),
+                              Divider(),
+                              ListView.builder(
+                                itemCount: cartProvider.items.length,
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return CartItemWidget(
+                                    cartItem: cartProvider.items.values
+                                        .elementAt(index),
+                                  );
+                                },
+                              ),
+                              Divider(),
+                              CartTotalWidget(
+                                cartProvider: cartProvider,
+                              ),
+                              Divider(),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(CheckoutScreen.routeName);
+                                },
+                                child: Text("Checkout"),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey.shade800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.shopping_bag,
+                              size: 100,
+                            ),
+                            Text(
+                              "There are no items In the cart.",
+                              style: textTheme.subtitle1,
+                            ),
+                          ],
+                        ),
+                      );
+              },
+            ),
           ),
-        ),
-        child: Consumer<CartProvider>(
-          builder: (context, cartProvider, _) {
-            return cartProvider.items.isNotEmpty
-                ? SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Shopping Cart",
-                              style: Theme.of(context).textTheme.headline6,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          StepWidget(step: 1),
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Cart Items",
-                              style: Theme.of(context).textTheme.headline5,
-                            ),
-                          ),
-                          Divider(),
-                          ListView.builder(
-                            itemCount: cartProvider.items.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return CartItemWidget(
-                                cartItem:
-                                    cartProvider.items.values.elementAt(index),
-                              );
-                            },
-                          ),
-                          Divider(),
-                          CartTotalWidget(
-                            cartProvider: cartProvider,
-                          ),
-                          Divider(),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(CheckoutScreen.routeName);
-                            },
-                            child: Text("Checkout"),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.grey.shade800,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_bag,
-                          size: 100,
-                        ),
-                        Text(
-                          "There are no items In the cart.",
-                          style: textTheme.subtitle1,
-                        ),
-                      ],
-                    ),
-                  );
-          },
-        ),
+          IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.grey.shade400,
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
