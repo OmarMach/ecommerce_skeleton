@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
+import 'package:ecommerce_app/widgets/backButtonWidget.dart';
 import 'package:ecommerce_app/widgets/cartItemWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
@@ -106,30 +107,7 @@ class CartScreen extends StatelessWidget {
               },
             ),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.grey.shade400,
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          BackButtonWidget(),
         ],
       ),
     );
