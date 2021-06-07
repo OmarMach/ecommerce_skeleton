@@ -43,13 +43,12 @@ class FavoritesScreen extends StatelessWidget {
                                 "Your wish list is empty",
                                 style: textTheme.subtitle1,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pushReplacementNamed(
-                                      SearchScreen.routeName);
-                                },
-                                child: Text("View Products"),
-                              )
+                              verticalSeparator,
+                              Text(
+                                "You can add items to your whishlist, through the ❤️ icon from any product details.",
+                                style: textTheme.caption,
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                         );
