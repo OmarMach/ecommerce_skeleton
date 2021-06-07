@@ -13,11 +13,14 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
       body: Container(
+        width: size.width,
+        height: size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.contain,

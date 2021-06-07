@@ -8,7 +8,6 @@ import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
 import 'package:ecommerce_app/widgets/productsGridList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
