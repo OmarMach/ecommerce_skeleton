@@ -2,7 +2,6 @@ import 'package:ecommerce_app/screens/cartScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
-import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +33,6 @@ class WrapperScreenState extends State<WrapperScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print(_selectedIndex);
     return Scaffold(
       key: scaffoldKey,
       drawer: DrawerMenuWidget(),

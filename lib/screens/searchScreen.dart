@@ -366,9 +366,9 @@ class _SearchByCategoryResultsWidgetState
                                   ),
                                   child: SizedBox(
                                     height: 40,
-                                    width: 40,
+                                    width: size.width / 2,
                                     child: Center(
-                                      child: Icon(
+                                      child: Icon( 
                                         Icons.arrow_back_rounded,
                                         color: page > 0
                                             ? Colors.white
@@ -381,42 +381,6 @@ class _SearchByCategoryResultsWidgetState
                             ),
                           ),
                         ),
-                        for (var i = 0; i < pagesCount; i++)
-                          Flexible(
-                            child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  page = i;
-                                });
-                              },
-                              child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Material(
-                                    color: Colors.grey.shade800,
-                                    borderRadius: BorderRadius.circular(
-                                      5,
-                                    ),
-                                    child: SizedBox(
-                                      height: 40,
-                                      width: 40,
-                                      child: Center(
-                                        child: Text(
-                                          (i + 1).toString(),
-                                          style: TextStyle(
-                                            color: page == i
-                                                ? Colors.redAccent
-                                                : Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
                         Flexible(
                           child: InkWell(
                             onTap: page < pagesCount - 1
@@ -437,7 +401,7 @@ class _SearchByCategoryResultsWidgetState
                                   ),
                                   child: SizedBox(
                                     height: 40,
-                                    width: 40,
+                                    width: size.width / 2,
                                     child: Center(
                                       child: Icon(
                                         Icons.arrow_forward,
