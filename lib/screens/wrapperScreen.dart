@@ -18,7 +18,6 @@ class WrapperScreenState extends State<WrapperScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    CartScreen(),
     SearchScreen(),
     FavoritesScreen(),
     ProfileScreen(),
@@ -44,10 +43,6 @@ class WrapperScreenState extends State<WrapperScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
-            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
