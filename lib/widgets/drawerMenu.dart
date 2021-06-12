@@ -88,7 +88,7 @@ class DrawerMenuWidget extends StatelessWidget {
                 onTap: () async {
                   await Provider.of<SearchProvider>(context, listen: false)
                       .searchProductsByCategory(0);
-                      
+
                   Navigator.of(context).pushNamed(
                     CategoryProductsScreen.routeName,
                     arguments: {'New Arrivals': 0},
@@ -343,8 +343,7 @@ class _DrawerCategoryItemState extends State<DrawerCategoryItem> {
                             _toggleLoading();
                             await Provider.of<SearchProvider>(context,
                                     listen: false)
-                                .searchProductsByCategory(
-                                    widget.category.category.id);
+                                .searchProductsByCategory(subCategory.id);
                             _toggleLoading();
                             Navigator.of(context).pushNamed(
                               CategoryProductsScreen.routeName,
