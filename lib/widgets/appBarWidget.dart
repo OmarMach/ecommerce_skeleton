@@ -6,6 +6,7 @@ import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:woocommerce/models/products.dart';
+import 'dart:io' show Platform;
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -13,6 +14,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     final size = MediaQuery.of(context).size;
     return AppBar(
       centerTitle: true,
+      leading: Platform.isIOS &&
+              ModalRoute.of(context).settings.name != WrapperScreen.routeName
+          ? BackButton()
+          : null,
       title: InkWell(
         onTap: () {
           if (ModalRoute.of(context).settings.name != WrapperScreen.routeName)
