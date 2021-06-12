@@ -88,6 +88,7 @@ class DrawerMenuWidget extends StatelessWidget {
                 onTap: () async {
                   await Provider.of<SearchProvider>(context, listen: false)
                       .searchProductsByCategory(0);
+                      
                   Navigator.of(context).pushNamed(
                     CategoryProductsScreen.routeName,
                     arguments: {'New Arrivals': 0},

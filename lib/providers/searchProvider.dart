@@ -10,6 +10,7 @@ import '../config.dart';
 class SearchProvider with ChangeNotifier {
   final List<WooProductCategory> selectedFilters = [];
   final List<WooProduct> searchedProducts = [];
+
   bool isLoading = false;
   String sortValue;
 
@@ -91,6 +92,9 @@ class SearchProvider with ChangeNotifier {
                 b.name.toLowerCase(),
               ),
         );
+        searchedProducts.forEach((element) {
+          print(element.name);
+        });
         break;
       case 'Sort By Title: Z to A':
         searchedProducts.sort(
@@ -98,20 +102,37 @@ class SearchProvider with ChangeNotifier {
                 a.name.toLowerCase(),
               ),
         );
+        searchedProducts.forEach((element) {
+          print(element.name);
+        });
         break;
       case 'Sort By Price: Low to High':
         searchedProducts.sort(
-          (WooProduct a, WooProduct b) => a.price.toLowerCase().compareTo(
-                b.price.toLowerCase(),
-              ),
+          (WooProduct a, WooProduct b) => int.parse(
+            a.price.toLowerCase(),
+          ).compareTo(
+            int.parse(
+              b.price.toLowerCase(),
+            ),
+          ),
         );
+        searchedProducts.forEach((element) {
+          print(element.price);
+        });
         break;
       case 'Sort By Price: High to Low':
         searchedProducts.sort(
-          (WooProduct a, WooProduct b) => b.price.toLowerCase().compareTo(
-                a.price.toLowerCase(),
-              ),
+          (WooProduct a, WooProduct b) => int.parse(
+            b.price.toLowerCase(),
+          ).compareTo(
+            int.parse(
+              a.price.toLowerCase(),
+            ),
+          ),
         );
+        searchedProducts.forEach((element) {
+          print(element.price);
+        });
         break;
     }
     notifyListeners();
