@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/utils.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -9,15 +10,53 @@ class SplashScreen extends StatelessWidget {
       body: Container(
         width: size.width,
         height: size.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.contain,
-            repeat: ImageRepeat.repeat,
-            image: AssetImage('assets/images/background.jpg'),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     fit: BoxFit.contain,
+        //     repeat: ImageRepeat.repeat,
+        //     image: AssetImage('assets/images/background.jpg'),
+        //   ),
+        // ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'assets/images/welcomeImage.png',
+                    width: size.width * .8,
+                    height: 120,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        'assets/images/Logo.png',
+                        width: size.width * .8,
+                      ),
+                    ),
+                    verticalSeparator,
+                    Container(
+                      width: size.width / 2,
+                      child: LinearProgressIndicator(),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 120,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        child: Center(
-          child: CircularProgressIndicator(),
         ),
       ),
     );

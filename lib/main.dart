@@ -6,7 +6,6 @@ import 'package:ecommerce_app/providers/searchProvider.dart';
 import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/routes.dart';
 import 'package:ecommerce_app/screens/errorScreen.dart';
-import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/splashScreen.dart';
 import 'package:ecommerce_app/screens/wrapperScreen.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +74,9 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           await productProvider.getProductsFromDb();
           await productProvider.getCarouselProducts();
 
+          print("Loading Categories..");
+          await categoriesProvider.getAllCategories(context);
+
           print("Loading Favorites..");
           await favProvider.loadFavoritesFromSharedPrefs();
 
@@ -83,9 +85,6 @@ class _LoadingWidgetState extends State<LoadingWidget> {
 
           print("Loading User Information..");
           await userProvider.initUserStatus();
-
-          print("Loading Categories..");
-          await categoriesProvider.getAllCategories(context);
 
           categoriesProvider.transformCategories();
           return Future;

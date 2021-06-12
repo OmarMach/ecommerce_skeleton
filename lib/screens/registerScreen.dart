@@ -48,6 +48,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Container(
           width: size.width,
           height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
           child: Form(
             key: _formKey,
             child: Padding(
