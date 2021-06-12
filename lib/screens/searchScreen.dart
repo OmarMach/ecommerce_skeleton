@@ -34,128 +34,141 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Select categories",
-                    style: textTheme.headline6,
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Select categories",
+                      style: textTheme.headline6,
+                    ),
                   ),
-                ),
-                Consumer<SearchProvider>(
-                  builder: (context, searchProvider, _) {
-                    final selectedFilters = searchProvider.selectedFilters;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          height: size.height / 3,
-                          padding: EdgeInsets.all(10),
-                          color: Colors.grey.shade800,
-                          child: ListView.builder(
-                            itemCount:
-                                categoriesProvider.grouppedCategories.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              final currentCatergory = categoriesProvider
-                                  .grouppedCategories
-                                  .elementAt(index);
+                  Consumer<SearchProvider>(
+                    builder: (context, searchProvider, _) {
+                      final selectedFilters = searchProvider.selectedFilters;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            height: size.height / 3,
+                            padding: EdgeInsets.all(10),
+                            color: Colors.grey.shade800,
+                            child: ListView.builder(
+                              itemCount:
+                                  categoriesProvider.grouppedCategories.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final currentCatergory = categoriesProvider
+                                    .grouppedCategories
+                                    .elementAt(index);
 
-                              return CheckboxListTile(
-                                activeColor: Colors.green,
-                                value:
-                                    selectedFilters.contains(currentCatergory),
-                                onChanged: (value) {
-                                  if (!selectedFilters
-                                      .contains(currentCatergory)) {
-                                    searchProvider.addFilter(currentCatergory);
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-                                    searchProvider.searchProductsByCategory(
-                                        currentCatergory.id);
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  } else
-                                    searchProvider
-                                        .removeFilter(currentCatergory);
-                                },
-                                title: Text(
-                                  currentCatergory.name,
-                                ),
-                                subtitle: Text("items  : " +
-                                    currentCatergory.count.toString()),
-                              );
-                            },
+                                return CheckboxListTile(
+                                  activeColor: Colors.green,
+                                  value: selectedFilters
+                                      .contains(currentCatergory),
+                                  onChanged: (value) {
+                                    if (!selectedFilters
+                                        .contains(currentCatergory)) {
+                                      searchProvider
+                                          .addFilter(currentCatergory);
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      searchProvider.searchProductsByCategory(
+                                          currentCatergory.id);
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    } else
+                                      searchProvider
+                                          .removeFilter(currentCatergory);
+                                  },
+                                  title: Text(
+                                    currentCatergory.name,
+                                  ),
+                                  subtitle: Text("items  : " +
+                                      currentCatergory.count.toString()),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton.icon(
-                                onPressed: selectedFilters.isEmpty
-                                    ? null
-                                    : () {
-                                        final List<int> categoryIds = [];
-                                        selectedFilters.forEach(
-                                          (element) {
-                                            categoryIds.add(element.id);
-                                          },
-                                        );
-                                        searchProvider
-                                            .searchProductByCategoriesId(
-                                          categoryIds,
-                                        );
-                                        searchProvider.clearSearchedProducts();
-                                      },
-                                label: Text("Search"),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.grey.shade800,
-                                ),
-                                icon: Icon(
-                                  Icons.search_rounded,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: selectedFilters.isEmpty
+                                      ? null
+                                      : () {
+                                          final List<int> categoryIds = [];
+                                          selectedFilters.forEach(
+                                            (element) {
+                                              categoryIds.add(element.id);
+                                            },
+                                          );
+                                          searchProvider
+                                              .searchProductByCategoriesId(
+                                            categoryIds,
+                                          );
+                                          searchProvider
+                                              .clearSearchedProducts();
+                                        },
+                                  label: Text("Search"),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey.shade800,
+                                  ),
+                                  icon: Icon(
+                                    Icons.search_rounded,
+                                  ),
                                 ),
                               ),
-                            ),
-                            selectedFilters.isNotEmpty
-                                ? Row(
-                                    children: [
-                                      horizontalSeparator,
-                                      ElevatedButton.icon(
-                                        onPressed: selectedFilters.isEmpty
-                                            ? null
-                                            : () {
-                                                searchProvider.clearFilters();
-                                              },
-                                        label: FittedBox(
-                                          fit: BoxFit.fitWidth,
-                                          child: Text("Clear filters"),
+                              selectedFilters.isNotEmpty
+                                  ? Row(
+                                      children: [
+                                        horizontalSeparator,
+                                        ElevatedButton.icon(
+                                          onPressed: selectedFilters.isEmpty
+                                              ? null
+                                              : () {
+                                                  searchProvider.clearFilters();
+                                                },
+                                          label: FittedBox(
+                                            fit: BoxFit.fitWidth,
+                                            child: Text("Clear filters"),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.grey.shade800,
+                                          ),
+                                          icon: Icon(Icons.delete),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.grey.shade800,
-                                        ),
-                                        icon: Icon(Icons.delete),
-                                      ),
-                                    ],
-                                  )
-                                : Container(),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                // Results widget
-                SearchByCategoryResultsWidget(
-                    textTheme: textTheme, isLoading: isLoading)
-              ],
+                                      ],
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                  // Results widget
+                  SearchByCategoryResultsWidget(
+                      textTheme: textTheme, isLoading: isLoading)
+                ],
+              ),
             ),
           ),
         ),
@@ -368,7 +381,7 @@ class _SearchByCategoryResultsWidgetState
                                     height: 40,
                                     width: size.width / 2,
                                     child: Center(
-                                      child: Icon( 
+                                      child: Icon(
                                         Icons.arrow_back_rounded,
                                         color: page > 0
                                             ? Colors.white

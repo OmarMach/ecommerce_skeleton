@@ -14,6 +14,7 @@ class ProductsGridList extends StatelessWidget {
   Widget build(BuildContext context) {
     final productsList =
         Provider.of<ProductProvider>(context, listen: false).items;
+        
     final size = MediaQuery.of(context).size;
 
     final sliverGridDelegateWithFixedCrossAxisCount =

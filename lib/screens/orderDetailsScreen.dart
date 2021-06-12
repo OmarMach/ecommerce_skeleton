@@ -13,78 +13,90 @@ class OrderDetailsScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final order = ModalRoute.of(context).settings.arguments as Order;
 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  children: [
-                    Text(
-                      "Order details",
-                      style: textTheme.subtitle1,
-                    ),
-                    Expanded(
-                      child: Divider(),
-                    ),
-                  ],
-                ),
-              ),
-              verticalSeparator,
-              OrderDetailsWidget(order: order),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  children: [
-                    Text(
-                      "Products",
-                      style: textTheme.subtitle1,
-                    ),
-                    Expanded(
-                      child: Divider(),
-                    ),
-                  ],
-                ),
-              ),
-              OrderItemsListWidget(orderItems: order.products),
-              verticalSeparator,
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Row(
-                  children: [
-                    Text(
-                      "Billing address",
-                      style: textTheme.subtitle1,
-                    ),
-                    Expanded(
-                      child: Divider(),
-                    ),
-                  ],
-                ),
-              ),
-              OrderAddressWidget(address: order.address),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey.shade800,
-                        ),
-                        onPressed: () {},
-                        child: Text("View Invoice"),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.contain,
+            repeat: ImageRepeat.repeat,
+            image: AssetImage('assets/images/background.jpg'),
+          ),
+        ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Order details",
+                        style: textTheme.subtitle1,
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Divider(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                verticalSeparator,
+                OrderDetailsWidget(order: order),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Products",
+                        style: textTheme.subtitle1,
+                      ),
+                      Expanded(
+                        child: Divider(),
+                      ),
+                    ],
+                  ),
+                ),
+                OrderItemsListWidget(orderItems: order.products),
+                verticalSeparator,
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Billing address",
+                        style: textTheme.subtitle1,
+                      ),
+                      Expanded(
+                        child: Divider(),
+                      ),
+                    ],
+                  ),
+                ),
+                OrderAddressWidget(address: order.address),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey.shade800,
+                          ),
+                          onPressed: () {},
+                          child: Text("View Invoice"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -17,28 +17,40 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
     final category =
         ModalRoute.of(context).settings.arguments as Map<String, int>;
     final textTheme = Theme.of(context).textTheme;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  category.keys.first ?? '',
-                  textAlign: TextAlign.center,
-                  style: textTheme.headline5,
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    category.keys.first ?? '',
+                    textAlign: TextAlign.center,
+                    style: textTheme.headline5,
+                  ),
                 ),
-              ),
-              verticalSeparator,
-              ProductsByCategoryGridListPaginated(
-                categoryId: category.values.first,
-                limit: category.values.first == 0 ? 100 : 20,
-              ),
-            ],
+                verticalSeparator,
+                ProductsByCategoryGridListPaginated(
+                  categoryId: category.values.first,
+                  limit: category.values.first == 0 ? 100 : 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -58,23 +58,10 @@ class _ProductsByCategoryGridListPaginatedState
           int remainingProductsCount = productsCount % 10;
 
           if (remainingProductsCount > 0) pagesCount++;
+
           if (searchProvider.searchedProducts.isEmpty)
             searchProvider.searchProductsByCategory(0);
 
-          // if (searchProvider.searchedProducts.isEmpty) {
-          //   return FutureBuilder(
-          //     future: searchProvider.searchProductsByCategory(0),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       } else {
-          //         return Container();
-          //       }
-          //     },
-          //   );
-          // } else
           if (searchProvider.searchedProducts.isEmpty)
             return Center(
               child: CircularProgressIndicator(),

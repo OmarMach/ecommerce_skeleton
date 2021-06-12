@@ -26,209 +26,221 @@ class _ProductScreenState extends State<ProductScreen> {
 
     final product = ModalRoute.of(context).settings.arguments as WooProduct;
 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                color: Colors.blue,
-                child: Column(
-                  children: [
-                    ProductImagesCarousel(items: product.images),
-                  ],
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  color: Colors.blue,
+                  child: Column(
+                    children: [
+                      ProductImagesCarousel(items: product.images),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Product Title
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        product.name,
-                        style: textTheme.subtitle1,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    // Price and stock
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "${product.price} TND - ",
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Product Title
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          product.name,
+                          style: textTheme.subtitle1,
                           textAlign: TextAlign.center,
-                          style: textTheme.subtitle1.copyWith(
-                            color: Colors.green,
-                          ),
                         ),
-                        if (product.stockStatus != 'instock')
+                      ),
+                      // Price and stock
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           Text(
-                            'Out of stock',
-                            style: textTheme.subtitle1.copyWith(
-                              color: Colors.red,
-                            ),
-                          ),
-                        if (product.stockStatus == 'instock')
-                          Text(
-                            'In stock',
+                            "${product.price} TND - ",
                             textAlign: TextAlign.center,
                             style: textTheme.subtitle1.copyWith(
                               color: Colors.green,
                             ),
                           ),
-                      ],
-                    ),
-                    Divider(),
-                    // Add to cart Buttons
-                    if (product.stockStatus == 'instock')
-                      AddToCartButtons(
-                        product: product,
+                          if (product.stockStatus != 'instock')
+                            Text(
+                              'Out of stock',
+                              style: textTheme.subtitle1.copyWith(
+                                color: Colors.red,
+                              ),
+                            ),
+                          if (product.stockStatus == 'instock')
+                            Text(
+                              'In stock',
+                              textAlign: TextAlign.center,
+                              style: textTheme.subtitle1.copyWith(
+                                color: Colors.green,
+                              ),
+                            ),
+                        ],
                       ),
-                    if (product.stockStatus != 'instock') NotifyMeWidget(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                ScaffoldMessenger.of(context)
-                                    .removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text("Item Added to the favorites.."),
-                                  ),
-                                );
-                                Provider.of<FavoritesProvider>(context,
-                                        listen: false)
-                                    .addToFavorites(product);
-                              },
-                              child: SizedBox(
-                                height: 60,
-                                width: 60,
-                                child: Center(
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.favorite_outline,
-                                        color: Colors.green,
-                                      ),
-                                      horizontalSeparator,
-                                      Text("Add to Wish list"),
-                                    ],
+                      Divider(),
+                      // Add to cart Buttons
+                      if (product.stockStatus == 'instock')
+                        AddToCartButtons(
+                          product: product,
+                        ),
+                      if (product.stockStatus != 'instock') NotifyMeWidget(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context)
+                                      .removeCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content:
+                                          Text("Item Added to the favorites.."),
+                                    ),
+                                  );
+                                  Provider.of<FavoritesProvider>(context,
+                                          listen: false)
+                                      .addToFavorites(product);
+                                },
+                                child: SizedBox(
+                                  height: 60,
+                                  width: 60,
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.favorite_outline,
+                                          color: Colors.green,
+                                        ),
+                                        horizontalSeparator,
+                                        Text("Add to Wish list"),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Divider(),
-                    // Aramex
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.check_circle_outline_outlined),
-                          horizontalSeparator,
-                          Text(
-                            "All products will be delivered by \"Aramex\".",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.check_circle_outline_outlined),
-                          horizontalSeparator,
-                          Text(
-                            "We also provide the possibility of local pickup.",
-                            textAlign: TextAlign.justify,
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Product shortdescription
-                    if (removeAllHtmlTags(product.description)
-                        .trim()
-                        .replaceAll('\n\n', '\n')
-                        .isNotEmpty) ...[
-                      if (product.shortDescription.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              removeAllHtmlTags(product.shortDescription)
-                                      .trim()
-                                      .replaceAll('\n\n', '\n') +
-                                  ".",
+                      Divider(),
+                      // Aramex
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle_outline_outlined),
+                            horizontalSeparator,
+                            Text(
+                              "All products will be delivered by \"Aramex\".",
                               textAlign: TextAlign.justify,
                             ),
-                          ),
+                          ],
                         ),
-                    ],
-                    // Product description
-                    if (removeAllHtmlTags(product.description)
-                        .trim()
-                        .replaceAll('\n\n', '\n')
-                        .isNotEmpty) ...[
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle_outline_outlined),
+                            horizontalSeparator,
+                            Text(
+                              "We also provide the possibility of local pickup.",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Product shortdescription
+                      if (removeAllHtmlTags(product.description)
+                          .trim()
+                          .replaceAll('\n\n', '\n')
+                          .isNotEmpty) ...[
+                        if (product.shortDescription.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                removeAllHtmlTags(product.shortDescription)
+                                        .trim()
+                                        .replaceAll('\n\n', '\n') +
+                                    ".",
+                                textAlign: TextAlign.justify,
+                              ),
+                            ),
+                          ),
+                      ],
+                      // Product description
+                      if (removeAllHtmlTags(product.description)
+                          .trim()
+                          .replaceAll('\n\n', '\n')
+                          .isNotEmpty) ...[
+                        Divider(),
+                        Text(
+                          "Description",
+                          textAlign: TextAlign.start,
+                          style: textTheme.headline5,
+                        ),
+                        if (product.description.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                removeAllHtmlTags(product.description)
+                                        .trim()
+                                        .replaceAll('\n\n', '\n') +
+                                    ".",
+                                textAlign: TextAlign.justify,
+                              ),
+                            ),
+                          ),
+                      ],
+
                       Divider(),
+                      // Similar products
                       Text(
-                        "Description",
+                        "Similar products",
                         textAlign: TextAlign.start,
                         style: textTheme.headline5,
                       ),
-                      if (product.description.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                            ),
-                            child: Text(
-                              removeAllHtmlTags(product.description)
-                                      .trim()
-                                      .replaceAll('\n\n', '\n') +
-                                  ".",
-                              textAlign: TextAlign.justify,
-                            ),
-                          ),
-                        ),
+                      verticalSeparator,
+                      ProductsByCategoryGridList(
+                        categoryId: product.categories[0].id,
+                        limit: 5,
+                      ),
                     ],
-
-                    Divider(),
-                    // Similar products
-                    Text(
-                      "Similar products",
-                      textAlign: TextAlign.start,
-                      style: textTheme.headline5,
-                    ),
-                    verticalSeparator,
-                    ProductsByCategoryGridList(
-                      categoryId: product.categories[0].id,
-                      limit: 5,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

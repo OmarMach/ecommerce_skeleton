@@ -12,40 +12,52 @@ class AddressesScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              userProvider.userAddress != null
-                  ? Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Billing Address",
-                            textAlign: TextAlign.center,
-                            style: textTheme.headline5,
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                userProvider.userAddress != null
+                    ? Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Billing Address",
+                              textAlign: TextAlign.center,
+                              style: textTheme.headline5,
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "This address will be auto filled for each new order.",
-                            style: textTheme.caption,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "This address will be auto filled for each new order.",
+                              style: textTheme.caption,
+                            ),
                           ),
-                        ),
-                        AddressWidget(
-                          textTheme: textTheme,
-                          address: userProvider.userAddress,
-                        ),
-                      ],
-                    )
-                  : NoAddressWidget(textTheme: textTheme),
-            ],
+                          AddressWidget(
+                            textTheme: textTheme,
+                            address: userProvider.userAddress,
+                          ),
+                        ],
+                      )
+                    : NoAddressWidget(textTheme: textTheme),
+              ],
+            ),
           ),
         ),
       ),

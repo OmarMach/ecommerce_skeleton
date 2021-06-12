@@ -92,9 +92,6 @@ class SearchProvider with ChangeNotifier {
                 b.name.toLowerCase(),
               ),
         );
-        searchedProducts.forEach((element) {
-          print(element.name);
-        });
         break;
       case 'Sort By Title: Z to A':
         searchedProducts.sort(
@@ -102,9 +99,6 @@ class SearchProvider with ChangeNotifier {
                 a.name.toLowerCase(),
               ),
         );
-        searchedProducts.forEach((element) {
-          print(element.name);
-        });
         break;
       case 'Sort By Price: Low to High':
         searchedProducts.sort(
@@ -116,9 +110,6 @@ class SearchProvider with ChangeNotifier {
             ),
           ),
         );
-        searchedProducts.forEach((element) {
-          print(element.price);
-        });
         break;
       case 'Sort By Price: High to Low':
         searchedProducts.sort(
@@ -130,9 +121,6 @@ class SearchProvider with ChangeNotifier {
             ),
           ),
         );
-        searchedProducts.forEach((element) {
-          print(element.price);
-        });
         break;
     }
     notifyListeners();
@@ -199,7 +187,6 @@ class SearchProvider with ChangeNotifier {
   }
 
   Future<List<WooProduct>> searchProductByKeyword(String keyword) async {
-    print("Searching keyword : " + keyword);
     searchedProducts.clear();
     // Adding params
     final Map<String, dynamic> params = {

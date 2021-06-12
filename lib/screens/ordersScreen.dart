@@ -17,50 +17,62 @@ class OrdersScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       body: SafeArea(
-        child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "Your Orders",
-                    style: textTheme.headline5,
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "This list will display all the orders you made with this account.",
-                      textAlign: TextAlign.justify,
-                      style: textTheme.caption,
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      "Your Orders",
+                      style: textTheme.headline5,
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  ListView.separated(
-                    itemCount: userProvider.userOrders.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OrderListItem(
-                          order: userProvider.userOrders.elementAt(index),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Divider(
-                        color: Colors.yellow,
-                      );
-                    },
-                  )
-                ],
-              ),
-            )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "This list will display all the orders you made with this account.",
+                        textAlign: TextAlign.justify,
+                        style: textTheme.caption,
+                      ),
+                    ),
+                    ListView.separated(
+                      itemCount: userProvider.userOrders.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: OrderListItem(
+                            order: userProvider.userOrders.elementAt(index),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return Divider(
+                          color: Colors.yellow,
+                        );
+                      },
+                    )
+                  ],
+                ),
+              )),
+        ),
       ),
     );
   }

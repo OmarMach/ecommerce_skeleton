@@ -18,17 +18,29 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
       body: SafeArea(
-        child: Consumer<UserProvider>(
-          builder: (context, provider, _) {
-            if (provider.isConnected)
-              return DashboardWidget();
-            else
-              return NotconnectedWidget();
-          },
+        child: Container(
+          width: size.width,
+          height: size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
+            ),
+          ),
+          child: Consumer<UserProvider>(
+            builder: (context, provider, _) {
+              if (provider.isConnected)
+                return DashboardWidget();
+              else
+                return NotconnectedWidget();
+            },
+          ),
         ),
       ),
     );
@@ -74,13 +86,13 @@ class DashboardWidget extends StatelessWidget {
                 Navigator.of(context).pushNamed(AddressesScreen.routeName);
               },
             ),
-            DashboardMenuItemWidget(
-              title: 'Account details',
-              icon: Icons.person_pin_rounded,
-              onTap: () {
-                Navigator.of(context).pushNamed(EditAccountDetails.routeName);
-              },
-            ),
+            // DashboardMenuItemWidget(
+            //   title: 'Account details',
+            //   icon: Icons.person_pin_rounded,
+            //   onTap: () {
+            //     Navigator.of(context).pushNamed(EditAccountDetails.routeName);
+            //   },
+            // ),
             DashboardMenuItemWidget(
               title: 'Logout',
               icon: Icons.logout,

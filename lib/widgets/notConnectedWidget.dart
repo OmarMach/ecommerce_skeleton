@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/screens/loginScreen.dart';
+import 'package:ecommerce_app/screens/registerScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../utils.dart';
@@ -38,7 +39,7 @@ class NotconnectedWidget extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(LoginScreen.routeName);
+                  Navigator.of(context).pushNamed(RegisterScreen.routeName);
                 },
                 child: Text("Register"),
               ),

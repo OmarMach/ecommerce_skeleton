@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/screens/cartScreen.dart';
 import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/screens/profileScreen.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';

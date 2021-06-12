@@ -194,6 +194,7 @@ class ProductProvider with ChangeNotifier {
 
     // Adding params
     final Map<String, dynamic> params = {
+      'orderBy': 'date',
       'per_page': limit > 0 ? limit.toString() : '10',
       'page': pageNumber.toString(),
       'status': 'publish',

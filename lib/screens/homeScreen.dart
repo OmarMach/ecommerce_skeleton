@@ -23,21 +23,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print("home");
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: SafeArea(
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                repeat: ImageRepeat.repeat,
-                image: AssetImage('assets/images/background.jpg'),
-              ),
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              repeat: ImageRepeat.repeat,
+              image: AssetImage('assets/images/background.jpg'),
             ),
+          ),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -48,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       CarouselWidget(),
                       verticalSeparator,
                       HomeTitleWidget(title: "New Arrivals"),
-                      ProductsGridList(
+                      ProductsByCategoryGridList(
+                        categoryId: 0,
                         limit: 6,
                       ),
                       HomeTitleWidget(title: "Screen Refurbish Tools"),

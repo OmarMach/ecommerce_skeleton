@@ -53,300 +53,311 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final address = userProvider.userAddress;
     final _isCartEmpty = cart.length > 0 ? false : true;
 
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
-      body: Stack(
-        children: [
-          _isCartEmpty
-              ? EmptyCartCheckoutWidget()
-              : Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        StepWidget(step: 2),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Payement information..",
-                            style: textTheme.headline5,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.contain,
+            repeat: ImageRepeat.repeat,
+            image: AssetImage('assets/images/background.jpg'),
+          ),
+        ),
+        child: Stack(
+          children: [
+            _isCartEmpty
+                ? EmptyCartCheckoutWidget()
+                : Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          StepWidget(step: 2),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Payement information..",
+                              style: textTheme.headline5,
+                            ),
                           ),
-                        ),
-                        Divider(),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => phoneNumberValidator(value),
-                          initialValue: address?.phone,
-                          decoration: buildFilledGreyInputDecoration(
-                            inputLabel: "Phone *",
+                          Divider(),
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => phoneNumberValidator(value),
+                            initialValue: address?.phone,
+                            decoration: buildFilledGreyInputDecoration(
+                              inputLabel: "Phone *",
+                            ),
                           ),
-                        ),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => emailValidator(value),
-                          initialValue: address?.email,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "Email address *"),
-                        ),
-                        verticalSeparator,
-                        Divider(),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => notEmptyValidator(value),
-                          initialValue: address?.firstName,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "First name *"),
-                        ),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => notEmptyValidator(value),
-                          initialValue: address?.lastName,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "Last name *"),
-                        ),
-                        verticalSeparator,
-                        Divider(),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => notEmptyValidator(value),
-                          initialValue: address?.address1,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "Adress * "),
-                        ),
-                        verticalSeparator,
-                        TextFormField(
-                          initialValue: address?.address2,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "Apartment, suite, unit, etc. "),
-                        ),
-                        verticalSeparator,
-                        Divider(),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => notEmptyValidator(value),
-                          initialValue: address?.city,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "Town/City *"),
-                        ),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => notEmptyValidator(value),
-                          initialValue: address?.state,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "State/Country *"),
-                        ),
-                        verticalSeparator,
-                        TextFormField(
-                          validator: (value) => notEmptyValidator(value),
-                          initialValue: address?.postcode,
-                          decoration: buildFilledGreyInputDecoration(
-                              inputLabel: "Post Code/ Zip *"),
-                        ),
-                        verticalSeparator,
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Payement information..",
-                            style: textTheme.headline5,
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => emailValidator(value),
+                            initialValue: address?.email,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "Email address *"),
                           ),
-                        ),
-                        Divider(),
-                        verticalSeparator,
-                        ListView.builder(
-                          itemCount: cart.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) => OrderCartItemsWidget(
-                            cartItem: cart.values.elementAt(index),
+                          verticalSeparator,
+                          Divider(),
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => notEmptyValidator(value),
+                            initialValue: address?.firstName,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "First name *"),
                           ),
-                        ),
-                        verticalSeparator,
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.grey.shade800,
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => notEmptyValidator(value),
+                            initialValue: address?.lastName,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "Last name *"),
+                          ),
+                          verticalSeparator,
+                          Divider(),
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => notEmptyValidator(value),
+                            initialValue: address?.address1,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "Adress * "),
+                          ),
+                          verticalSeparator,
+                          TextFormField(
+                            initialValue: address?.address2,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "Apartment, suite, unit, etc. "),
+                          ),
+                          verticalSeparator,
+                          Divider(),
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => notEmptyValidator(value),
+                            initialValue: address?.city,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "Town/City *"),
+                          ),
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => notEmptyValidator(value),
+                            initialValue: address?.state,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "State/Country *"),
+                          ),
+                          verticalSeparator,
+                          TextFormField(
+                            validator: (value) => notEmptyValidator(value),
+                            initialValue: address?.postcode,
+                            decoration: buildFilledGreyInputDecoration(
+                                inputLabel: "Post Code/ Zip *"),
+                          ),
+                          verticalSeparator,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Payement information..",
+                              style: textTheme.headline5,
+                            ),
+                          ),
+                          Divider(),
+                          verticalSeparator,
+                          ListView.builder(
+                            itemCount: cart.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) =>
+                                OrderCartItemsWidget(
+                              cartItem: cart.values.elementAt(index),
+                            ),
+                          ),
+                          verticalSeparator,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              color: Colors.grey.shade800,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Subtotal"),
+                                        Text(cartProvider.total.toString() +
+                                            " Tnd"),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Shipping"),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: DeliveryType.delivery,
+                                        groupValue: _delivery,
+                                        onChanged: (DeliveryType value) {
+                                          setState(() {
+                                            _delivery = value;
+                                          });
+                                        },
+                                      ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _delivery = DeliveryType.delivery;
+                                            });
+                                          },
+                                          child: Text("Delivery"),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: DeliveryType.pickup,
+                                        groupValue: _delivery,
+                                        onChanged: (DeliveryType value) {
+                                          setState(() {
+                                            _delivery = value;
+                                          });
+                                        },
+                                      ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _delivery = DeliveryType.pickup;
+                                            });
+                                          },
+                                          child: Text("Personal Pickup"),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Total"),
+                                        Text(cartProvider.total.toString() +
+                                            " Tnd"),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          verticalSeparator,
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5.0),
+                              ),
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Subtotal"),
-                                      Text(cartProvider.total.toString() +
-                                          " Tnd"),
-                                    ],
-                                  ),
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("Shipping"),
-                                ),
                                 Row(
                                   children: [
                                     Radio(
-                                      value: DeliveryType.delivery,
-                                      groupValue: _delivery,
-                                      onChanged: (DeliveryType value) {
-                                        setState(() {
-                                          _delivery = value;
-                                        });
-                                      },
+                                      groupValue: null,
+                                      onChanged: (Null value) {},
+                                      value: null,
                                     ),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _delivery = DeliveryType.delivery;
-                                          });
-                                        },
-                                        child: Text("Delivery"),
-                                      ),
-                                    )
+                                    Text("Cash on delivery")
                                   ],
-                                ),
-                                Row(
-                                  children: [
-                                    Radio(
-                                      value: DeliveryType.pickup,
-                                      groupValue: _delivery,
-                                      onChanged: (DeliveryType value) {
-                                        setState(() {
-                                          _delivery = value;
-                                        });
-                                      },
-                                    ),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _delivery = DeliveryType.pickup;
-                                          });
-                                        },
-                                        child: Text("Personal Pickup"),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Divider(
-                                  color: Colors.grey,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Total"),
-                                      Text(cartProvider.total.toString() +
-                                          " Tnd"),
-                                    ],
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    "Pay with cash upon delivery or local pickup.",
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        verticalSeparator,
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5.0),
-                            ),
-                            border: Border.all(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          verticalSeparator,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Radio(
-                                    groupValue: null,
-                                    onChanged: (Null value) {},
-                                    value: null,
-                                  ),
-                                  Text("Cash on delivery")
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "Pay with cash upon delivery or local pickup.",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        verticalSeparator,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Checkbox(
-                              value: _terms,
-                              onChanged: (value) {
-                                setState(() {
-                                  _terms = value;
-                                });
-                              },
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
+                              Checkbox(
+                                value: _terms,
+                                onChanged: (value) {
                                   setState(() {
-                                    _terms = !_terms;
+                                    _terms = value;
                                   });
                                 },
-                                child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    "I have read and agreed the application's Terms and conditions.",
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _terms = !_terms;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      "I have read and agreed the application's Terms and conditions.",
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                        verticalSeparator,
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey.shade800,
+                              )
+                            ],
                           ),
-                          onPressed: () async {
-                            _isLoading = true;
-                            setState(() {});
-                            try {
-                              // userProvider.createOrder(
-                              //   cartItems: cartProvider.items,
-                              //   address: userProvider.userAddress,
-                              // );
-                              await userProvider.getUserOrders();
-                            } catch (e) {
-                              _error = true;
-                              _errorMessage = e.toString();
-                            }
-                            _isLoading = false;
-                            setState(() {});
-                          },
-                          child: _isLoading
-                              ? LinearProgressIndicator()
-                              : Text('Palce Order'),
-                        ),
-                      ],
+                          verticalSeparator,
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.grey.shade800,
+                            ),
+                            onPressed: () async {
+                              _isLoading = true;
+                              setState(() {});
+                              try {
+                                // userProvider.createOrder(
+                                //   cartItems: cartProvider.items,
+                                //   address: userProvider.userAddress,
+                                // );
+                                await userProvider.getUserOrders();
+                              } catch (e) {
+                                _error = true;
+                                _errorMessage = e.toString();
+                              }
+                              _isLoading = false;
+                              setState(() {});
+                            },
+                            child: _isLoading
+                                ? LinearProgressIndicator()
+                                : Text('Palce Order'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-          BackButtonWidget(),
-        ],
+            BackButtonWidget(),
+          ],
+        ),
       ),
     );
   }

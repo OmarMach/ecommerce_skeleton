@@ -14,22 +14,34 @@ class TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBarWidget(),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            checkDatabaseConnection(context);
-          },
-          style: ElevatedButton.styleFrom(
-            primary: error ? Colors.red : Colors.green,
+      body: Container(
+        width: size.width,
+        height: size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.contain,
+            repeat: ImageRepeat.repeat,
+            image: AssetImage('assets/images/background.jpg'),
           ),
-          child: isLoading
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
-                )
-              : Text("Test DB Connection"),
+        ),
+        child: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              checkDatabaseConnection(context);
+            },
+            style: ElevatedButton.styleFrom(
+              primary: error ? Colors.red : Colors.green,
+            ),
+            child: isLoading
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  )
+                : Text("Test DB Connection"),
+          ),
         ),
       ),
     );
