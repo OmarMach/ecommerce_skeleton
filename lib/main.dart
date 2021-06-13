@@ -76,6 +76,7 @@ class _LoadingWidgetState extends State<LoadingWidget> {
 
           print("Loading Categories..");
           await categoriesProvider.getAllCategories(context);
+          categoriesProvider.transformCategories();
 
           print("Loading Favorites..");
           await favProvider.loadFavoritesFromSharedPrefs();
@@ -86,7 +87,6 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           print("Loading User Information..");
           await userProvider.initUserStatus();
 
-          categoriesProvider.transformCategories();
           return Future;
         }
 

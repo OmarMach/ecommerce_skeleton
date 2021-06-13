@@ -300,16 +300,16 @@ class _SearchByCategoryResultsWidgetState
                               if (newValue == 'Sort By Price: Low to High')
                                 searchedProducts.sort(
                                   (WooProduct a, WooProduct b) =>
-                                      a.price.toLowerCase().compareTo(
-                                            b.price.toLowerCase(),
-                                          ),
+                                      double.parse(a.price).compareTo(
+                                    double.parse(b.price),
+                                  ),
                                 );
                               if (newValue == 'Sort By Price: High to Low')
                                 searchedProducts.sort(
                                   (WooProduct a, WooProduct b) =>
-                                      b.price.toLowerCase().compareTo(
-                                            a.price.toLowerCase(),
-                                          ),
+                                      double.parse(b.price).compareTo(
+                                    double.parse(a.price),
+                                  ),
                                 );
                             },
                           );

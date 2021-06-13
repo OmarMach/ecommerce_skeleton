@@ -102,10 +102,10 @@ class SearchProvider with ChangeNotifier {
         break;
       case 'Sort By Price: Low to High':
         searchedProducts.sort(
-          (WooProduct a, WooProduct b) => int.parse(
+          (WooProduct a, WooProduct b) => double.parse(
             a.price.toLowerCase(),
           ).compareTo(
-            int.parse(
+            double.parse(
               b.price.toLowerCase(),
             ),
           ),
@@ -113,10 +113,10 @@ class SearchProvider with ChangeNotifier {
         break;
       case 'Sort By Price: High to Low':
         searchedProducts.sort(
-          (WooProduct a, WooProduct b) => int.parse(
+          (WooProduct a, WooProduct b) => double.parse(
             b.price.toLowerCase(),
           ).compareTo(
-            int.parse(
+            double.parse(
               a.price.toLowerCase(),
             ),
           ),
