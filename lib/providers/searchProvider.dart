@@ -10,13 +10,14 @@ import '../config.dart';
 class SearchProvider with ChangeNotifier {
   final List<WooProductCategory> selectedFilters = [];
   final List<WooProduct> searchedProducts = [];
+  final List<WooProduct> categorizedProducts = [];
 
   bool isLoading = false;
   String sortValue;
 
   void clearFilters() {
     selectedFilters.clear();
-    searchedProducts.clear();
+    categorizedProducts.clear();
     notifyListeners();
   }
 
@@ -26,23 +27,36 @@ class SearchProvider with ChangeNotifier {
   }
 
   void clearSearchedProducts() {
+    print(
+      "${searchedProducts.length} cleared from the searched products list.",
+    );
     searchedProducts.clear();
     notifyListeners();
   }
 
+  void clearCategorizedProducts() {
+    print(
+      "${categorizedProducts.length} cleared from the categorized products list.",
+    );
+    categorizedProducts.clear();
+    notifyListeners();
+  }
+
   Future addFilter(WooProductCategory category) async {
+    print("Adding filter to Selected Filters list : " + category.name);
     selectedFilters.add(category);
     notifyListeners();
   }
 
   void removeFilter(WooProductCategory category) {
+    print("Removing filter from Selected Filters list : " + category.name);
     selectedFilters.remove(category);
     removeSearchedItemsByCategory(category.id);
     notifyListeners();
   }
 
   void removeSearchedItemsByCategory(int id) {
-    searchedProducts.removeWhere((prod) {
+    categorizedProducts.removeWhere((prod) {
       return prod.categories.where((cat) {
         if (cat.id == id || cat.parent == id) {
           print("Deleting Product : ${prod.name} : ${cat.id}");
@@ -59,13 +73,15 @@ class SearchProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // This function is used inside the search screen, it takes all the selected categories
+  // and fetches the products categories
   Future searchProductByCategoriesId(List<int> categoriesId) async {
     isLoading = true;
     notifyListeners();
 
     categoriesId.forEach(
       (element) async {
-        await searchProductsByCategory(element);
+        await searchForCategorizedProducts(element);
       },
     );
 
@@ -183,6 +199,63 @@ class SearchProvider with ChangeNotifier {
       },
     );
     // Setting the state to loading
+    toggleLoadingState();
+  }
+
+  Future searchForCategorizedProducts(int categoryId) async {
+    // Setting the params to send into the request
+    final Map<String, dynamic> params = {
+      'per_page': '100',
+      'status': 'publish',
+    };
+    toggleLoadingState();
+
+    // search by category
+    if (categoryId != 0) params['category'] = categoryId.toString();
+
+    final Uri uri = Uri.https('goods.tn', 'wp-json/wc/v3/products', params);
+    final response = await http.get(uri, headers: headers);
+
+    // decoding the results into a list.
+    final List productList = json.decode(response.body) as List;
+
+    // Converting each item to WooProduct.
+    productList.forEach(
+      (element) {
+        // Converting product from Json to WooProduct.
+        final WooProduct product = WooProduct.fromJson(element);
+
+        // Getting the categories
+        final List categories = element['categories'];
+        final List attributes = element['attributes'];
+
+        attributes.forEach(
+          (element) {
+            final WooProductItemAttribute productAttribute =
+                WooProductItemAttribute.fromJson(element);
+            product.attributes.add(productAttribute);
+          },
+        );
+
+        // Adding the categories to the product.
+        categories.forEach(
+          (element) {
+            final WooProductCategory category =
+                WooProductCategory.fromJson(element);
+            // Avoiding duplicates
+            if (product.categories
+                    .indexWhere((product) => product.id == category.id) ==
+                -1) product.categories.add(element);
+          },
+        );
+
+        // Adding the product to the list
+        if (!categorizedProducts.contains(product)) {
+          categorizedProducts.add(product);
+          print(product.name + ' --- ' + product.categories.first.name);
+        }
+      },
+    );
     toggleLoadingState();
   }
 

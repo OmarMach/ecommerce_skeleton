@@ -51,60 +51,72 @@ class _SearchScreenState extends State<SearchScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Select categories",
-                      style: textTheme.headline6,
+                  Container(
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.grey.shade800,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          "Select categories",
+                          style: textTheme.headline6,
+                        ),
+                      ),
                     ),
                   ),
+                  verticalSeparator,
                   Consumer<SearchProvider>(
                     builder: (context, searchProvider, _) {
                       final selectedFilters = searchProvider.selectedFilters;
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Container(
-                            height: size.height / 3,
-                            padding: EdgeInsets.all(10),
-                            color: Colors.grey.shade800,
-                            child: ListView.builder(
-                              itemCount:
-                                  categoriesProvider.grouppedCategories.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final currentCatergory = categoriesProvider
-                                    .grouppedCategories
-                                    .elementAt(index);
-
-                                return CheckboxListTile(
-                                  activeColor: Colors.green,
-                                  value: selectedFilters
-                                      .contains(currentCatergory),
-                                  onChanged: (value) {
-                                    if (!selectedFilters
-                                        .contains(currentCatergory)) {
-                                      searchProvider
-                                          .addFilter(currentCatergory);
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      searchProvider.searchProductsByCategory(
-                                          currentCatergory.id);
-                                      setState(() {
-                                        isLoading = false;
-                                      });
-                                    } else
-                                      searchProvider
-                                          .removeFilter(currentCatergory);
-                                  },
-                                  title: Text(
-                                    currentCatergory.name,
-                                  ),
-                                  subtitle: Text("items  : " +
-                                      currentCatergory.count.toString()),
-                                );
-                              },
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              height: size.height / 3,
+                              padding: EdgeInsets.all(10),
+                              color: Colors.grey.shade800,
+                              child: ListView.builder(
+                                itemCount: categoriesProvider
+                                    .grouppedCategories.length,
+                                itemBuilder: (context, index) {
+                                  // Selecting a category item.
+                                  final currentCatergory = categoriesProvider
+                                      .grouppedCategories
+                                      .elementAt(index);
+                                  // Displaying the checkbox Tile
+                                  return CheckboxListTile(
+                                    activeColor: Colors.green,
+                                    value: selectedFilters
+                                        .contains(currentCatergory),
+                                    onChanged: (value) async {
+                                      if (!selectedFilters
+                                          .contains(currentCatergory)) {
+                                        // Adding the filter to the filters state list.
+                                        searchProvider
+                                            .addFilter(currentCatergory);
+                                        // Performing the fetch request
+                                        await searchProvider
+                                            .searchForCategorizedProducts(
+                                          currentCatergory.id,
+                                        );
+                                      } else
+                                        searchProvider
+                                            .removeFilter(currentCatergory);
+                                    },
+                                    title: Text(
+                                      currentCatergory.name,
+                                    ),
+                                    subtitle: Text(
+                                      "${currentCatergory.count} - Product",
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           Row(
@@ -113,7 +125,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 child: ElevatedButton.icon(
                                   onPressed: selectedFilters.isEmpty
                                       ? null
-                                      : () {
+                                      : () async {
+                                          // Perform Search Manually for each selected category.
                                           final List<int> categoryIds = [];
                                           selectedFilters.forEach(
                                             (element) {
@@ -121,11 +134,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                             },
                                           );
                                           searchProvider
+                                              .clearCategorizedProducts();
+                                          await searchProvider
                                               .searchProductByCategoriesId(
                                             categoryIds,
                                           );
-                                          searchProvider
-                                              .clearSearchedProducts();
                                         },
                                   label: Text("Search"),
                                   style: ElevatedButton.styleFrom(
@@ -136,28 +149,26 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ),
                                 ),
                               ),
-                              selectedFilters.isNotEmpty
-                                  ? Row(
-                                      children: [
-                                        horizontalSeparator,
-                                        ElevatedButton.icon(
-                                          onPressed: selectedFilters.isEmpty
-                                              ? null
-                                              : () {
-                                                  searchProvider.clearFilters();
-                                                },
-                                          label: FittedBox(
-                                            fit: BoxFit.fitWidth,
-                                            child: Text("Clear filters"),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.grey.shade800,
-                                          ),
-                                          icon: Icon(Icons.delete),
-                                        ),
-                                      ],
-                                    )
-                                  : Container(),
+                              // Conditional rendering for the clearing filters Button.
+                              if (selectedFilters.isNotEmpty) ...[
+                                horizontalSeparator,
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    // Clearing the state form categorized products and selected filters.
+                                    searchProvider.clearFilters();
+                                  },
+                                  label: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Text("Clear filters"),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.grey.shade800,
+                                  ),
+                                  icon: Icon(
+                                    Icons.delete,
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
                         ],
@@ -166,7 +177,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   // Results widget
                   SearchByCategoryResultsWidget(
-                      textTheme: textTheme, isLoading: isLoading)
+                    textTheme: textTheme,
+                    isLoading: isLoading,
+                  )
                 ],
               ),
             ),
@@ -217,227 +230,246 @@ class _SearchByCategoryResultsWidgetState
     return Consumer<SearchProvider>(
       builder: (context, searchProvider, child) {
         final size = MediaQuery.of(context).size;
-        final List<WooProduct> searchedProducts =
-            searchProvider.searchedProducts;
 
-        int productsCount = searchedProducts.length;
+        // Getting filtered products from state
+        final List<WooProduct> filteringResults =
+            searchProvider.categorizedProducts;
+
+        // Calculating pages
+        int productsCount = filteringResults.length;
         int pagesCount = productsCount ~/ 10;
         int remainingProductsCount = productsCount % 10;
-
+        // adding one more page if there are less than 10 products in the last page.
         if (remainingProductsCount > 0) pagesCount++;
 
-        return searchedProducts.length > 0
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Search results",
-                      textAlign: TextAlign.center,
-                      style: widget.textTheme.headline6,
-                    ),
-                  ),
-                  Divider(),
-                  ElevatedButton.icon(
-                    onPressed: searchProvider.searchedProducts.isEmpty
-                        ? null
-                        : () {
-                            searchProvider.clearSearchedProducts();
-                            searchProvider.clearFilters();
-                            page = 0;
-                          },
-                    label: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text("Clear results"),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.grey.shade800,
-                    ),
-                    icon: Icon(Icons.delete),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: dropdownValue,
-                        onChanged: (String newValue) {
-                          setState(
-                            () {
-                              dropdownValue = newValue;
+        // Rendering the results.
+        if (filteringResults.isNotEmpty) {
+          // if the filtering list is not empty
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Divider(),
+              Text(
+                "Search results",
+                textAlign: TextAlign.center,
+                style: widget.textTheme.headline6,
+              ),
+              Divider(),
+              ElevatedButton.icon(
+                onPressed: filteringResults.isEmpty
+                    ? null
+                    : () {
+                        searchProvider.clearFilters();
+                        page = 0;
+                      },
+                label: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text("Clear results"),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey.shade800,
+                ),
+                icon: Icon(
+                  Icons.delete,
+                ),
+              ),
 
-                              if (newValue == 'Sort By Popularity')
-                                searchedProducts.sort(
-                                  (WooProduct a, WooProduct b) =>
-                                      a.totalSales.compareTo(b.totalSales),
-                                );
-                              if (newValue == 'Sort By Latest')
-                                searchedProducts.sort(
-                                  (WooProduct a, WooProduct b) =>
-                                      a.id.compareTo(b.id),
-                                );
-                              if (newValue == 'Sort By Title: A to Z')
-                                searchedProducts.sort(
-                                  (WooProduct a, WooProduct b) =>
-                                      a.name.toLowerCase().compareTo(
-                                            b.name.toLowerCase(),
-                                          ),
-                                );
-                              if (newValue == 'Sort By Title: Z to A')
-                                searchedProducts.sort(
-                                  (WooProduct a, WooProduct b) =>
-                                      b.name.toLowerCase().compareTo(
-                                            a.name.toLowerCase(),
-                                          ),
-                                );
-                              if (newValue == 'Sort By Price: Low to High')
-                                searchedProducts.sort(
-                                  (WooProduct a, WooProduct b) =>
-                                      double.parse(a.price).compareTo(
-                                    double.parse(b.price),
-                                  ),
-                                );
-                              if (newValue == 'Sort By Price: High to Low')
-                                searchedProducts.sort(
-                                  (WooProduct a, WooProduct b) =>
-                                      double.parse(b.price).compareTo(
-                                    double.parse(a.price),
-                                  ),
-                                );
-                            },
-                          );
-                        },
-                        selectedItemBuilder: (BuildContext context) {
-                          return options.map((String value) {
-                            return Center(
-                              child: Text(
-                                dropdownValue,
-                                style: const TextStyle(color: Colors.white),
+              // Displaying loading indicator above the list.
+              // If there are products in the list and we're adding more.
+              if (searchProvider.isLoading)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: LinearProgressIndicator(),
+                  ),
+                ),
+
+              Container(
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(
+                    color: Colors.grey,
+                  ),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: dropdownValue,
+                    onChanged: (String newValue) {
+                      setState(
+                        () {
+                          dropdownValue = newValue;
+
+                          if (newValue == 'Sort By Popularity')
+                            filteringResults.sort(
+                              (WooProduct a, WooProduct b) =>
+                                  a.totalSales.compareTo(b.totalSales),
+                            );
+                          if (newValue == 'Sort By Latest')
+                            filteringResults.sort(
+                              (WooProduct a, WooProduct b) =>
+                                  a.id.compareTo(b.id),
+                            );
+                          if (newValue == 'Sort By Title: A to Z')
+                            filteringResults.sort(
+                              (WooProduct a, WooProduct b) =>
+                                  a.name.toLowerCase().compareTo(
+                                        b.name.toLowerCase(),
+                                      ),
+                            );
+                          if (newValue == 'Sort By Title: Z to A')
+                            filteringResults.sort(
+                              (WooProduct a, WooProduct b) =>
+                                  b.name.toLowerCase().compareTo(
+                                        a.name.toLowerCase(),
+                                      ),
+                            );
+                          if (newValue == 'Sort By Price: Low to High')
+                            filteringResults.sort(
+                              (WooProduct a, WooProduct b) =>
+                                  double.parse(a.price).compareTo(
+                                double.parse(b.price),
                               ),
                             );
-                          }).toList();
+                          if (newValue == 'Sort By Price: High to Low')
+                            filteringResults.sort(
+                              (WooProduct a, WooProduct b) =>
+                                  double.parse(b.price).compareTo(
+                                double.parse(a.price),
+                              ),
+                            );
                         },
-                        items: options
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                      );
+                    },
+                    selectedItemBuilder: (BuildContext context) {
+                      return options.map((String value) {
+                        return Center(
+                          child: Text(
+                            dropdownValue,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }).toList();
+                    },
+                    items:
+                        options.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: size.width >= 1000
-                          ? 5
-                          : size.width >= 600
-                              ? 3
-                              : 2,
-                      childAspectRatio: 0.55,
-                      mainAxisSpacing: 10,
-                    ),
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount:
-                        page == pagesCount - 1 ? remainingProductsCount : 10,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ProductWidget(
-                        product: searchedProducts[page * 10 + index],
-                      ),
-                    ),
+                ),
+              ),
+              GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: size.width >= 1000
+                      ? 5
+                      : size.width >= 600
+                          ? 3
+                          : 2,
+                  childAspectRatio: 0.55,
+                  mainAxisSpacing: 10,
+                ),
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: page == pagesCount - 1 ? remainingProductsCount : 10,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProductWidget(
+                    product: filteringResults[page * 10 + index],
                   ),
-                  if (pagesCount > 1)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: InkWell(
-                            onTap: page > 0
-                                ? () {
-                                    setState(() {
-                                      page--;
-                                    });
-                                  }
-                                : null,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Material(
-                                  color: Colors.grey.shade800,
-                                  borderRadius: BorderRadius.circular(
-                                    5,
-                                  ),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: size.width / 2,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.arrow_back_rounded,
-                                        color: page > 0
-                                            ? Colors.white
-                                            : Colors.grey,
-                                      ),
-                                    ),
+                ),
+              ),
+              if (pagesCount > 1)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: InkWell(
+                        onTap: page > 0
+                            ? () {
+                                setState(() {
+                                  page--;
+                                });
+                              }
+                            : null,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Material(
+                              color: Colors.grey.shade800,
+                              borderRadius: BorderRadius.circular(
+                                5,
+                              ),
+                              child: SizedBox(
+                                height: 40,
+                                width: size.width / 2,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_back_rounded,
+                                    color:
+                                        page > 0 ? Colors.white : Colors.grey,
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        Flexible(
-                          child: InkWell(
-                            onTap: page < pagesCount - 1
-                                ? () {
-                                    setState(() {
-                                      page++;
-                                    });
-                                  }
-                                : null,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Material(
-                                  color: Colors.grey.shade800,
-                                  borderRadius: BorderRadius.circular(
-                                    5,
-                                  ),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: size.width / 2,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.arrow_forward,
-                                        color: page < pagesCount - 1
-                                            ? Colors.white
-                                            : Colors.grey,
-                                      ),
-                                    ),
+                      ),
+                    ),
+                    Flexible(
+                      child: InkWell(
+                        onTap: page < pagesCount - 1
+                            ? () {
+                                setState(() {
+                                  page++;
+                                });
+                              }
+                            : null,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Material(
+                              color: Colors.grey.shade800,
+                              borderRadius: BorderRadius.circular(
+                                5,
+                              ),
+                              child: SizedBox(
+                                height: 40,
+                                width: size.width / 2,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_forward,
+                                    color: page < pagesCount - 1
+                                        ? Colors.white
+                                        : Colors.grey,
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                ],
-              )
-            : widget.isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Container();
+                  ],
+                ),
+            ],
+          );
+        } else {
+          if (searchProvider.isLoading) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: LinearProgressIndicator(),
+              ),
+            );
+          } else {
+            return Container();
+          }
+        }
       },
     );
   }
