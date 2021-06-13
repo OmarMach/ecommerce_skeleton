@@ -208,7 +208,8 @@ class SearchProvider with ChangeNotifier {
       'per_page': '100',
       'status': 'publish',
     };
-    toggleLoadingState();
+    isLoading = true;
+    notifyListeners();
 
     // search by category
     if (categoryId != 0) params['category'] = categoryId.toString();
@@ -256,7 +257,9 @@ class SearchProvider with ChangeNotifier {
         }
       },
     );
-    toggleLoadingState();
+    
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<List<WooProduct>> searchProductByKeyword(String keyword) async {

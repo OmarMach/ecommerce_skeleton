@@ -81,12 +81,13 @@ class _SearchScreenState extends State<SearchScreen> {
                               padding: EdgeInsets.all(10),
                               color: Colors.grey.shade800,
                               child: ListView.builder(
+                                physics: BouncingScrollPhysics(),
                                 itemCount: categoriesProvider
-                                    .grouppedCategories.length,
+                                    .categories['sub-categories'].length,
                                 itemBuilder: (context, index) {
                                   // Selecting a category item.
                                   final currentCatergory = categoriesProvider
-                                      .grouppedCategories
+                                      .categories['sub-categories']
                                       .elementAt(index);
                                   // Displaying the checkbox Tile
                                   return CheckboxListTile(
