@@ -75,7 +75,7 @@ class _LoadingWidgetState extends State<LoadingWidget> {
           await productProvider.getCarouselProducts();
 
           print("Loading Categories..");
-          await categoriesProvider.getAllCategories(context);
+          await categoriesProvider.getAllCategories();
           categoriesProvider.transformCategories();
 
           print("Loading Favorites..");

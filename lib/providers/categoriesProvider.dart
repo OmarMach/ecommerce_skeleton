@@ -72,8 +72,7 @@ class CategoriesProvider with ChangeNotifier {
     return subCategories;
   }
 
-  Future<Map<String, List<WooProductCategory>>> getAllCategories(
-      BuildContext context) async {
+  Future<Map<String, List<WooProductCategory>>> getAllCategories() async {
     // Clearing the categories to avoid duplicates.
     _categories['categories'].clear();
     _categories['sub-categories'].clear();
@@ -104,16 +103,16 @@ class CategoriesProvider with ChangeNotifier {
         // Creating the category item
         final WooProductCategory category =
             WooProductCategory.fromJson(element);
-        _grouppedCategories.add(category);
+
+        if (!_grouppedCategories.contains(category))
+          _grouppedCategories.add(category);
+
         // Dividing categories and subcategories.
         if (category.parent == 0)
           _categories['categories'].add(category);
         else
           _categories['sub-categories'].add(category);
       });
-
-      print("${_categories['categories'].length} Categories added.");
-      print("${_categories['sub-categories'].length} Sub-Categories added.");
     } catch (e) {
       print("Error while Loading categories :" + e.toString());
     }

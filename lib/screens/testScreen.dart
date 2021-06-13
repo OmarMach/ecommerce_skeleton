@@ -52,7 +52,7 @@ class TestScreenState extends State<TestScreen> {
       isLoading = true;
     });
     try {
-      await CategoriesProvider().getAllCategories(context);
+      await CategoriesProvider().getAllCategories();
     } catch (e) {
       print("Error : " + e);
       setState(() {

@@ -18,7 +18,6 @@ class DrawerMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-
     return Drawer(
       child: SafeArea(
         child: SingleChildScrollView(
