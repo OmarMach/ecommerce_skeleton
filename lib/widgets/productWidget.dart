@@ -21,7 +21,6 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final textTheme = Theme.of(context).textTheme;
-
     return SizedBox(
       height: size.height / 2.5,
       child: Stack(

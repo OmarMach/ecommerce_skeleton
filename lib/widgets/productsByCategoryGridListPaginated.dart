@@ -59,6 +59,11 @@ class _ProductsByCategoryGridListPaginatedState
 
           if (remainingProductsCount > 0) pagesCount++;
 
+          print("prod count  : $productsCount");
+          print("remaining pages :$remainingProductsCount");
+          print("pages : $pagesCount");
+          print("pages : $page");
+
           if (searchProvider.searchedProducts.isEmpty)
             searchProvider.searchProductsByCategory(0);
 
@@ -96,7 +101,9 @@ class _ProductsByCategoryGridListPaginatedState
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: page == pagesCount - 1 ? remainingProductsCount : 10,
+                itemCount: page == pagesCount - 1 && remainingProductsCount != 0
+                    ? remainingProductsCount
+                    : 10,
                 gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
                 itemBuilder: (context, index) {
                   return ProductWidget(

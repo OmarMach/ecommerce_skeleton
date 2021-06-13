@@ -460,7 +460,8 @@ class _SearchByCategoryResultsWidgetState
             ],
           );
         } else {
-          if (searchProvider.isLoading) {
+          if (searchProvider.isLoading &&
+              searchProvider.selectedFilters.isNotEmpty) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
