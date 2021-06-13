@@ -1,6 +1,5 @@
 import 'package:ecommerce_app/providers/cartProvider.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
-import 'package:ecommerce_app/widgets/backButtonWidget.dart';
 import 'package:ecommerce_app/widgets/cartItemWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
@@ -107,7 +106,6 @@ class CartScreen extends StatelessWidget {
               },
             ),
           ),
-          BackButtonWidget(),
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:ecommerce_app/providers/userProvider.dart';
 import 'package:ecommerce_app/screens/searchScreen.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
-import 'package:ecommerce_app/widgets/backButtonWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/orderCartItemsWidget.dart';
 import 'package:ecommerce_app/widgets/stepWidget.dart';
@@ -355,7 +354,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
                   ),
-            BackButtonWidget(),
           ],
         ),
       ),
