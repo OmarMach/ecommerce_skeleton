@@ -73,6 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: ComingSoonCarouselWidget(),
                       ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 3,
+                            color: Colors.redAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "We're a repair professionals",
+                            style: Theme.of(context).textTheme.headline5,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+
                       // verticalSeparator,
                       // ClipRRect(
                       //   borderRadius: BorderRadius.circular(10),
