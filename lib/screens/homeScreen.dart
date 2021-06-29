@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ContactWidget(),
                       CarouselWidget(),
                       verticalSeparator,
                       HomeTitleWidget(title: "New Arrivals"),
