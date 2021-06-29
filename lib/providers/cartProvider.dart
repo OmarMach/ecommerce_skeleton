@@ -12,6 +12,8 @@ class CartProvider with ChangeNotifier {
   Map<int, CartItem> _cartItems = {};
   Map<String, String> _compressedCart = {};
 
+  bool isDelivery = false;
+
   // Getting an immutable copy of the cart items list.
   Map<int, CartItem> get items {
     return {..._cartItems};

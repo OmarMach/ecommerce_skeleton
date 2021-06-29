@@ -207,6 +207,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         onChanged: (DeliveryType value) {
                                           setState(() {
                                             _delivery = value;
+                                            cartProvider.isDelivery = true;
                                           });
                                         },
                                       ),
@@ -215,9 +216,36 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           onTap: () {
                                             setState(() {
                                               _delivery = DeliveryType.delivery;
+                                              cartProvider.isDelivery = true;
                                             });
                                           },
-                                          child: Text("Delivery"),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Delivery"),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 8.0,
+                                                ),
+                                                child: cartProvider.total > 300
+                                                    ? Row(
+                                                        children: [
+                                                          Text(
+                                                            "10.00 Tnd",
+                                                            style: TextStyle(
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .lineThrough,
+                                                            ),
+                                                          ),
+                                                          Text(" 0 Tnd"),
+                                                        ],
+                                                      )
+                                                    : Text("10.00 Tnd"),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       )
                                     ],
@@ -230,6 +258,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         onChanged: (DeliveryType value) {
                                           setState(() {
                                             _delivery = value;
+                                            cartProvider.isDelivery = false;
                                           });
                                         },
                                       ),
@@ -238,6 +267,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           onTap: () {
                                             setState(() {
                                               _delivery = DeliveryType.pickup;
+                                              cartProvider.isDelivery = false;
                                             });
                                           },
                                           child: Text("Personal Pickup"),
@@ -255,7 +285,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text("Total"),
-                                        Text(cartProvider.total.toString() +
+                                        Text((cartProvider.total +
+                                                    (cartProvider.isDelivery
+                                                        ? (cartProvider.total <
+                                                                300.00
+                                                            ? 10.00
+                                                            : 0)
+                                                        : 0))
+                                                .toString() +
                                             " Tnd"),
                                       ],
                                     ),

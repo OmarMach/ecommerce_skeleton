@@ -1,13 +1,13 @@
-import 'package:ecommerce_app/config.dart';
 import 'package:ecommerce_app/utils.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/carouselWidget.dart';
 import 'package:ecommerce_app/widgets/comingsoonCarouselWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:ecommerce_app/widgets/productsByCategoryGrid.dart';
-import 'package:ecommerce_app/widgets/productsGridList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      ContactWidget(),
                       CarouselWidget(),
                       verticalSeparator,
                       HomeTitleWidget(title: "New Arrivals"),
@@ -73,23 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: ComingSoonCarouselWidget(),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 3,
-                            color: Colors.redAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "We're a repair professionals",
-                            style: Theme.of(context).textTheme.headline5,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
+                      ContactWidget(),
 
                       // verticalSeparator,
                       // ClipRRect(
@@ -106,6 +91,101 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ContactWidget extends StatelessWidget {
+  const ContactWidget({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 3,
+          color: Colors.redAccent,
+        ),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              "We're a repair professionals",
+              style: Theme.of(context).textTheme.headline5,
+              textAlign: TextAlign.center,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () async {
+                      await launch('https://www.facebook.com/GOODS.TN/');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          FaIcon(FontAwesomeIcons.facebook),
+                          Text(
+                            "GOODS•Tn",
+                            style: textTheme.caption,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () async {
+                      await launch('https://www.facebook.com/ajbouni.toufa');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          FaIcon(FontAwesomeIcons.userAlt),
+                          Text(
+                            "Ajbouni Taoufik",
+                            style: textTheme.caption,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () async {
+                      await launch(
+                          "https://www.facebook.com/groups/tunisiaskills");
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          FaIcon(FontAwesomeIcons.users),
+                          Text(
+                            "GSM Skills",
+                            style: textTheme.caption,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
