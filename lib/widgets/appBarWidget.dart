@@ -36,8 +36,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () {
-            // if (ModalRoute.of(context).settings.name != SearchScreen.routeName)
-            //   Navigator.of(context).pushNamed(SearchScreen.routeName);
             showSearch(context: context, delegate: ProductSearch());
           },
           icon: Icon(
@@ -94,6 +92,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
 class ProductSearch extends SearchDelegate<String> {
   @override
+  TextInputAction get textInputAction => TextInputAction.none;
+
+  @override
   List<Widget> buildActions(BuildContext context) => [
         IconButton(
           icon: Icon(Icons.clear),
@@ -105,7 +106,7 @@ class ProductSearch extends SearchDelegate<String> {
               showSuggestions(context);
             }
           },
-        )
+        ),
       ];
 
   @override
@@ -115,29 +116,33 @@ class ProductSearch extends SearchDelegate<String> {
       );
 
   @override
-  Widget buildResults(BuildContext context) => Consumer<SearchProvider>(
-        builder: (context, provider, child) => FutureBuilder<List<WooProduct>>(
+  Widget buildResults(BuildContext context) {
+    return Consumer<SearchProvider>(
+      builder: (context, provider, child) {
+        return FutureBuilder<List<WooProduct>>(
           future: provider.searchProductByKeyword(query),
           builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(child: CircularProgressIndicator());
-              default:
-                if (snapshot.hasError) {
-                  return Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Something went wrong!',
-                      style: TextStyle(fontSize: 28, color: Colors.white),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(child: CircularProgressIndicator());
+            else if (snapshot.hasError) {
+              return Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Something went wrong!',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            } else {
+              return Container();
             }
           },
-        ),
-      );
+        );
+      },
+    );
+  }
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -147,7 +152,6 @@ class ProductSearch extends SearchDelegate<String> {
       future: provider.searchProductByKeyword(query),
       builder: (context, snapshot) {
         if (query.isEmpty) return buildNoSuggestions();
-
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return Center(
@@ -172,16 +176,12 @@ class ProductSearch extends SearchDelegate<String> {
     );
   }
 
-  Widget buildNoSuggestions() => Center(
-        child: Text(
-          ' ',
-        ),
-      );
+  Widget buildNoSuggestions() => Center(child: Text(' '));
 
   Widget buildSuggestionsSuccess(List<WooProduct> suggestions) =>
       ListView.builder(
         itemCount: suggestions.length,
-        shrinkWrap: true,
+        // shrinkWrap: true,
         itemBuilder: (context, index) {
           final suggestion = suggestions[index];
           return Column(
