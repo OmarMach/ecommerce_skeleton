@@ -8,7 +8,6 @@ import 'package:ecommerce_app/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:woocommerce/models/products.dart';
 
 import '../config.dart';
 
@@ -36,9 +35,9 @@ class UserProvider with ChangeNotifier {
   }
 
   Future initUserStatus() async {
-    await loadAddressFromSharedPrefs();
     await loadUserFromSharedPrefs();
     await getUserOrders();
+    await loadAddressFromSharedPrefs();
   }
 
   Future loadUserFromSharedPrefs() async {
@@ -68,9 +67,7 @@ class UserProvider with ChangeNotifier {
       _address = Address.fromJSON(map);
       SharedPreferences _prefs = await SharedPreferences.getInstance();
 
-      String encodedAddress = json.encode(_address);
-
-      await _prefs.setString('address', encodedAddress);
+      await _prefs.setString('address', _address.toJson());
     } catch (e) {
       print(e);
     }
@@ -81,14 +78,15 @@ class UserProvider with ChangeNotifier {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       String encodedAddress = _prefs.getString("address");
 
-      if (encodedAddress != null)
+      if (encodedAddress != null) {
         _address = Address.fromJSON(
           json.decode(encodedAddress),
         );
+      }
 
       notifyListeners();
     } catch (e) {
-      print(e);
+      print("Error while getting address from shared prefs :\n$e");
     }
   }
 
@@ -213,7 +211,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future createOrder({Address address, Map<int, CartItem> cartItems}) async {
+  Future<bool> createOrder({
+    @required Map address,
+    @required Map<int, CartItem> cartItems,
+    Map deliveryRates,
+  }) async {
     try {
       // Creating the URL
       final Uri uri = Uri.https('goods.tn', '/wp-json/wc/v3/orders/');
@@ -235,19 +237,26 @@ class UserProvider with ChangeNotifier {
         body: json.encode(
           {
             'customer_id': _user.id,
-            'billing': [address.toJson()],
-            'shipping': [address.toJson()],
+            'billing': address,
+            'shipping': address,
             'line_items': transformedCart,
+            'shipping_lines': [deliveryRates],
           },
         ),
       );
+
+      final data = json.decode(response.body);
+      print(data);
+      return data['id'] != null;
     } catch (e) {
       print("error : " + e.toString());
+      return false;
     }
   }
 
-  Future getUserOrders({Address address, List<WooProduct> products}) async {
+  Future<List<Order>> getUserOrders() async {
     _userOrders.clear();
+
     // Adding params
     final Map<String, dynamic> params = {
       'customer': '${user.id}',
@@ -271,8 +280,9 @@ class UserProvider with ChangeNotifier {
           _userOrders.add(order);
         });
       }
+      return _userOrders;
     } catch (e) {
-      print(e);
+      throw (e);
     }
   }
 }

@@ -45,19 +45,14 @@ String emailValidator(String email) {
 }
 
 String phoneNumberValidator(String phone) {
-  Pattern pattern = r'/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/';
-  RegExp regex = new RegExp(pattern);
-
-  if (notEmptyValidator(phone) == null) if (regex.hasMatch(phone))
+  if (notEmptyValidator(phone) == null || phone.length == 8)
     return null;
   else
     return 'Please provide a valid phone number.';
-  else
-    return notEmptyValidator(phone);
 }
 
 String notEmptyValidator(String string) {
-  if (string.length > 1)
+  if (string.isNotEmpty)
     return null;
   else
     return 'Please fill this field.';

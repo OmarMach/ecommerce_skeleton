@@ -79,22 +79,6 @@ class OrderDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 OrderAddressWidget(address: order.address),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.grey.shade800,
-                          ),
-                          onPressed: () {},
-                          child: Text("View Invoice"),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -236,6 +220,7 @@ class OrderItemsListWidget extends StatelessWidget {
           child: ListView.builder(
             itemCount: orderItems.length,
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final item = orderItems.elementAt(index);
               return Padding(
@@ -249,21 +234,23 @@ class OrderItemsListWidget extends StatelessWidget {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${item?.name}'),
-                              Text('Quantity : x${item?.quantity}'),
-                            ],
+                          Expanded(
+                            child: Text('${item?.name}'),
                           ),
-                          Text('${item?.price} Tnd'),
+                          horizontalSeparator,
+                          Text('x${item?.quantity}'),
                         ],
                       ),
                       Divider(),
-                      Text("Total : ${item?.total} Tnd")
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Unit Price : ${item?.price} TND"),
+                          Text("Total : ${item?.total} TND"),
+                        ],
+                      )
                     ],
                   ),
                 ),

@@ -38,6 +38,9 @@ class MyApp extends StatelessWidget {
           buttonTheme: Theme.of(context).buttonTheme.copyWith(
                 buttonColor: Colors.grey.shade700,
               ),
+          snackBarTheme: Theme.of(context).snackBarTheme.copyWith(
+                behavior: SnackBarBehavior.floating,
+              ),
           fontFamily: 'ProductSans',
           primaryColor: Colors.grey.shade800,
           accentColor: Colors.redAccent,

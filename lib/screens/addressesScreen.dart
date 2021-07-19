@@ -11,6 +11,7 @@ class AddressesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.loadAddressFromSharedPrefs();
 
     final size = MediaQuery.of(context).size;
     return Scaffold(

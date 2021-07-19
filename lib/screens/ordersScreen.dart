@@ -33,45 +33,58 @@ class OrdersScreen extends StatelessWidget {
           ),
           child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Your Orders",
-                      style: textTheme.headline5,
-                      textAlign: TextAlign.center,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "This list will display all the orders you made with this account.",
-                        textAlign: TextAlign.justify,
-                        style: textTheme.caption,
-                      ),
-                    ),
-                    ListView.separated(
-                      itemCount: userProvider.userOrders.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: OrderListItem(
-                            order: userProvider.userOrders.elementAt(index),
+              child: FutureBuilder<List<Order>>(
+                  future: userProvider.getUserOrders(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    if (snapshot.hasError)
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 100,
                           ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return Divider(
-                          color: Colors.yellow,
-                        );
-                      },
-                    )
-                  ],
-                ),
-              )),
+                          Text(
+                              "Error while loading your orders, please try again later."),
+                        ],
+                      );
+                    if (snapshot.hasData && snapshot.data.isEmpty)
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.list_alt,
+                            size: 100,
+                          ),
+                          Text("You have no orders yet."),
+                        ],
+                      );
+                    else
+                      return ListView.separated(
+                        itemCount: userProvider.userOrders.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: OrderListItem(
+                              order: userProvider.userOrders.elementAt(index),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return Divider(
+                            color: Colors.yellow,
+                          );
+                        },
+                      );
+                  })),
         ),
       ),
     );
@@ -135,18 +148,6 @@ class OrderListItem extends StatelessWidget {
                 );
               },
               child: Text("View Order"),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.grey.shade800,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-            ),
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text("View Invoice"),
               style: ElevatedButton.styleFrom(
                 primary: Colors.grey.shade800,
               ),
