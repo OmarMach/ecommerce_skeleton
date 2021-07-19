@@ -44,6 +44,15 @@ String emailValidator(String email) {
     return notEmptyValidator(email);
 }
 
+String passwordValidator(String password) {
+  if (password.isEmpty)
+    return 'Please enter a password.';
+  else if (password.length < 6)
+    return 'Your Password must contain at least 6 characters.';
+  else
+    return null;
+}
+
 String phoneNumberValidator(String phone) {
   if (notEmptyValidator(phone) == null || phone.length == 8)
     return null;

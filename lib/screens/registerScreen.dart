@@ -21,7 +21,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading;
   bool _error;
   String _errorMessage = '';
-  UserProvider userProvider;
   TextTheme textTheme;
 
   @override
@@ -29,18 +28,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.initState();
     _isLoading = false;
     _error = false;
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-  }
-
-  @override
-  void didChangeDependencies() {
-    textTheme = Theme.of(context).textTheme;
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
@@ -74,7 +69,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   verticalSeparator,
                   verticalSeparator,
                   TextFormField(
-                    initialValue: 'soulaamal256@gmail.com',
                     onSaved: (value) {
                       email = value.toString().trim();
                     },
@@ -84,14 +78,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hint: "Email",
                       label: 'Email Address',
                     ),
-                    validator: (value) => value.contains('@')
-                        ? null
-                        : 'Please enter a valid Email address',
+                    validator: emailValidator,
                   ),
                   verticalSeparator,
                   TextFormField(
                     obscureText: true,
-                    initialValue: 'azerty123',
                     onSaved: (value) {
                       password = value.toString();
                     },
@@ -101,14 +92,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hint: "Password",
                       label: 'Password',
                     ),
-                    validator: (value) => value.length > 6
-                        ? null
-                        : 'The password needs to have at least 6 characters',
+                    validator: passwordValidator,
                   ),
                   verticalSeparator,
                   TextFormField(
                     obscureText: true,
-                    initialValue: 'azerty123',
                     onSaved: (value) {
                       password = value.toString();
                     },
@@ -118,9 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hint: "Confirm Password",
                       label: 'Confirm Password',
                     ),
-                    validator: (value) => password == value
-                        ? null
-                        : 'The passwords doesn\'t match',
+                    validator: passwordValidator,
                   ),
                   if (_error)
                     Padding(
@@ -133,27 +119,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ElevatedButton(
-                    onPressed: () async {
-                      _formKey.currentState.save();
-                      if (_formKey.currentState.validate()) {
-                        _isLoading = true;
-                        setState(() {});
-                        try {
-                          bool isRegistred =
-                              await userProvider.registerUser(email, password);
-                          if (!isRegistred) throw ('e');
-                        } catch (e) {
-                          _error = true;
-                          _errorMessage = e;
-                        }
-                        _isLoading = false;
-                        setState(() {});
-                      }
-                    },
+                    onPressed: _isLoading
+                        ? null
+                        : () async {
+                            _formKey.currentState.save();
+                            if (_formKey.currentState.validate()) {
+                              _isLoading = true;
+                              setState(() {});
+
+                              try {
+                                bool isRegistred = await userProvider
+                                    .registerUser(email, password);
+                                if (!isRegistred) throw ('e');
+                              } catch (e) {
+                                _error = true;
+                                _errorMessage = e;
+                              }
+
+                              _isLoading = false;
+                              setState(() {});
+                            }
+                          },
                     child: _isLoading
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(
+                            child: LinearProgressIndicator(
                               backgroundColor: Colors.white,
                             ),
                           )

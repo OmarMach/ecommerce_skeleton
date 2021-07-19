@@ -6,6 +6,7 @@ import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../config.dart';
 
@@ -74,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             children: [
                               // Email text field
                               TextFormField(
-                                initialValue: _credentials['email'],
                                 onSaved: (value) {
                                   _credentials['email'] =
                                       value.toString().trim();
@@ -85,22 +85,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hint: "Email Address..",
                                   label: 'Email',
                                 ),
-                                validator: (value) => value.contains('@')
-                                    ? null
-                                    : 'Please enter a valid Email address..',
+                                validator: emailValidator,
                               ),
                               verticalSeparator,
                               // Password textfield
                               TextFormField(
-                                initialValue: _credentials['password'],
+                                obscureText: true,
                                 onSaved: (value) {
                                   _credentials['password'] =
                                       value.toString().trim();
                                 },
                                 // obscureText: true,
-                                validator: (value) => value.isNotEmpty
-                                    ? null
-                                    : 'Please enter a password..',
+                                validator: passwordValidator,
                                 decoration: buildFormInputDecoration(
                                   icon: Icons.lock,
                                   hint: "Password...",
@@ -125,15 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        ScaffoldMessenger.of(context)
-                                            .hideCurrentSnackBar();
-
-                                        final SnackBar snackBar = SnackBar(
-                                          content: Text("Sorry for you.."),
-                                        );
-
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
+                                        launch(
+                                            'https://goods.tn/my-account/lost-password/');
                                       },
                                       child: Text(
                                         "Forgot password?",
@@ -148,41 +137,43 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           verticalSeparator,
                           ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                _isLoading = true;
-                                setState(() {});
+                            onPressed: _isLoading
+                                ? null
+                                : () async {
+                                    if (_formKey.currentState.validate()) {
+                                      _formKey.currentState.save();
+                                      _isLoading = true;
+                                      setState(() {});
 
-                                try {
-                                  await userProvider.login(
-                                    email: _credentials['email'],
-                                    password: _credentials['password'],
-                                  );
-                                  _error = false;
-                                } catch (e) {
-                                  _error = true;
-                                  _errorMessage = e.toString();
-                                  print(e.toString());
-                                }
+                                      try {
+                                        await userProvider.login(
+                                          email: _credentials['email'],
+                                          password: _credentials['password'],
+                                        );
+                                        _error = false;
+                                      } catch (e) {
+                                        _error = true;
+                                        _errorMessage = e.toString();
+                                        print(e.toString());
+                                      }
 
-                                _isLoading = false;
-                                setState(() {});
+                                      _isLoading = false;
+                                      setState(() {});
 
-                                if (userProvider.isConnected) {
-                                  Navigator.of(context).popUntil(
-                                    ModalRoute.withName(
-                                        WrapperScreen.routeName),
-                                  );
-                                  Navigator.of(context)
-                                      .pushNamed(WrapperScreen.routeName);
-                                }
-                              }
-                            },
+                                      if (userProvider.isConnected) {
+                                        Navigator.of(context).popUntil(
+                                          ModalRoute.withName(
+                                              WrapperScreen.routeName),
+                                        );
+                                        Navigator.of(context)
+                                            .pushNamed(WrapperScreen.routeName);
+                                      }
+                                    }
+                                  },
                             child: _isLoading
                                 ? Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator(
+                                    child: LinearProgressIndicator(
                                       backgroundColor: Colors.white,
                                     ),
                                   )
@@ -191,14 +182,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pushReplacementNamed(
-                                  RegisterScreen.routeName);
+                                RegisterScreen.routeName,
+                              );
                             },
                             child: Text("Create an account"),
                           ),
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pushReplacementNamed(
-                                  WrapperScreen.routeName);
+                                WrapperScreen.routeName,
+                              );
                             },
                             child: Text(
                               "Continue without logging in",
@@ -208,62 +201,62 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Divider(),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          primary: googleColor,
-                          side: BorderSide(color: googleColor),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(FontAwesome.google),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Use your Google Account",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          primary: facebookColor,
-                          side: BorderSide(
-                            color: facebookColor,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              FontAwesome.facebook_official,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Use your Facebook account",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  //     Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //       children: [
+                  //         Divider(),
+                  //         ElevatedButton(
+                  //           onPressed: () {},
+                  //           style: ElevatedButton.styleFrom(
+                  //             primary: googleColor,
+                  //             side: BorderSide(color: googleColor),
+                  //           ),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Icon(FontAwesome.google),
+                  //               Expanded(
+                  //                 child: Row(
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: [
+                  //                     Text(
+                  //                       "Use your Google Account",
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //         ElevatedButton(
+                  //           onPressed: () {},
+                  //           style: ElevatedButton.styleFrom(
+                  //             primary: facebookColor,
+                  //             side: BorderSide(
+                  //               color: facebookColor,
+                  //             ),
+                  //           ),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Icon(
+                  //                 FontAwesome.facebook_official,
+                  //               ),
+                  //               Expanded(
+                  //                 child: Row(
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: [
+                  //                     Text(
+                  //                       "Use your Facebook account",
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
                 ],
               ),
             ),
