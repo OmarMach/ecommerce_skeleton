@@ -236,7 +236,7 @@ class UserProvider with ChangeNotifier {
         headers: headers,
         body: json.encode(
           {
-            'customer_id': _user.id,
+            'customer_id': _user.id ?? "0",
             'billing': address,
             'shipping': address,
             'line_items': transformedCart,
@@ -246,7 +246,6 @@ class UserProvider with ChangeNotifier {
       );
 
       final data = json.decode(response.body);
-      print(data);
       return data['id'] != null;
     } catch (e) {
       print("error : " + e.toString());
