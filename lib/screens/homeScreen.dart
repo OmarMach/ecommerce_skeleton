@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       verticalSeparator,
-                      HomeTitleWidget(title: "Coming Soon"),
+                      HomeTitleWidget(title: "Best Selling"),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ComingSoonCarouselWidget(),

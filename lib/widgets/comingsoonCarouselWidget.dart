@@ -31,7 +31,7 @@ class ComingSoonCarouselWidget extends StatelessWidget {
                   : 1 / 2,
         ),
         items: [
-          ...productsProvider.carouselItems
+          ...productsProvider.bestSellingProducts
               .map(
                 (e) => Padding(
                   padding: const EdgeInsets.all(8.0),
