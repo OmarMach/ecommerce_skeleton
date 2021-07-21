@@ -236,7 +236,7 @@ class UserProvider with ChangeNotifier {
         headers: headers,
         body: json.encode(
           {
-            'customer_id': _user.id ?? "0",
+            'customer_id': user == null ? 0 : _user.id ?? "0",
             'billing': address,
             'shipping': address,
             'line_items': transformedCart,
