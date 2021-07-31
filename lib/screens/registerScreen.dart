@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/providers/userProvider.dart';
+import 'package:ecommerce_app/screens/homeScreen.dart';
 import 'package:ecommerce_app/widgets/appBarWidget.dart';
 import 'package:ecommerce_app/widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
@@ -128,9 +129,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               setState(() {});
 
                               try {
+                                _error = true;
+                                _errorMessage = "";
+
                                 bool isRegistred = await userProvider
                                     .registerUser(email, password);
-                                if (!isRegistred) throw ('e');
+                                if (!isRegistred)
+                                  throw ('e');
+                                else {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Success"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Ok"),
+                                        ),
+                                      ],
+                                      content: Text(
+                                          "Your account has been successfully created"),
+                                    ),
+                                  );
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(
+                                    context,
+                                    HomeScreen.routeName,
+                                  );
+                                }
                               } catch (e) {
                                 _error = true;
                                 _errorMessage = e;

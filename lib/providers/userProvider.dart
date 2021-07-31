@@ -94,7 +94,7 @@ class UserProvider with ChangeNotifier {
     // Adding params
     final Map<String, dynamic> params = {
       'rest_route': '/simple-jwt-login/v1/users',
-      'email': 'omramch@fmak.cmo',
+      'email': '$email',
       'password': '$password',
       'test-auth-key': 'test-auth-key',
     };
@@ -113,7 +113,7 @@ class UserProvider with ChangeNotifier {
 
       final decodedBody = json.decode(response.body) as Map;
 
-      if (decodedBody['success'] == 'true') {
+      if ((decodedBody['success'] as bool) == true) {
         await login(email: email, password: password);
         notifyListeners();
         return true;
