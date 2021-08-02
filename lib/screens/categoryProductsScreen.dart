@@ -12,12 +12,14 @@ class CategoryProductsScreen extends StatefulWidget {
 }
 
 class CategoryProductsScreenState extends State<CategoryProductsScreen> {
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     final category =
         ModalRoute.of(context).settings.arguments as Map<String, int>;
     final textTheme = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBarWidget(),
       drawer: DrawerMenuWidget(),
@@ -33,6 +35,7 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
             ),
           ),
           child: SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -46,6 +49,8 @@ class CategoryProductsScreenState extends State<CategoryProductsScreen> {
                 ),
                 verticalSeparator,
                 ProductsByCategoryGridListPaginated(
+                  // sending this scroll controller to reset scrolling position when clicked on next button.
+                  scrollController: _scrollController,
                   categoryId: category.values.first,
                   limit: category.values.first == 0 ? 100 : 20,
                 ),

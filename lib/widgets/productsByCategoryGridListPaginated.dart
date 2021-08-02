@@ -11,9 +11,11 @@ class ProductsByCategoryGridListPaginated extends StatefulWidget {
     Key key,
     @required this.categoryId,
     @required this.limit,
+    this.scrollController,
   }) : super(key: key);
 
   final int limit;
+  final ScrollController scrollController;
   final int categoryId;
 
   @override
@@ -58,11 +60,6 @@ class _ProductsByCategoryGridListPaginatedState
           int remainingProductsCount = productsCount % 10;
 
           if (remainingProductsCount > 0) pagesCount++;
-
-          print("prod count  : $productsCount");
-          print("remaining pages :$remainingProductsCount");
-          print("pages : $pagesCount");
-          print("pages : $page");
 
           if (searchProvider.searchedProducts.isEmpty)
             searchProvider.searchProductsByCategory(0);
@@ -120,6 +117,7 @@ class _ProductsByCategoryGridListPaginatedState
                       child: ElevatedButton(
                         onPressed: page > 0
                             ? () {
+                                widget.scrollController.jumpTo(0);
                                 setState(() {
                                   page--;
                                 });
@@ -136,6 +134,7 @@ class _ProductsByCategoryGridListPaginatedState
                       child: ElevatedButton(
                         onPressed: page < pagesCount - 1
                             ? () {
+                                widget.scrollController.jumpTo(0);
                                 setState(() {
                                   page++;
                                 });

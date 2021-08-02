@@ -114,7 +114,10 @@ class UserProvider with ChangeNotifier {
       final decodedBody = json.decode(response.body) as Map;
 
       if ((decodedBody['success'] as bool) == true) {
-        await login(email: email, password: password);
+        await login(
+          email: email,
+          password: password,
+        );
         notifyListeners();
         return true;
       } else
