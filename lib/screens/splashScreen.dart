@@ -21,38 +21,19 @@ class SplashScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
-                    'assets/images/welcomeImage.png',
+                    'assets/images/Logo.png',
                     width: size.width * .8,
-                    height: 120,
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        'assets/images/Logo.png',
-                        width: size.width * .8,
-                      ),
-                    ),
-                    verticalSeparator,
-                    Container(
-                      width: size.width / 2,
-                      child: LinearProgressIndicator(),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 120,
-                  ),
+                verticalSeparator,
+                Container(
+                  width: size.width / 2,
+                  child: LinearProgressIndicator(),
                 ),
               ],
             ),

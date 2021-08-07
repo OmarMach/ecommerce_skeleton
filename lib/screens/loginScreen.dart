@@ -206,65 +206,65 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Divider(),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          primary: googleColor,
-                          side: BorderSide(color: googleColor),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(FontAwesome.google),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Use your Google Account",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final LoginResult result =
-                              await FacebookAuth.instance.login();
-                          print(result.message);
-                          if (result.status == LoginStatus.success) {
-                            final AccessToken accessToken = result.accessToken;
-                            print(accessToken);
-                          } else
-                            print(result.status);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: facebookColor,
-                          side: BorderSide(
-                            color: facebookColor,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(
-                              FontAwesome.facebook_official,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Use your Facebook account",
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // ElevatedButton(
+                      //   onPressed: () {},
+                      //   style: ElevatedButton.styleFrom(
+                      //     primary: googleColor,
+                      //     side: BorderSide(color: googleColor),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Icon(FontAwesome.google),
+                      //       Expanded(
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             Text(
+                      //               "Use your Google Account",
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // ElevatedButton(
+                      //   onPressed: () async {
+                      //     final LoginResult result =
+                      //         await FacebookAuth.instance.login();
+                      //     print(result.message);
+                      //     if (result.status == LoginStatus.success) {
+                      //       final AccessToken accessToken = result.accessToken;
+                      //       print(accessToken);
+                      //     } else
+                      //       print(result.status);
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     primary: facebookColor,
+                      //     side: BorderSide(
+                      //       color: facebookColor,
+                      //     ),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Icon(
+                      //         FontAwesome.facebook_official,
+                      //       ),
+                      //       Expanded(
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: [
+                      //             Text(
+                      //               "Use your Facebook account",
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],
